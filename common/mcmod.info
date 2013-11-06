@@ -1,0 +1,18 @@
+[
+{
+    "modid" : "CompressedBuilding",
+    "name" : "Compressed Building",
+    "version" : "v0.0.1",
+    "credits" : "Thanks to Vswe and his awesome tutorials",
+    "authors" : [
+        "WarlockJK"
+    ],
+    "description" : "Allows you to compress materials in the crafting table to be placed in the world in the correct size",
+    "url" : "",
+    "updateUrl"  : "",
+    "logoFile" : "",
+    "parent" : "",
+    "screenshots" : [
+    ]
+}
+]
