@@ -40,24 +40,7 @@ public class PlacementUtil {
 			sideBasedLogic(side);//Manipulates where the loops below start and end for proper orientation based on the side
 			orientationLogic(world, x, y, z, side);//Changes the east-west vs north-south orientation
 			if(!world.getBlockMaterial(x, y, z).isSolid()) {
-				if(side == 5 || side == 3) {
-					if (!sneaking && side == 3) {
-						orientationArr[2] = 0;
-						orientationArr[3] = 3;
-					}else{
-						orientationArr[0] = 0;
-						orientationArr[1] = 3;
-					}
-				}else if (side == 2 || side == 4) {
-					if (!sneaking && side == 2) {
-						orientationArr[2] = -2;
-						orientationArr[3] = 1;
-					}else{
-						orientationArr[0] = -2;
-						orientationArr[1] = 1;
-					}
-				}
-				orientationArr[4] = 0;
+				nonSolidLogic(side);//Makes things work as you would think they would with grass and such
 			}
 			
 			for (int i = orientationArr[0]; i < orientationArr[1]; i++) {
@@ -182,5 +165,26 @@ public class PlacementUtil {
 				}
 			}
 		}
+	}
+	
+	private void nonSolidLogic(int side) {
+			if(side == 5 || side == 3) {
+				if (!sneaking && side == 3) {
+					orientationArr[2] = 0;
+					orientationArr[3] = 3;
+				}else{
+					orientationArr[0] = 0;
+					orientationArr[1] = 3;
+				}
+			}else if (side == 2 || side == 4) {
+				if (!sneaking && side == 2) {
+					orientationArr[2] = -2;
+					orientationArr[3] = 1;
+				}else{
+					orientationArr[0] = -2;
+					orientationArr[1] = 1;
+				}
+			}
+			orientationArr[4] = 0;
 	}
 }
