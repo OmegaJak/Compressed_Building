@@ -39,27 +39,46 @@ public class PlacementUtil {
 			
 			sideBasedLogic(side);//Manipulates where the loops below start and end for proper orientation based on the side
 			orientationLogic(world, x, y, z, side);//Changes the east-west vs north-south orientation
+			if(!world.getBlockMaterial(x, y, z).isSolid()) {
+				if(side == 5 || side == 3) {
+					if (!sneaking && side == 3) {
+						orientationArr[2] = 0;
+						orientationArr[3] = 3;
+					}else{
+						orientationArr[0] = 0;
+						orientationArr[1] = 3;
+					}
+				}else if (side == 2 || side == 4) {
+					if (!sneaking && side == 2) {
+						orientationArr[2] = -2;
+						orientationArr[3] = 1;
+					}else{
+						orientationArr[0] = -2;
+						orientationArr[1] = 1;
+					}
+				}
+				orientationArr[4] = 0;
+			}
 			
 			for (int i = orientationArr[0]; i < orientationArr[1]; i++) {
 				for(int j = orientationArr[2]; j < orientationArr[3]; j++) {
 					if (sneaking) {
 						if (orientationArr[5] == 1) {
-							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareCobble.blockID) {
+							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareCobble.blockID) {
 								world.setBlock(x + i, y + j, z + orientationArr[4], id);
 							}
 						}else{
-							if (world.isAirBlock(x + orientationArr[4], y + j, z + i ) || world.getBlockId(x + orientationArr[4], y + j, z + i) == Blocks.squareCobble.blockID) {
+							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlockMaterial(x + orientationArr[4], y + j, z + i).isSolid() || world.getBlockId(x + orientationArr[4], y + j, z + i) == Blocks.squareCobble.blockID) {
 								world.setBlock(x + orientationArr[4], y + j, z + i, id);
 							}
 						}
 					}else{
-						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || world.getBlockId(x + i, y + orientationArr[4], z + j) == Blocks.squareCobble.blockID) {
+						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlockMaterial(x + i, y + orientationArr[4], z + j).isSolid() || world.getBlockId(x + i, y + orientationArr[4], z + j) == Blocks.squareCobble.blockID) {
 							world.setBlock(x + i, y + orientationArr[4], z + j, id);
 						}
 					}
 				}
 			}
-
 		}
 	}
 	
@@ -130,7 +149,7 @@ public class PlacementUtil {
 	}
 	
 	private void orientationLogic(World world,int x,int y,int z, int side) {
-				if (side == 0 || side == 1) {
+		if (side == 0 || side == 1) {
 			originalCount = 0;		
 			for (int n = orientationArr[0]; n < orientationArr[1]; n++) {
 				if(orientationArr[5] == 1) {

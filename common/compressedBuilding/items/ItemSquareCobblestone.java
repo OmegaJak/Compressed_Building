@@ -18,6 +18,9 @@ public class ItemSquareCobblestone extends ItemBlock{
 		if(!world.isRemote) {
 			PlacementUtil placementUtil = new PlacementUtil();	
 			placementUtil.placeBlocks(stack, player, world, x, y, z, side, Block.cobblestone.blockID, 1, 1);
+			if (!player.capabilities.isCreativeMode) {
+				stack.stackSize--;
+			}
 		}
 		return false;
 	}
