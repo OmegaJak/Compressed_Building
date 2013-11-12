@@ -12,6 +12,11 @@ public class PlacementUtil {
 	private byte[] orientationArr = new byte[6];
 	private byte originalCount = 0;
 	private byte newCount = 0;
+	private byte radius = 1;
+	private byte upCount = 0;
+	private byte downCount = 0;
+	private byte[] countArr = new byte[3];
+	private byte largestNum = 0;
 	
 	public PlacementUtil() {
 	}
@@ -42,7 +47,9 @@ public class PlacementUtil {
 			if(!world.getBlockMaterial(x, y, z).isSolid()) {
 				nonSolidLogic(side);//Makes things work as you would think they would with grass and such
 			}
-			
+			if(sneaking) {
+				verticalDisplacementLogic(world, x, y, z);
+			}
 			for (int i = orientationArr[0]; i < orientationArr[1]; i++) {
 				for(int j = orientationArr[2]; j < orientationArr[3]; j++) {
 					if (sneaking) {
@@ -186,5 +193,55 @@ public class PlacementUtil {
 				}
 			}
 			orientationArr[4] = 0;
+	}
+	
+	private void verticalDisplacementLogic(World world,int x, int y, int z) {
+		radius = (byte)((Math.abs(orientationArr[1] - orientationArr[0]) - 1) / 2);
+		downCount = 0;
+		originalCount = 0;
+		upCount = 0;
+		for (int k = -1; k < 2; k++) {
+			for (int n = -1; n < 2; n++) {
+				if(n == 0) { continue; }
+				for (int i = -radius; i <= radius; i++) {
+					if (orientationArr[5] == 1) {
+						if (world.isAirBlock(x + i, y + (n * radius), z + orientationArr[4])) {
+							if(k == -1) {
+								downCount++;
+							}else if(k == 0) {
+								originalCount++;
+							}else{
+								upCount++;
+							}
+						}
+					}else{
+						if (world.isAirBlock(x + orientationArr[4], y + (n * radius), z + i)) {
+							if(k == -1) {
+								downCount++;
+							}else if(k == 0) {
+								originalCount++;
+							}else{
+								upCount++;
+							}
+						}
+					}
+				}
+			}
+		}
+		countArr[0] = downCount;
+		countArr[1] = originalCount;
+		countArr[2] = upCount;
+		for (int r = 0; r < countArr.length; r++) {
+			if(countArr[r] > largestNum) {
+				largestNum = countArr[r];
+			}
+		}
+		if(largestNum == downCount) {
+			orientationArr[2]--;
+			orientationArr[3]--;
+		}else if(largestNum == upCount) {
+			orientationArr[2]++;
+			orientationArr[3]++;
+		}
 	}
 }
