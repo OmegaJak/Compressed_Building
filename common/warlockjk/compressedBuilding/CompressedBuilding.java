@@ -1,15 +1,13 @@
-package compressedBuilding;
+package warlockjk.compressedBuilding;
 
 import net.minecraft.creativetab.CreativeTabs;
-
-import compressedBuilding.blocks.Blocks;
-import compressedBuilding.config.ConfigHandler;
-import compressedBuilding.creativeTab.CreativeTab;
-import compressedBuilding.items.Items;
-import compressedBuilding.lib.ModInformation;
-import compressedBuilding.network.PacketHandler;
-import compressedBuilding.proxies.CommonProxy;
-
+import warlockjk.compressedBuilding.blocks.Blocks;
+import warlockjk.compressedBuilding.config.ConfigHandler;
+import warlockjk.compressedBuilding.creativeTab.CreativeTab;
+import warlockjk.compressedBuilding.items.Items;
+import warlockjk.compressedBuilding.lib.ModInformation;
+import warlockjk.compressedBuilding.network.PacketHandler;
+import warlockjk.compressedBuilding.proxies.CommonProxy;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;

@@ -1,4 +1,4 @@
-package compressedBuilding.network;
+package warlockjk.compressedBuilding.network;
 
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;

@@ -1,10 +1,8 @@
-package compressedBuilding.blocks;
+package warlockjk.compressedBuilding.blocks;
 
 import net.minecraft.block.Block;
-
-import compressedBuilding.items.ItemSquareCobblestone;
-import compressedBuilding.lib.BlockInfo;
-
+import warlockjk.compressedBuilding.items.ItemSquareCobblestone;
+import warlockjk.compressedBuilding.lib.BlockInfo;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 

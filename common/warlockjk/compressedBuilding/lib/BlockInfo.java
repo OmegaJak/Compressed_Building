@@ -1,4 +1,4 @@
-package compressedBuilding.lib;
+package warlockjk.compressedBuilding.lib;
 
 public class BlockInfo {
 	public static final String TEXTURE_LOCATION = "compressedbuilding";

@@ -1,10 +1,9 @@
-package compressedBuilding.config;
+package warlockjk.compressedBuilding.config;
 
 import java.io.File;
 
 import net.minecraftforge.common.Configuration;
-
-import compressedBuilding.lib.BlockInfo;
+import warlockjk.compressedBuilding.lib.BlockInfo;
 
 public class ConfigHandler {
 	public static void init(File file) {

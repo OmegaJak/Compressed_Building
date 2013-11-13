@@ -1,12 +1,11 @@
-package compressedBuilding.items;
-
-import compressedBuilding.utils.PlacementUtil;
+package warlockjk.compressedBuilding.items;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import warlockjk.compressedBuilding.utils.PlacementUtil;
 
 public class ItemSquareCobblestone extends ItemBlock{
 	public ItemSquareCobblestone(int id) {
