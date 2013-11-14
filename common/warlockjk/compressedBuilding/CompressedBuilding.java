@@ -26,7 +26,7 @@ public class CompressedBuilding {
 	@Instance(ModInformation.ID)
 	public static CompressedBuilding instance;
 	
-	@SidedProxy(clientSide = "compressedBuilding.proxies.ClientProxy", serverSide = "compressedBuilding.proxies.CommonProxy")
+	@SidedProxy(clientSide = "warlockjk.compressedBuilding.proxies.ClientProxy", serverSide = "warlockjk.compressedBuilding.proxies.CommonProxy")
 	public static CommonProxy proxy;
 	
 	@EventHandler

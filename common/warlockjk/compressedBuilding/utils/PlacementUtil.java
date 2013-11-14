@@ -14,8 +14,6 @@ public class PlacementUtil {
 	private byte radius = 1;
 	private byte upCount = 0;
 	private byte downCount = 0;
-	private byte[] countArr = new byte[3];
-	private byte largestNum = 0;
 	
 	public PlacementUtil() {
 	}
@@ -201,10 +199,10 @@ public class PlacementUtil {
 		upCount = 0;
 		for (int k = -1; k < 2; k++) {
 			for (int n = -1; n < 2; n++) {
-				if(n == 0) { continue; }
+				if(n == 0) continue;
 				for (int i = -radius; i <= radius; i++) {
 					if (orientationArr[5] == 1) {
-						if (world.isAirBlock(x + i, y + (n * radius), z + orientationArr[4])) {
+						if (world.isAirBlock(x + i, y + (n * radius) + k, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + (n * radius) + k, z + orientationArr[4]).isSolid()) {
 							if(k == -1) {
 								downCount++;
 							}else if(k == 0) {
@@ -214,7 +212,7 @@ public class PlacementUtil {
 							}
 						}
 					}else{
-						if (world.isAirBlock(x + orientationArr[4], y + (n * radius), z + i)) {
+						if (world.isAirBlock(x + orientationArr[4], y + (n * radius) + k, z + i) || !world.getBlockMaterial(x + orientationArr[4], y + (n * radius) + k, z + i).isSolid()) {
 							if(k == -1) {
 								downCount++;
 							}else if(k == 0) {
@@ -227,20 +225,17 @@ public class PlacementUtil {
 				}
 			}
 		}
-		countArr[0] = downCount;
-		countArr[1] = originalCount;
-		countArr[2] = upCount;
-		for (int r = 0; r < countArr.length; r++) {
-			if(countArr[r] > largestNum) {
-				largestNum = countArr[r];
+		if(upCount > originalCount) {
+			if(downCount > upCount) {
+				orientationArr[2]--;
+				orientationArr[3]--;
+			}else{
+				orientationArr[2]++;
+				orientationArr[3]++;
 			}
-		}
-		if(largestNum == downCount) {
+		}else if(downCount > originalCount) {
 			orientationArr[2]--;
 			orientationArr[3]--;
-		}else if(largestNum == upCount) {
-			orientationArr[2]++;
-			orientationArr[3]++;
 		}
 	}
 }
