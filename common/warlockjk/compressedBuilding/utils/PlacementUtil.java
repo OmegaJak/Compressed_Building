@@ -207,7 +207,7 @@ public class PlacementUtil {
 								downCount++;
 							}else if(k == 0) {
 								originalCount++;
-							}else{
+							}else if (k == 1){
 								upCount++;
 							}
 						}
@@ -217,7 +217,7 @@ public class PlacementUtil {
 								downCount++;
 							}else if(k == 0) {
 								originalCount++;
-							}else{
+							}else if (k == 1){
 								upCount++;
 							}
 						}
