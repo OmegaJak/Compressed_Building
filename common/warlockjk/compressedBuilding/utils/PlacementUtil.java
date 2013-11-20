@@ -11,9 +11,9 @@ public class PlacementUtil {
 	private byte[] orientationArr = new byte[6];
 	private byte originalCount = 0;
 	private byte newCount = 0;
-	private byte radius = 1;
-	private byte upCount = 0;
-	private byte downCount = 0;
+//	private byte radius = 1;
+//	private byte upCount = 0;
+//	private byte downCount = 0;
 	
 	public PlacementUtil() {
 	}
@@ -26,11 +26,11 @@ public class PlacementUtil {
 	public void placeBlocks(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, int id, double sizeFactor1, double sizeFactor2) {
 		if (!world.isRemote) {
 			sneaking = player.isSneaking();
-			orientationArr[0] = -1;
-			orientationArr[1] = 2;
-			orientationArr[2] = -1;
-			orientationArr[3] = 2;
-			orientationArr[4] = 1;
+			orientationArr[0] = -1;//Starting of i
+			orientationArr[1] = 2;//One greater than the ending of i
+			orientationArr[2] = -1;//Starting of k
+			orientationArr[3] = 2;//One greater than the ending of k
+			orientationArr[4] = 1;//The offset of various directions depending on where it is used below
 			
 			/**
 			 * Used to determine which direction to orient it when the player is sneaking
@@ -42,11 +42,16 @@ public class PlacementUtil {
 			sideBasedLogic(side);//Manipulates where the loops below start and end for proper orientation based on the side
 			orientationLogic(world, x, y, z, side);//Changes the east-west vs north-south orientation
 			if(!world.getBlockMaterial(x, y, z).isSolid()) {
-				nonSolidLogic(side);//Makes things work as you would think they would with grass and such
+				//nonSolidLogic(side);//Makes things work as you would think they would with grass and such
+				orientationArr[0] = -1;
+				orientationArr[1] = 2;
+				orientationArr[2] = -1;
+				orientationArr[3] = 2;
+				orientationArr[4] = 0;
 			}
-			if(sneaking) {
+/**			if(sneaking) {
 				verticalDisplacementLogic(world, x, y, z);
-			}
+			}*/
 			for (int i = orientationArr[0]; i < orientationArr[1]; i++) {
 				for(int j = orientationArr[2]; j < orientationArr[3]; j++) {
 					if (sneaking) {
@@ -140,11 +145,11 @@ public class PlacementUtil {
 			originalCount = 0;		
 			for (int n = orientationArr[0]; n < orientationArr[1]; n++) {
 				if(orientationArr[5] == 1) {
-					if(!world.isAirBlock(x + n, y, z + orientationArr[4])){
+					if(!(world.isAirBlock(x + n, y, z + orientationArr[4]) || !world.getBlockMaterial(x + n, y, z + orientationArr[4]).isSolid())){
 						originalCount++;
 					}
 				}else{
-					if(!world.isAirBlock(x + orientationArr[4], y, z + n)) {
+					if(!(world.isAirBlock(x + orientationArr[4], y, z + n) || !world.getBlockMaterial(x + orientationArr[4], y, z + n).isSolid())) {
 						originalCount++;
 					}
 				}
@@ -171,7 +176,7 @@ public class PlacementUtil {
 		}
 	}
 	
-	private void nonSolidLogic(int side) {
+/**	private void nonSolidLogic(int side) {
 			if(side == 5 || side == 3) {
 				if (!sneaking && side == 3) {
 					orientationArr[2] = 0;
@@ -190,9 +195,9 @@ public class PlacementUtil {
 				}
 			}
 			orientationArr[4] = 0;
-	}
+	}*/
 	
-	private void verticalDisplacementLogic(World world,int x, int y, int z) {
+/**	private void verticalDisplacementLogic(World world,int x, int y, int z) {
 		radius = (byte)((Math.abs(orientationArr[1] - orientationArr[0]) - 1) / 2);
 		downCount = 0;
 		originalCount = 0;
@@ -237,5 +242,5 @@ public class PlacementUtil {
 			orientationArr[2]--;
 			orientationArr[3]--;
 		}
-	}
+	}*/
 }
