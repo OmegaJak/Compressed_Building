@@ -1,5 +1,6 @@
 package warlockjk.compressedBuilding.utils;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -58,15 +59,21 @@ public class PlacementUtil {
 						if (orientationArr[5] == 1) {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareCobble.blockID) {
 								world.setBlock(x + i, y + j, z + orientationArr[4], id);
+							}else{
+								spawnCompensation(world, id, 1, x, y, z);
 							}
 						}else{
 							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlockMaterial(x + orientationArr[4], y + j, z + i).isSolid() || world.getBlockId(x + orientationArr[4], y + j, z + i) == Blocks.squareCobble.blockID) {
 								world.setBlock(x + orientationArr[4], y + j, z + i, id);
+							}else{
+								spawnCompensation(world, id, 1, x, y, z);
 							}
 						}
 					}else{
 						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlockMaterial(x + i, y + orientationArr[4], z + j).isSolid() || world.getBlockId(x + i, y + orientationArr[4], z + j) == Blocks.squareCobble.blockID) {
 							world.setBlock(x + i, y + orientationArr[4], z + j, id);
+						}else{
+							spawnCompensation(world, id, 1, x, y, z);
 						}
 					}
 				}
@@ -139,6 +146,39 @@ public class PlacementUtil {
 			}
 		}
 	}
+	
+	public void spawnCompensation(World world, int id, int count, int x, int y, int z) {
+		EntityItem entityItem = new EntityItem(world, (double)x, (double)y, (double)z, new ItemStack(id, count, 0));
+		world.spawnEntityInWorld(entityItem);
+	}
+	
+/**	public void addItemsToInventory(EntityPlayer player, int id, int count) {
+		if (count > 0) {
+			itemSlot = getInventorySlotContainItem(player, id);
+			if (itemSlot != -1) {
+				if (player.inventory.mainInventory[itemSlot].getMaxStackSize() - player.inventory.mainInventory[itemSlot].stackSize >= count) {
+					player.inventory.mainInventory[itemSlot].stackSize += count;
+				}else{
+					if (!player.inventory.addItemStackToInventory(new ItemStack(id, count - (player.inventory.mainInventory[itemSlot].getMaxStackSize() - player.inventory.mainInventory[itemSlot].stackSize), 0))) {
+						//if it doesn't work, then drop the items on the ground by the player
+					}
+					player.inventory.mainInventory[itemSlot].stackSize += 
+							player.inventory.mainInventory[itemSlot].getMaxStackSize() - player.inventory.mainInventory[itemSlot].stackSize;
+				}
+			}else{
+				
+			}
+		}
+	}*/
+	
+/**	public int getInventorySlotContainItem(EntityPlayer player, int id) {
+        for (int i = 0; i < player.inventory.mainInventory.length; i++) {
+            if (player.inventory.mainInventory[i] != null && player.inventory.mainInventory[i].itemID == id) {
+                return i;
+            }
+        }
+        return -1;
+	}*/
 	
 	private void orientationLogic(World world,int x,int y,int z, int side) {
 		if (side == 0 || side == 1) {
