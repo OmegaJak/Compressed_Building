@@ -60,20 +60,20 @@ public class PlacementUtil {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareCobble.blockID) {
 								world.setBlock(x + i, y + j, z + orientationArr[4], id);
 							}else{
-								spawnCompensation(world, id, 1, x, y, z);
+								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}else{
 							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlockMaterial(x + orientationArr[4], y + j, z + i).isSolid() || world.getBlockId(x + orientationArr[4], y + j, z + i) == Blocks.squareCobble.blockID) {
 								world.setBlock(x + orientationArr[4], y + j, z + i, id);
 							}else{
-								spawnCompensation(world, id, 1, x, y, z);
+								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}
 					}else{
 						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlockMaterial(x + i, y + orientationArr[4], z + j).isSolid() || world.getBlockId(x + i, y + orientationArr[4], z + j) == Blocks.squareCobble.blockID) {
 							world.setBlock(x + i, y + orientationArr[4], z + j, id);
 						}else{
-							spawnCompensation(world, id, 1, x, y, z);
+							spawnCompensation(world, id, 1, x, y, z, player);
 						}
 					}
 				}
@@ -147,9 +147,17 @@ public class PlacementUtil {
 		}
 	}
 	
-	public void spawnCompensation(World world, int id, int count, int x, int y, int z) {
-		EntityItem entityItem = new EntityItem(world, (double)x, (double)y, (double)z, new ItemStack(id, count, 0));
+	public void spawnCompensation(World world, int id, int count, double x, double y, double z, EntityPlayer player) {
+		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(id, count, 0));
+		double distance = getDistance(x, y, z, player.posX, player.posY, player.posZ);
+		entityItem.motionX = (double)((player.posX - x) * distance * 0.01D);
+		entityItem.motionY = (double)((player.posY - y) * distance * 0.01D);
+		entityItem.motionZ = (double)((player.posZ - z) * distance * 0.01D);
 		world.spawnEntityInWorld(entityItem);
+	}
+	
+	public double getDistance(double x1, double y1, double z1, double x2, double y2, double z2) {
+		return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1);
 	}
 	
 /**	public void addItemsToInventory(EntityPlayer player, int id, int count) {
