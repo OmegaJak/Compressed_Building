@@ -12,6 +12,7 @@ public class ConfigHandler {
 		config.load();
 		
 		BlockInfo.SQCOBBLE_ID = config.getBlock(BlockInfo.SQCOBBLE_KEY, BlockInfo.SQCOBBLE_DEFAULT).getInt();
+		BlockInfo.COMPACTOR_ID = config.getBlock(BlockInfo.COMPACTOR_KEY, BlockInfo.COMPACTOR_DEFAULT).getInt();
 		
 //		ItemInfo.WAND_ID = config.getItem(ItemInfo.WAND_KEY, ItemInfo.WAND_DEFAULT).getInt() - 256;
 		
