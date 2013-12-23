@@ -2,6 +2,7 @@ package warlockjk.compressedBuilding;
 
 import net.minecraft.creativetab.CreativeTabs;
 import warlockjk.compressedBuilding.blocks.Blocks;
+import warlockjk.compressedBuilding.client.interfaces.GuiHandler;
 import warlockjk.compressedBuilding.config.ConfigHandler;
 import warlockjk.compressedBuilding.creativeTab.CreativeTab;
 import warlockjk.compressedBuilding.items.Items;
@@ -46,6 +47,10 @@ public class CompressedBuilding {
 		Blocks.addNames();
 		
 		Items.registerRecipes();
+		
+		Blocks.registerTileEntities();
+		
+		new GuiHandler();
 	}
 	
 	@EventHandler
