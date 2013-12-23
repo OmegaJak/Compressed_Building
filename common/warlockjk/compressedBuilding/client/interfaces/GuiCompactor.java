@@ -15,9 +15,6 @@ public class GuiCompactor extends GuiContainer {
 
 	public GuiCompactor(InventoryPlayer invplayer, World world, int x, int y, int z) {
 		super(new ContainerCompactor(invplayer, world, x, y, z));
-		
-		//xSize = 156;
-		//ySize = 156;
 	}
 	
 	private static final ResourceLocation texture = new ResourceLocation(BlockInfo.TEXTURE_LOCATION, "textures/gui/compactor.png");

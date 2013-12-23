@@ -160,34 +160,6 @@ public class PlacementUtil {
 		return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1);
 	}
 	
-/**	public void addItemsToInventory(EntityPlayer player, int id, int count) {
-		if (count > 0) {
-			itemSlot = getInventorySlotContainItem(player, id);
-			if (itemSlot != -1) {
-				if (player.inventory.mainInventory[itemSlot].getMaxStackSize() - player.inventory.mainInventory[itemSlot].stackSize >= count) {
-					player.inventory.mainInventory[itemSlot].stackSize += count;
-				}else{
-					if (!player.inventory.addItemStackToInventory(new ItemStack(id, count - (player.inventory.mainInventory[itemSlot].getMaxStackSize() - player.inventory.mainInventory[itemSlot].stackSize), 0))) {
-						//if it doesn't work, then drop the items on the ground by the player
-					}
-					player.inventory.mainInventory[itemSlot].stackSize += 
-							player.inventory.mainInventory[itemSlot].getMaxStackSize() - player.inventory.mainInventory[itemSlot].stackSize;
-				}
-			}else{
-				
-			}
-		}
-	}*/
-	
-/**	public int getInventorySlotContainItem(EntityPlayer player, int id) {
-        for (int i = 0; i < player.inventory.mainInventory.length; i++) {
-            if (player.inventory.mainInventory[i] != null && player.inventory.mainInventory[i].itemID == id) {
-                return i;
-            }
-        }
-        return -1;
-	}*/
-	
 	private void orientationLogic(World world,int x,int y,int z, int side) {
 		if (side == 0 || side == 1) {
 			originalCount = 0;		
@@ -223,72 +195,4 @@ public class PlacementUtil {
 			}
 		}
 	}
-	
-/**	private void nonSolidLogic(int side) {
-			if(side == 5 || side == 3) {
-				if (!sneaking && side == 3) {
-					orientationArr[2] = 0;
-					orientationArr[3] = 3;
-				}else{
-					orientationArr[0] = 0;
-					orientationArr[1] = 3;
-				}
-			}else if (side == 2 || side == 4) {
-				if (!sneaking && side == 2) {
-					orientationArr[2] = -2;
-					orientationArr[3] = 1;
-				}else{
-					orientationArr[0] = -2;
-					orientationArr[1] = 1;
-				}
-			}
-			orientationArr[4] = 0;
-	}*/
-	
-/**	private void verticalDisplacementLogic(World world,int x, int y, int z) {
-		radius = (byte)((Math.abs(orientationArr[1] - orientationArr[0]) - 1) / 2);
-		downCount = 0;
-		originalCount = 0;
-		upCount = 0;
-		for (int k = -1; k < 2; k++) {
-			for (int n = -1; n < 2; n++) {
-				if(n == 0) continue;
-				for (int i = -radius; i <= radius; i++) {
-					if (orientationArr[5] == 1) {
-						if (world.isAirBlock(x + i, y + (n * radius) + k, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + (n * radius) + k, z + orientationArr[4]).isSolid()) {
-							if(k == -1) {
-								downCount++;
-							}else if(k == 0) {
-								originalCount++;
-							}else if (k == 1){
-								upCount++;
-							}
-						}
-					}else{
-						if (world.isAirBlock(x + orientationArr[4], y + (n * radius) + k, z + i) || !world.getBlockMaterial(x + orientationArr[4], y + (n * radius) + k, z + i).isSolid()) {
-							if(k == -1) {
-								downCount++;
-							}else if(k == 0) {
-								originalCount++;
-							}else if (k == 1){
-								upCount++;
-							}
-						}
-					}
-				}
-			}
-		}
-		if(upCount > originalCount) {
-			if(downCount > upCount) {
-				orientationArr[2]--;
-				orientationArr[3]--;
-			}else{
-				orientationArr[2]++;
-				orientationArr[3]++;
-			}
-		}else if(downCount > originalCount) {
-			orientationArr[2]--;
-			orientationArr[3]--;
-		}
-	}*/
 }
