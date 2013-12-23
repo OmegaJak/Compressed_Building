@@ -12,7 +12,7 @@ public class Items {
 	}
 	
 	public static void registerRecipes() {
-		GameRegistry.addRecipe(new ItemStack(Blocks.squareCobble), new Object[] { "XXX", "XXX", "XXX", 'X', Block.cobblestone});
+		GameRegistry.addRecipe(new ItemStack(Blocks.squareTemplate), new Object[] { "XXX", "XXX", "XXX", 'X', Block.cobblestone});
 	}
 	
 }

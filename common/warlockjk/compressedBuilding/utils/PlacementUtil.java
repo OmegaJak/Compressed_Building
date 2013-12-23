@@ -57,20 +57,20 @@ public class PlacementUtil {
 				for(int j = orientationArr[2]; j < orientationArr[3]; j++) {
 					if (sneaking) {
 						if (orientationArr[5] == 1) {
-							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareCobble.blockID) {
+							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareTemplate.blockID) {
 								world.setBlock(x + i, y + j, z + orientationArr[4], id);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}else{
-							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlockMaterial(x + orientationArr[4], y + j, z + i).isSolid() || world.getBlockId(x + orientationArr[4], y + j, z + i) == Blocks.squareCobble.blockID) {
+							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlockMaterial(x + orientationArr[4], y + j, z + i).isSolid() || world.getBlockId(x + orientationArr[4], y + j, z + i) == Blocks.squareTemplate.blockID) {
 								world.setBlock(x + orientationArr[4], y + j, z + i, id);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}
 					}else{
-						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlockMaterial(x + i, y + orientationArr[4], z + j).isSolid() || world.getBlockId(x + i, y + orientationArr[4], z + j) == Blocks.squareCobble.blockID) {
+						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlockMaterial(x + i, y + orientationArr[4], z + j).isSolid() || world.getBlockId(x + i, y + orientationArr[4], z + j) == Blocks.squareTemplate.blockID) {
 							world.setBlock(x + i, y + orientationArr[4], z + j, id);
 						}else{
 							spawnCompensation(world, id, 1, x, y, z, player);

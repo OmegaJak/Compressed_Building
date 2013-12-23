@@ -10,18 +10,18 @@ import warlockjk.compressedBuilding.lib.BlockInfo;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockSquareCobblestone extends Block{
+public class BlockSquareTemplate extends Block{
 
-	public BlockSquareCobblestone(int id) {
+	public BlockSquareTemplate(int id) {
 		super(id, Material.rock);
 		setCreativeTab(CompressedBuilding.tabCompressedBuilding);
-		setUnlocalizedName(BlockInfo.SQCOBBLE_UNLOCALIZED_NAME);
+		setUnlocalizedName(BlockInfo.SQTEMPLATE_UNLOCALIZED_NAME);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister register) {
-		blockIcon = register.registerIcon(BlockInfo.TEXTURE_LOCATION + ":" + BlockInfo.SQCOBBLE_TEXTURE);
+		blockIcon = register.registerIcon(BlockInfo.TEXTURE_LOCATION + ":" + BlockInfo.SQTEMPLATE_TEXTURE);
 	}
 	
 	@Override

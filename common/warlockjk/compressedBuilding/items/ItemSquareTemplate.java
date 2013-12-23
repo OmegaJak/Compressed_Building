@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import warlockjk.compressedBuilding.utils.PlacementUtil;
 
-public class ItemSquareCobblestone extends ItemBlock{
-	public ItemSquareCobblestone(int id) {
+public class ItemSquareTemplate extends ItemBlock{
+	public ItemSquareTemplate(int id) {
 		super(id);
 	}
 	
