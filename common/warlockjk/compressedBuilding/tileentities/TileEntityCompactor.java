@@ -12,7 +12,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	private ItemStack[] items;
 	
 	public TileEntityCompactor() {
-		items = new ItemStack[9];
+		items = new ItemStack[10];
 	}
 
 	@Override
