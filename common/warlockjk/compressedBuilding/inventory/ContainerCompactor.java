@@ -8,6 +8,7 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import warlockjk.compressedBuilding.client.interfaces.SlotCompactor;
 
@@ -59,6 +60,11 @@ public class ContainerCompactor extends Container {
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return entityplayer.getDistanceSq(posX + 0.5, posY + 0.5, posZ + 0.5) <= 64;
+	}
+	
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
+		return null;
 	}
 
 }
