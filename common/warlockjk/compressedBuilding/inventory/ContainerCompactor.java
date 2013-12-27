@@ -9,6 +9,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.world.World;
+import warlockjk.compressedBuilding.client.interfaces.SlotCompactor;
 
 public class ContainerCompactor extends Container {
 
@@ -35,7 +36,7 @@ public class ContainerCompactor extends Container {
         {
             for (k = 0; k < 3; k++)
             {
-                this.addSlotToContainer(new Slot(this.craftMatrix, k + i * 3, 30 + k * 18, 17 + i * 18));
+                this.addSlotToContainer(new SlotCompactor(this.craftMatrix, k + i * 3, 30 + k * 18, 17 + i * 18));
             }
         }
 
