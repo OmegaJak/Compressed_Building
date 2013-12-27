@@ -47,8 +47,7 @@ public class BlockCompactor extends BlockContainer {
         if (player.isSneaking()) return false;
         if (!world.isRemote) {
             FMLNetworkHandler.openGui(player, CompressedBuilding.instance, 0, world, x, y, z);
-            return true;
         }
-        return false;
+        return true;
 	}
 }
