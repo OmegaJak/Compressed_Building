@@ -17,13 +17,13 @@ public class ContainerCompactor extends Container {
         int i;
         int k;
         
-        this.addSlotToContainer(new SlotCompactor(this.compactor, 9, 124, 35));
+        this.addSlotToContainer(new SlotCompactor(this.compactor, 9, 124, 35, false));
 
         for (i = 0; i < 3; i++)
         {
             for (k = 0; k < 3; k++)
             {
-                this.addSlotToContainer(new SlotCompactor(this.compactor, k + i * 3, 30 + k * 18, 17 + i * 18));
+                this.addSlotToContainer(new SlotCompactor(this.compactor, k + i * 3, 30 + k * 18, 17 + i * 18, true));
             }
         }
 
