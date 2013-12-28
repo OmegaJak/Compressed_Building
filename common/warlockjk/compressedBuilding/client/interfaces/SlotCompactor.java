@@ -7,18 +7,22 @@ import net.minecraft.item.ItemStack;
 
 public class SlotCompactor extends Slot {
 	
-	boolean isInput;
+	boolean isInputSlot;
 	
-	public SlotCompactor(IInventory inventory, int id, int x, int y, boolean isInput) {
+	public SlotCompactor(IInventory inventory, int id, int x, int y, boolean isInputSlot) {
 		super(inventory, id, x, y);
-		this.isInput = isInput;
+		this.isInputSlot = isInputSlot;
 	}
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		if (isInput && stack.getItem() instanceof ItemBlock) {
+		if (isInputSlot && stack.getItem() instanceof ItemBlock) {
 			return true;
 		}
 		return false;
+	}
+	
+	public void onSlotChange(ItemStack par1ItemStack, ItemStack par2ItemStack) {
+		
 	}
 }

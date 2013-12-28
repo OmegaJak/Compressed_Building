@@ -125,4 +125,47 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			}
 		}
 	}
+	
+	@Override
+	public void onInventoryChanged() {
+		distributeItems();
+		if (determineIfHomogenous()) {
+			if (determineIfFilled(0)) {
+				System.out.println("Success!");
+			}
+		}
+		super.onInventoryChanged();
+	}
+	
+	private boolean determineIfHomogenous() {
+		for (int i = 0; i < items.length - 1; i++) {
+			if (items[i] != null) {
+				int itemID = items[i].itemID;
+				for (int k = i; k < items.length - 1; k++) {
+					if (items[i] != null) {
+						if (items[i].itemID != itemID) {
+							System.out.println("It was not homogenous!");
+							return false;
+						} 
+					}
+				}
+				return true;
+			}
+		}
+		System.out.println("It was not homogenous!");
+		return false;
+	}
+
+	public boolean determineIfFilled(int index) {
+		for (int i = 0; i < items.length - 1; i++) {
+			if (items[i] == null) {
+				System.out.println("It was not filled!");
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void distributeItems() {
+	}
 }
