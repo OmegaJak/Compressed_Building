@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityCompactor extends TileEntity implements IInventory {
 	
 	private ItemStack[] items;
+	int num = 0;
 	
 	public TileEntityCompactor() {
 		items = new ItemStack[10];
@@ -34,7 +35,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 				setInventorySlotContents(slot, null);
 			}else{
 				itemstack = itemstack.splitStack(count);
-				onInventoryChanged();
+				
 			}
 		}
 
@@ -56,7 +57,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
 		
-		onInventoryChanged();
 	}
 
 	@Override
@@ -126,36 +126,47 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		}
 	}
 	
-	@Override
-	public void onInventoryChanged() {
-		distributeItems();
-		if (determineIfHomogenous()) {
-			if (determineIfFilled(0)) {
-				System.out.println("Success!");
+	public void checkForCompacting() {
+		if (!worldObj.isRemote) {
+			System.out.println("checkForCompacting was called for the " + num + " time on the " + sideToString() + " side");
+			num++;
+			distributeItems();
+			if (determineIfHomogenous()) {
+				if (determineIfFilled(0)) {
+					System.out.println("Success!");
+				}
 			}
 		}
-		super.onInventoryChanged();
 	}
 	
-	private boolean determineIfHomogenous() {
+	private String sideToString() {
+		if (worldObj.isRemote) {
+			return "client";
+		}else{
+			return "server";
+		}
+	}
+	
+	//Determines if everything in the compacting grid is the same item
+	public boolean determineIfHomogenous() {
 		for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] != null) {
 				int itemID = items[i].itemID;
 				for (int k = i; k < items.length - 1; k++) {
-					if (items[i] != null) {
-						if (items[i].itemID != itemID) {
-							System.out.println("It was not homogenous!");
-							return false;
-						} 
+					if (items[k] != null && items[k].itemID != itemID) {
+						System.out.println("It was not homogenous!");
+						return false;
 					}
 				}
+				System.out.println("It was homogenous!");
 				return true;
 			}
 		}
-		System.out.println("It was not homogenous!");
+		System.out.println("It was empty!");
 		return false;
 	}
-
+	
+	//Determines if the compacting grid is filled, will only be called if it's homogenous
 	public boolean determineIfFilled(int index) {
 		for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] == null) {
@@ -163,9 +174,11 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 				return false;
 			}
 		}
+		System.out.println("It was filled!");
 		return true;
 	}
-
+	
+	//Equally distributes the items in the crafting grid between each other 
 	public void distributeItems() {
 	}
 }

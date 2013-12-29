@@ -26,5 +26,4 @@ public class GuiCompactor extends GuiContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
-
 }

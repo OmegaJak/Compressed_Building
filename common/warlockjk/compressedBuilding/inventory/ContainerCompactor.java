@@ -40,8 +40,8 @@ public class ContainerCompactor extends Container {
             this.addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
         }
     }
-
-	@Override
+    
+    @Override
 	public boolean canInteractWith(EntityPlayer entityPlayer) {
 		return compactor.isUseableByPlayer(entityPlayer);
 	}

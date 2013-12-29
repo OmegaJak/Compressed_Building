@@ -4,10 +4,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import warlockjk.compressedBuilding.tileentities.TileEntityCompactor;
 
 public class SlotCompactor extends Slot {
 	
 	boolean isInputSlot;
+	TileEntityCompactor teInventory = (TileEntityCompactor)this.inventory;
 	
 	public SlotCompactor(IInventory inventory, int id, int x, int y, boolean isInputSlot) {
 		super(inventory, id, x, y);
@@ -22,7 +24,10 @@ public class SlotCompactor extends Slot {
 		return false;
 	}
 	
-	public void onSlotChange(ItemStack par1ItemStack, ItemStack par2ItemStack) {
-		
+	public void onSlotChanged() {
+		if (isInputSlot) {
+			teInventory.checkForCompacting();
+		}
+//		super.onSlotChanged();
 	}
 }
