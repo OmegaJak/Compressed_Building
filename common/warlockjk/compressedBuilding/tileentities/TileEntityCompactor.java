@@ -132,7 +132,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			num++;
 			distributeItems();
 			if (determineIfHomogenous()) {
-				if (determineIfFilled(0)) {
+				if (determineIfFilled()) {
 					System.out.println("Success!");
 				}
 			}
@@ -167,7 +167,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 	
 	//Determines if the compacting grid is filled, will only be called if it's homogenous
-	public boolean determineIfFilled(int index) {
+	public boolean determineIfFilled() {
 		for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] == null) {
 				System.out.println("It was not filled!");
