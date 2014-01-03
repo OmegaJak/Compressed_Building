@@ -134,6 +134,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			if (determineIfHomogenous()) {
 				if (determineIfFilled()) {
 					System.out.println("Success!");
+					determineOutput();
 				}
 			}
 		}
@@ -180,5 +181,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	
 	//Equally distributes the items in the crafting grid between each other 
 	public void distributeItems() {
+	}
+	
+	public ItemStack determineOutput() {
+		return null;
 	}
 }

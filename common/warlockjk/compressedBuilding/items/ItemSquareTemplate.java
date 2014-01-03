@@ -17,7 +17,7 @@ public class ItemSquareTemplate extends ItemBlock{
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		player.swingItem();
 		if(!world.isRemote) {
-			PlacementUtil placementUtil = new PlacementUtil();	
+			PlacementUtil placementUtil = new PlacementUtil();
 			placementUtil.placeBlocks(stack, player, world, x, y, z, side, Block.cobblestone.blockID, 1, 1);
 			if (!player.capabilities.isCreativeMode) {
 				stack.stackSize--;
