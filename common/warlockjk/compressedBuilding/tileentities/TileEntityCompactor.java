@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import warlockjk.compressedBuilding.lib.BlockInfo;
 
 public class TileEntityCompactor extends TileEntity implements IInventory {
 	
@@ -35,7 +36,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 				setInventorySlotContents(slot, null);
 			}else{
 				itemstack = itemstack.splitStack(count);
-				
+				onInventoryChanged();
 			}
 		}
 
@@ -50,13 +51,13 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public void setInventorySlotContents(int count, ItemStack itemstack) {
-		items[count] = itemstack;
+	public void setInventorySlotContents(int slot, ItemStack itemstack) {
+		items[slot] = itemstack;
 		
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
-		
+		onInventoryChanged();
 	}
 
 	@Override
@@ -134,7 +135,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			if (determineIfHomogenous()) {
 				if (determineIfFilled()) {
 					System.out.println("Success!");
-					determineOutput();
+					setInventorySlotContents(9, determineOutput());
+					decrementInputs();
 				}
 			}
 		}
@@ -184,6 +186,12 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 	
 	public ItemStack determineOutput() {
-		return null;
+		return new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, items[4].itemID);
+	}
+	
+	private void decrementInputs() {
+		for (int i = 0; i < items.length - 1; i++) {
+			items[i].stackSize--;
+		}
 	}
 }

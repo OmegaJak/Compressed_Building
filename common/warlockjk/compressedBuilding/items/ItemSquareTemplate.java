@@ -1,5 +1,7 @@
 package warlockjk.compressedBuilding.items;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -18,7 +20,7 @@ public class ItemSquareTemplate extends ItemBlock{
 		player.swingItem();
 		if(!world.isRemote) {
 			PlacementUtil placementUtil = new PlacementUtil();
-			placementUtil.placeBlocks(stack, player, world, x, y, z, side, Block.cobblestone.blockID, 1, 1);
+			placementUtil.placeBlocks(stack, player, world, x, y, z, side, stack.getItemDamage(), 1, 1);
 			if (!player.capabilities.isCreativeMode) {
 				stack.stackSize--;
 			}
@@ -32,4 +34,9 @@ public class ItemSquareTemplate extends ItemBlock{
 	public EnumAction getItemUseAction(ItemStack stack) {
         return EnumAction.block;
     }
+	
+	@Override
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean useExtraInfo) {
+		info.add("This places the block with ID " + itemStack.getItemDamage());
+	}
 }
