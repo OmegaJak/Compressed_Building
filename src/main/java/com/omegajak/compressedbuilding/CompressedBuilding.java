@@ -1,14 +1,16 @@
-package warlockjk.compressedBuilding;
+package com.omegajak.compressedbuilding;
 
 import net.minecraft.creativetab.CreativeTabs;
-import warlockjk.compressedBuilding.blocks.Blocks;
-import warlockjk.compressedBuilding.client.interfaces.GuiHandler;
-import warlockjk.compressedBuilding.config.ConfigHandler;
-import warlockjk.compressedBuilding.creativeTab.CreativeTab;
-import warlockjk.compressedBuilding.items.Items;
-import warlockjk.compressedBuilding.lib.ModInformation;
-import warlockjk.compressedBuilding.network.PacketHandler;
-import warlockjk.compressedBuilding.proxies.CommonProxy;
+
+import com.omegajak.compressedbuilding.blocks.Blocks;
+import com.omegajak.compressedbuilding.client.interfaces.GuiHandler;
+import com.omegajak.compressedbuilding.config.ConfigHandler;
+import com.omegajak.compressedbuilding.creativeTab.CreativeTab;
+import com.omegajak.compressedbuilding.items.Items;
+import com.omegajak.compressedbuilding.lib.ModInformation;
+import com.omegajak.compressedbuilding.network.PacketHandler;
+import com.omegajak.compressedbuilding.proxies.CommonProxy;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -16,7 +18,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
+//import cpw.mods.fml.common.network.NetworkMod;
 
 @Mod(modid = ModInformation.ID, name = ModInformation.NAME, version = ModInformation.VERSION)
 @NetworkMod(channels = {ModInformation.CHANNEL}, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
