@@ -14,9 +14,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSquareTemplate extends Block{
 
-	public BlockSquareTemplate(int id) {
+	public BlockSquareTemplate() {
 		super(Material.rock);
+		setBlockName(BlockInfo.SQTEMPLATE_NAME);
 		setCreativeTab(CompressedBuilding.tabCompressedBuilding);
+		setBlockTextureName(BlockInfo.SQTEMPLATE_TEXTURE);
 //		setUnlocalizedName(BlockInfo.SQTEMPLATE_UNLOCALIZED_NAME);
 	}
 	

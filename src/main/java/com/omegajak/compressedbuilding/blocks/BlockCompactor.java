@@ -23,7 +23,7 @@ public class BlockCompactor extends BlockContainer {
 	public BlockCompactor() {
 		super(Material.rock);
 		
-		setCreativeTab(com.omegajak.compressedbuilding.CompressedBuilding.tabCompressedBuilding);
+		setCreativeTab(CompressedBuilding.tabCompressedBuilding);
 		setHardness(2F);
 		setStepSound(Block.soundTypeStone);
 //		setUnlocalizedName(BlockInfo.COMPACTOR_UNLOCALIZED_NAME);

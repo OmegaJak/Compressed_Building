@@ -20,10 +20,11 @@ public class CreativeTab extends CreativeTabs {
 	
 	@Override
 	public ItemStack getIconItemStack() {
-		if (stack == null) {
-			stack = new ItemStack(Blocks.squareTemplate);
-		}
-		return stack;
+//		if (stack == null) {
+//			stack = new ItemStack(Blocks.squareTemplate);
+//		}
+//		return stack;
+		return null;
 	}
 
 	@Override
