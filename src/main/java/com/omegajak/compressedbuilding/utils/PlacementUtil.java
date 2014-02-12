@@ -16,6 +16,7 @@ public class PlacementUtil {
 	private byte[] orientationArr = new byte[6];
 	private byte originalCount = 0;
 	private byte newCount = 0;
+	private byte successCount = 0;
 //	private byte radius = 1;
 //	private byte upCount = 0;
 //	private byte downCount = 0;
@@ -28,7 +29,7 @@ public class PlacementUtil {
 	 * @param sizeFactor1 Modifies the size of what's placed, 1 would keep it at the default 3 TODO Implement this
 	 * @param sizeFactor2 Modifies the size of what's placed, 1 would keep it at the default 3 TODO Implement this
 	 */
-	public void placeBlocks(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, int id, double sizeFactor1, double sizeFactor2) {
+	public boolean placeBlocks(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, int id, double sizeFactor1, double sizeFactor2) {
 		if (!world.isRemote) {
 			sneaking = player.isSneaking();
 			orientationArr[0] = -1;//Starting of i
@@ -62,20 +63,23 @@ public class PlacementUtil {
 					if (sneaking) {
 						if (orientationArr[5] == 1) {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlock(x + i, y + j, z + orientationArr[4]).getMaterial().isSolid() || world.getBlock(x + i, y + j, z + orientationArr[4]).getUnlocalizedName() == Blocks.squareTemplate.getUnlocalizedName()) {
-								world.setBlock(x + i, y + j, z + orientationArr[4], new BlockStone(), 0, 1);
+								world.setBlock(x + i, y + j, z + orientationArr[4], new BlockStone(), 0, 2);
+								successCount++;
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}else{
 							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlock(x + orientationArr[4], y + j, z + i).getMaterial().isSolid() || world.getBlock(x + orientationArr[4], y + j, z + i).getUnlocalizedName()  == Blocks.squareTemplate.getUnlocalizedName() ) {
-								world.setBlock(x + orientationArr[4], y + j, z + i, new BlockStone(), 0, 1);
+								world.setBlock(x + orientationArr[4], y + j, z + i, new BlockStone(), 0, 2);
+								successCount++;
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}
 					}else{
 						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlock(x + i, y + orientationArr[4], z + j).getMaterial().isSolid() || world.getBlock(x + i, y + orientationArr[4], z + j).getUnlocalizedName()  == Blocks.squareTemplate.getUnlocalizedName() ) {
-							world.setBlock(x + i, y + orientationArr[4], z + j, new BlockStone(), 0, 1);
+							world.setBlock(x + i, y + orientationArr[4], z + j, new BlockStone(), 0, 2);
+							successCount++;
 						}else{
 							spawnCompensation(world, id, 1, x, y, z, player);
 						}
@@ -83,6 +87,11 @@ public class PlacementUtil {
 				}
 			}
 		}
+		if (successCount == (sizeFactor1 * 3) * (sizeFactor2 * 3)) {
+			System.out.println("Successful placement!");
+			return true;
+		}
+		return false;
 	}
 	
 	private void sideBasedLogic(int side) {

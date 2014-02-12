@@ -150,7 +150,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	
 	//Determines if everything in the compacting grid is the same item
 	public boolean determineIfHomogenous() {
-		for (int i = 0; i < items.length - 1; i++) {
+	/**	for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] != null) {
 				String itemName = items[i].getDisplayName();
 				for (int k = i; k < items.length - 1; k++) {
@@ -164,6 +164,20 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			}
 		}
 		System.out.println("It was empty!");
+		return false;*/
+		
+		for (int i = 1; i < items.length - 1; i++) {
+			if (items[i] != null) {
+				if (!items[i].equals(items[i - 1])) {
+					System.out.println("It was not homogenous!");
+					return false;
+				}else if (i == items.length - 1) {
+					System.out.println("It was homogenous!");
+					return true;
+				}
+			}
+		}
+		System.out.println("It was empty or something!");
 		return false;
 	}
 	
