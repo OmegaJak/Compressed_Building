@@ -1,4 +1,4 @@
-package warlockjk.compressedBuilding.config;
+package com.omegajak.compressedbuilding.config;
 
 import java.io.File;
 

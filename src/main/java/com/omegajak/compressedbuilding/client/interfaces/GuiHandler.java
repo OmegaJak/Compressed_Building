@@ -1,4 +1,4 @@
-package warlockjk.compressedBuilding.client.interfaces;
+package com.omegajak.compressedbuilding.client.interfaces;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

@@ -1,39 +1,41 @@
-package warlockjk.compressedBuilding.blocks;
+package com.omegajak.compressedbuilding.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import warlockjk.compressedBuilding.CompressedBuilding;
-import warlockjk.compressedBuilding.lib.BlockInfo;
+
+import com.omegajak.compressedbuilding.CompressedBuilding;
+import com.omegajak.compressedbuilding.lib.BlockInfo;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSquareTemplate extends Block{
 
 	public BlockSquareTemplate(int id) {
-		super(id, Material.rock);
+		super(Material.rock);
 		setCreativeTab(CompressedBuilding.tabCompressedBuilding);
-		setUnlocalizedName(BlockInfo.SQTEMPLATE_UNLOCALIZED_NAME);
+//		setUnlocalizedName(BlockInfo.SQTEMPLATE_UNLOCALIZED_NAME);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister register) {
+	public void registerBlockIcons(IIconRegister register) {
 		blockIcon = register.registerIcon(BlockInfo.TEXTURE_LOCATION + ":" + BlockInfo.SQTEMPLATE_TEXTURE);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta) {
+	public IIcon getIcon(int side, int meta) {
 		return blockIcon;
 	}
 	
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		if(!world.isRemote){
-			world.setBlock(x, y, z, Block.cobblestone.blockID);
+			world.setBlock(x, y, z, Block.getBlockFromName("cobblestone"));
 		}
 	}
 	

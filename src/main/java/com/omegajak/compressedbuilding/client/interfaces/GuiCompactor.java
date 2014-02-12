@@ -1,4 +1,4 @@
-package warlockjk.compressedBuilding.client.interfaces;
+package com.omegajak.compressedbuilding.client.interfaces;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;

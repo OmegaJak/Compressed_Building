@@ -1,4 +1,4 @@
-package warlockjk.compressedBuilding.items;
+package com.omegajak.compressedbuilding.items;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

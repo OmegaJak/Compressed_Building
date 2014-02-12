@@ -1,44 +1,48 @@
-package warlockjk.compressedBuilding.blocks;
+package com.omegajak.compressedbuilding.blocks;
+
+import javax.swing.Icon;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import warlockjk.compressedBuilding.CompressedBuilding;
-import warlockjk.compressedBuilding.lib.BlockInfo;
-import warlockjk.compressedBuilding.tileentities.TileEntityCompactor;
-import cpw.mods.fml.common.network.FMLNetworkHandler;
+
+import com.omegajak.compressedbuilding.CompressedBuilding;
+import com.omegajak.compressedbuilding.lib.BlockInfo;
+import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
+
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCompactor extends BlockContainer {
 	public BlockCompactor(int id) {
-		super(id, Material.rock);
+		super(Material.rock);
 		
-		setCreativeTab(CompressedBuilding.tabCompressedBuilding);
+		setCreativeTab(com.omegajak.compressedbuilding.CompressedBuilding.tabCompressedBuilding);
 		setHardness(2F);
-		setStepSound(Block.soundStoneFootstep);
-		setUnlocalizedName(BlockInfo.COMPACTOR_UNLOCALIZED_NAME);
+		setStepSound(Block.soundTypeStone);
+//		setUnlocalizedName(BlockInfo.COMPACTOR_UNLOCALIZED_NAME);
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int par2) {
 		return new TileEntityCompactor();
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister register) {
+	public void registerBlockIcons(IIconRegister register) {
 		blockIcon = register.registerIcon(BlockInfo.TEXTURE_LOCATION + ":" + BlockInfo.COMPACTOR_TEXTURE);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta) {
+	public IIcon getIcon(int side, int meta) {
 		return blockIcon;
 	}
 	

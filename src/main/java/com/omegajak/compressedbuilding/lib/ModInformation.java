@@ -1,4 +1,4 @@
-package warlockjk.compressedBuilding.lib;
+package com.omegajak.compressedbuilding.lib;
 
 public class ModInformation {
 	

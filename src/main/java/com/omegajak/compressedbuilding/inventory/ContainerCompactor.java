@@ -1,4 +1,4 @@
-package warlockjk.compressedBuilding.inventory;
+package com.omegajak.compressedbuilding.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
