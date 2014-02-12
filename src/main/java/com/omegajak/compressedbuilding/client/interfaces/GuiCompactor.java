@@ -7,9 +7,9 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import warlockjk.compressedBuilding.inventory.ContainerCompactor;
-import warlockjk.compressedBuilding.lib.BlockInfo;
-import warlockjk.compressedBuilding.tileentities.TileEntityCompactor;
+import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
+import com.omegajak.compressedbuilding.lib.BlockInfo;
+import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
 public class GuiCompactor extends GuiContainer {
 

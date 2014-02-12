@@ -6,7 +6,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import warlockjk.compressedBuilding.lib.BlockInfo;
+
+import com.omegajak.compressedbuilding.blocks.BlockCompactor;
+import com.omegajak.compressedbuilding.items.ItemSquareTemplate;
 
 public class TileEntityCompactor extends TileEntity implements IInventory {
 	
@@ -36,7 +38,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 				setInventorySlotContents(slot, null);
 			}else{
 				itemstack = itemstack.splitStack(count);
-				onInventoryChanged();
+				updateEntity();
 			}
 		}
 
@@ -57,17 +59,12 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
-		onInventoryChanged();
+		updateEntity();
 	}
 
 	@Override
-	public String getInvName() {
+	public String getInventoryName() {
 		return "InventoryCompactor";
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
 	}
 
 	@Override
@@ -81,10 +78,10 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public void openChest() {}
+	public void openInventory() {}
 
 	@Override
-	public void closeChest() {}
+	public void closeInventory() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -115,10 +112,11 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-		NBTTagList items = compound.getTagList("Items");
+		//not entirely sure what this does...
+		NBTTagList items = compound.getTagList("Items", 0);
 		
 		for (int i = 0; i < items.tagCount(); i++) {
-			NBTTagCompound item = (NBTTagCompound)items.tagAt(i);
+			NBTTagCompound item = (NBTTagCompound)items.getCompoundTagAt(i);
 			int slot = item.getByte("Slot");
 			
 			if (slot >= 0 && slot < getSizeInventory()) {
@@ -154,9 +152,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public boolean determineIfHomogenous() {
 		for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] != null) {
-				int itemID = items[i].itemID;
+				String itemName = items[i].getDisplayName();
 				for (int k = i; k < items.length - 1; k++) {
-					if (items[k] != null && items[k].itemID != itemID) {
+					if (items[k] != null && items[k].getDisplayName() != itemName) {
 						System.out.println("It was not homogenous!");
 						return false;
 					}
@@ -186,12 +184,18 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 	
 	public ItemStack determineOutput() {
-		return new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, items[4].itemID);
+		return new ItemStack(new ItemSquareTemplate(new BlockCompactor()), 1, 0);
 	}
 	
 	private void decrementInputs() {
 		for (int i = 0; i < items.length - 1; i++) {
 			items[i].stackSize--;
 		}
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

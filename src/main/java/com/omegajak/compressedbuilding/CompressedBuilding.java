@@ -8,7 +8,6 @@ import com.omegajak.compressedbuilding.config.ConfigHandler;
 import com.omegajak.compressedbuilding.creativeTab.CreativeTab;
 import com.omegajak.compressedbuilding.items.Items;
 import com.omegajak.compressedbuilding.lib.ModInformation;
-import com.omegajak.compressedbuilding.network.PacketHandler;
 import com.omegajak.compressedbuilding.proxies.CommonProxy;
 
 import cpw.mods.fml.common.Mod;
@@ -29,7 +28,7 @@ public class CompressedBuilding {
 	@Instance(ModInformation.ID)
 	public static CompressedBuilding instance;
 	
-	@SidedProxy(clientSide = "warlockjk.compressedBuilding.proxies.ClientProxy", serverSide = "warlockjk.compressedBuilding.proxies.CommonProxy")
+	@SidedProxy(clientSide = "com.omegajak.compressedbuilding.proxies.ClientProxy", serverSide = "com.omegajak.compressedbuilding.proxies.CommonProxy")
 	public static CommonProxy proxy;
 	
 	@EventHandler

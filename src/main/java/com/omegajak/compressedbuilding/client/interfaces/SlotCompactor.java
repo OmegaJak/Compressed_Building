@@ -4,7 +4,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import warlockjk.compressedBuilding.tileentities.TileEntityCompactor;
+
+import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
 public class SlotCompactor extends Slot {
 	

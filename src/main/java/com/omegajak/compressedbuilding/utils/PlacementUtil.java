@@ -1,10 +1,14 @@
 package com.omegajak.compressedbuilding.utils;
 
+import net.minecraft.block.BlockStone;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import com.omegajak.compressedbuilding.blocks.BlockCompactor;
 import com.omegajak.compressedbuilding.blocks.Blocks;
+import com.omegajak.compressedbuilding.items.ItemSquareTemplate;
 
 public class PlacementUtil {
 	
@@ -42,7 +46,7 @@ public class PlacementUtil {
 			
 			sideBasedLogic(side);//Manipulates where the loops below start and end for proper orientation based on the side
 			orientationLogic(world, x, y, z, side);//Changes the east-west vs north-south orientation
-			if(!world.getBlockMaterial(x, y, z).isSolid()) {
+			if(!world.getBlock(x, y, z).getMaterial().isSolid()) {
 				//nonSolidLogic(side);//Makes things work as you would think they would with grass and such
 				orientationArr[0] = -1;
 				orientationArr[1] = 2;
@@ -57,21 +61,21 @@ public class PlacementUtil {
 				for(int j = orientationArr[2]; j < orientationArr[3]; j++) {
 					if (sneaking) {
 						if (orientationArr[5] == 1) {
-							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareTemplate.blockID) {
-								world.setBlock(x + i, y + j, z + orientationArr[4], id);
+							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlock(x + i, y + j, z + orientationArr[4]).getMaterial().isSolid() || world.getBlock(x + i, y + j, z + orientationArr[4]).getUnlocalizedName() == Blocks.squareTemplate.getUnlocalizedName()) {
+								world.setBlock(x + i, y + j, z + orientationArr[4], new BlockStone(), 0, 1);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}else{
-							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlockMaterial(x + orientationArr[4], y + j, z + i).isSolid() || world.getBlockId(x + orientationArr[4], y + j, z + i) == Blocks.squareTemplate.blockID) {
-								world.setBlock(x + orientationArr[4], y + j, z + i, id);
+							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlock(x + orientationArr[4], y + j, z + i).getMaterial().isSolid() || world.getBlock(x + orientationArr[4], y + j, z + i).getUnlocalizedName()  == Blocks.squareTemplate.getUnlocalizedName() ) {
+								world.setBlock(x + orientationArr[4], y + j, z + i, new BlockStone(), 0, 1);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}
 					}else{
-						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlockMaterial(x + i, y + orientationArr[4], z + j).isSolid() || world.getBlockId(x + i, y + orientationArr[4], z + j) == Blocks.squareTemplate.blockID) {
-							world.setBlock(x + i, y + orientationArr[4], z + j, id);
+						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlock(x + i, y + orientationArr[4], z + j).getMaterial().isSolid() || world.getBlock(x + i, y + orientationArr[4], z + j).getUnlocalizedName()  == Blocks.squareTemplate.getUnlocalizedName() ) {
+							world.setBlock(x + i, y + orientationArr[4], z + j, new BlockStone(), 0, 1);
 						}else{
 							spawnCompensation(world, id, 1, x, y, z, player);
 						}
@@ -148,7 +152,7 @@ public class PlacementUtil {
 	}
 	
 	public void spawnCompensation(World world, int id, int count, double x, double y, double z, EntityPlayer player) {
-		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(id, count, 0));
+		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(new ItemSquareTemplate(new BlockCompactor()), count, 0));
 		double distance = getDistance(x, y, z, player.posX, player.posY, player.posZ);
 		entityItem.motionX = (double)((player.posX - x) * distance * 0.01D);
 		entityItem.motionY = (double)((player.posY - y) * distance * 0.01D);
@@ -165,11 +169,11 @@ public class PlacementUtil {
 			originalCount = 0;		
 			for (int n = orientationArr[0]; n < orientationArr[1]; n++) {
 				if(orientationArr[5] == 1) {
-					if(!(world.isAirBlock(x + n, y, z + orientationArr[4]) || !world.getBlockMaterial(x + n, y, z + orientationArr[4]).isSolid())){
+					if(!(world.isAirBlock(x + n, y, z + orientationArr[4]) || !world.getBlock(x + n, y, z + orientationArr[4]).getMaterial().isSolid())){
 						originalCount++;
 					}
 				}else{
-					if(!(world.isAirBlock(x + orientationArr[4], y, z + n) || !world.getBlockMaterial(x + orientationArr[4], y, z + n).isSolid())) {
+					if(!(world.isAirBlock(x + orientationArr[4], y, z + n) || !world.getBlock(x + orientationArr[4], y, z + n).getMaterial().isSolid())) {
 						originalCount++;
 					}
 				}

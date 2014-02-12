@@ -24,4 +24,7 @@ public class BlockInfo {
 	public static final String COMPACTOR_TEXTURE = "compactor";
 	
 	public static final String COMPACTOR_TE_KEY = "compactorTileEntity";
+	
+	//Categories
+	public static final String BLOCK_CATEGORY = "Blocks";
 }

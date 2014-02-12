@@ -1,8 +1,12 @@
 package com.omegajak.compressedbuilding.creativeTab;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import warlockjk.compressedBuilding.blocks.Blocks;
+
+import com.omegajak.compressedbuilding.blocks.BlockSquareTemplate;
+import com.omegajak.compressedbuilding.blocks.Blocks;
+
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class CreativeTab extends CreativeTabs {
@@ -20,6 +24,11 @@ public class CreativeTab extends CreativeTabs {
 			stack = new ItemStack(Blocks.squareTemplate);
 		}
 		return stack;
+	}
+
+	@Override
+	public Item getTabIconItem() {
+		return null;
 	}
 	
 }

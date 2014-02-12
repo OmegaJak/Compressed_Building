@@ -16,7 +16,7 @@ public class Blocks {
 	public static void init() {
 		squareTemplate = new BlockSquareTemplate(BlockInfo.SQTEMPLATE_ID);
 		GameRegistry.registerBlock(squareTemplate, ItemSquareTemplate.class, BlockInfo.SQTEMPLATE_KEY);
-		compactor = new BlockCompactor(BlockInfo.COMPACTOR_ID);
+		compactor = new BlockCompactor();
 		GameRegistry.registerBlock(compactor, BlockInfo.COMPACTOR_KEY);
 	}
 	

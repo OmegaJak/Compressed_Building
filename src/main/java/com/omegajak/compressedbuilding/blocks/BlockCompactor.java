@@ -20,7 +20,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCompactor extends BlockContainer {
-	public BlockCompactor(int id) {
+	public BlockCompactor() {
 		super(Material.rock);
 		
 		setCreativeTab(com.omegajak.compressedbuilding.CompressedBuilding.tabCompressedBuilding);
