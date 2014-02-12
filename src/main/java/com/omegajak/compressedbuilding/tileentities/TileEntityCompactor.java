@@ -2,6 +2,7 @@ package com.omegajak.compressedbuilding.tileentities;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -167,8 +168,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		return false;*/
 		
 		for (int i = 1; i < items.length - 1; i++) {
-			if (items[i] != null) {
-				if (!items[i].equals(items[i - 1])) {
+			if (items[i] != null && items[i - 1] != null) {
+				if (Item.getIdFromItem(items[i].getItem()) != Item.getIdFromItem(items[i - 1].getItem())) {
 					System.out.println("It was not homogenous!");
 					return false;
 				}else if (i == items.length - 1) {
