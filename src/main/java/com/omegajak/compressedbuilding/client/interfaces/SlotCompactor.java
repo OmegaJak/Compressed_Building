@@ -1,5 +1,6 @@
 package com.omegajak.compressedbuilding.client.interfaces;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemBlock;

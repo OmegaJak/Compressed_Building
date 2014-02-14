@@ -9,6 +9,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 import com.omegajak.compressedbuilding.blocks.BlockSquareTemplate;
+import com.omegajak.compressedbuilding.blocks.Blocks;
+import com.omegajak.compressedbuilding.lib.BlockInfo;
+import com.omegajak.compressedbuilding.lib.ModInformation;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityCompactor extends TileEntity implements IInventory {
 	
@@ -133,7 +138,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			if (determineIfHomogenous()) {
 				if (determineIfFilled()) {
 					System.out.println("Success!");
-					setInventorySlotContents(9, determineOutput());
+					ItemStack itemStack = determineOutput();
+					System.out.println(itemStack.getUnlocalizedName());
+					setInventorySlotContents(9, itemStack);
 					decrementInputs();
 				}
 			}
@@ -150,11 +157,11 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	
 	//Determines if everything in the compacting grid is the same item
 	public boolean determineIfHomogenous() {
-	/**	for (int i = 0; i < items.length - 1; i++) {
+		for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] != null) {
-				String itemName = items[i].getDisplayName();
+				int lastID = Item.getIdFromItem(items[i].getItem());
 				for (int k = i; k < items.length - 1; k++) {
-					if (items[k] != null && items[k].getDisplayName() != itemName) {
+					if (items[k] != null && Item.getIdFromItem(items[k].getItem())!= lastID) {
 						System.out.println("It was not homogenous!");
 						return false;
 					}
@@ -164,20 +171,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			}
 		}
 		System.out.println("It was empty!");
-		return false;*/
-		
-		for (int i = 1; i < items.length - 1; i++) {
-			if (items[i] != null && items[i - 1] != null) {
-				if (Item.getIdFromItem(items[i].getItem()) != Item.getIdFromItem(items[i - 1].getItem())) {
-					System.out.println("It was not homogenous!");
-					return false;
-				}else if (i == items.length - 1) {
-					System.out.println("It was homogenous!");
-					return true;
-				}
-			}
-		}
-		System.out.println("It was empty or something!");
 		return false;
 	}
 	
@@ -198,12 +191,13 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 	
 	public ItemStack determineOutput() {
-		return new ItemStack(new BlockSquareTemplate(), 1, 0);
+		return new ItemStack(Blocks.squareTemplate, 1, 0);
 	}
 	
 	private void decrementInputs() {
 		for (int i = 0; i < items.length - 1; i++) {
-			items[i].stackSize--;
+	//		items[i].stackSize--;
+			decrStackSize(i, 1);
 		}
 	}
 

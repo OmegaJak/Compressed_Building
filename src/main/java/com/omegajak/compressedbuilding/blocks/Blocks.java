@@ -18,14 +18,14 @@ public class Blocks {
 	
 	public static void init() {
 		squareTemplate = new BlockSquareTemplate();
-		GameRegistry.registerBlock(squareTemplate, ItemSquareTemplate.class, BlockInfo.SQTEMPLATE_KEY);
+		GameRegistry.registerBlock(squareTemplate.setBlockName(BlockInfo.SQTEMPLATE_UNLOCALIZED_NAME).setCreativeTab(CompressedBuilding.tabCompressedBuilding).setBlockTextureName(BlockInfo.SQTEMPLATE_TEXTURE), ItemSquareTemplate.class, BlockInfo.SQTEMPLATE_KEY);
 		compactor = new BlockCompactor();
 		GameRegistry.registerBlock(compactor, BlockInfo.COMPACTOR_KEY);
 	}
 	
 	public static void addNames() {
-		LanguageRegistry.addName(squareTemplate, BlockInfo.SQTEMPLATE_NAME);
-		LanguageRegistry.addName(compactor, BlockInfo.COMPACTOR_NAME);
+//		LanguageRegistry.addName(squareTemplate, BlockInfo.SQTEMPLATE_NAME);
+//		LanguageRegistry.addName(compactor, BlockInfo.COMPACTOR_NAME);
 	}
 	
 	public static void registerTileEntities() {
