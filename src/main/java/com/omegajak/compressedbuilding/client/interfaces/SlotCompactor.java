@@ -1,12 +1,14 @@
 package com.omegajak.compressedbuilding.client.interfaces;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class SlotCompactor extends Slot {
 	
@@ -26,10 +28,10 @@ public class SlotCompactor extends Slot {
 		return false;
 	}
 	
+	@Override
 	public void onSlotChanged() {
 		if (isInputSlot) {
 			teInventory.checkForCompacting();
 		}
-//		super.onSlotChanged();
 	}
 }

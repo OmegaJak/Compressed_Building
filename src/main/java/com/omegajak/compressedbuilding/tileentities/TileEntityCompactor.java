@@ -36,25 +36,30 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 
 	@Override
 	public ItemStack decrStackSize(int slot, int count) {
-		ItemStack itemstack = getStackInSlot(slot);
+		ItemStack itemStack = getStackInSlot(slot);
 		
-		if (itemstack != null) {
-			if (itemstack.stackSize <= count) {
+		if (itemStack != null) {
+			if (itemStack.stackSize <= count) {
 				setInventorySlotContents(slot, null);
 			}else{
-				itemstack = itemstack.splitStack(count);
-				updateEntity();
+				itemStack = itemStack.splitStack(count);
+				if (itemStack.stackSize == 0)
+                {
+                    setInventorySlotContents(slot, null);
+                }
 			}
 		}
 
-		return itemstack;
+		return itemStack;
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
-		ItemStack item = getStackInSlot(slot);
-		setInventorySlotContents(slot, null);
-		return item;
+		ItemStack itemStack = getStackInSlot(slot);
+		if (itemStack != null) {
+			setInventorySlotContents(slot, null);
+		}
+		return itemStack;
 	}
 
 	@Override
@@ -64,7 +69,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
-		updateEntity();
 	}
 
 	@Override
@@ -97,20 +101,18 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		
-		NBTTagList items = new NBTTagList();
+		NBTTagList tagList = new NBTTagList();
 		
 		for (int i = 0; i < getSizeInventory(); i++) {
-			ItemStack stack = getStackInSlot(i);
-			
-			if (stack != null) {
-				NBTTagCompound item = new NBTTagCompound();
-				item.setByte("Slot", (byte)i);
-				stack.writeToNBT(item);
-				items.appendTag(item);
+			if (items[i] != null) {
+				NBTTagCompound tagCompound = new NBTTagCompound();
+				tagCompound.setByte("Slot", (byte)i);
+				items[i].writeToNBT(tagCompound);
+				tagList.appendTag(tagCompound);
 			}
 		}
 		
-		compound.setTag("Items", items);
+		compound.setTag("Items", tagList);
 	}
 	
 	@Override
@@ -118,20 +120,20 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		super.readFromNBT(compound);
 		
 		//not entirely sure what this does...
-		NBTTagList items = compound.getTagList("Items", 0);
-		
-		for (int i = 0; i < items.tagCount(); i++) {
-			NBTTagCompound item = (NBTTagCompound)items.getCompoundTagAt(i);
-			int slot = item.getByte("Slot");
+		NBTTagList list = compound.getTagList("Items", 0);
+		items = new ItemStack[this.getSizeInventory()];
+		for (int i = 0; i < list.tagCount(); i++) {
+			NBTTagCompound tagCompound = (NBTTagCompound)list.getCompoundTagAt(i);
+			int slot = tagCompound.getByte("Slot");
 			
 			if (slot >= 0 && slot < getSizeInventory()) {
-				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
+				items[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
 			}
 		}
 	}
 	
 	public void checkForCompacting() {
-		if (!worldObj.isRemote) {
+	//	if (!worldObj.isRemote) {
 			System.out.println("checkForCompacting was called for the " + num + " time on the " + sideToString() + " side");
 			num++;
 			distributeItems();
@@ -140,11 +142,12 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 					System.out.println("Success!");
 					ItemStack itemStack = determineOutput();
 					System.out.println(itemStack.getUnlocalizedName());
-					setInventorySlotContents(9, itemStack);
 					decrementInputs();
+					setInventorySlotContents(9, itemStack);
+					markDirty();
 				}
 			}
-		}
+//		}
 	}
 	
 	private String sideToString() {

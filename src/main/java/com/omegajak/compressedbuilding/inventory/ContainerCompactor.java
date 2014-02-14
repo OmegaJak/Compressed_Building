@@ -18,8 +18,10 @@ public class ContainerCompactor extends Container {
         int i;
         int k;
         
+        //add the output slot
         this.addSlotToContainer(new SlotCompactor(this.compactor, 9, 124, 35, false));
-
+        
+        //add the 'crafting grid'
         for (i = 0; i < 3; i++)
         {
             for (k = 0; k < 3; k++)
@@ -27,7 +29,8 @@ public class ContainerCompactor extends Container {
                 this.addSlotToContainer(new SlotCompactor(this.compactor, k + i * 3, 30 + k * 18, 17 + i * 18, true));
             }
         }
-
+        
+        //add the player's inventory
         for (i = 0; i < 3; ++i)
         {
             for (k = 0; k < 9; ++k)
@@ -35,7 +38,8 @@ public class ContainerCompactor extends Container {
                 this.addSlotToContainer(new Slot(inventoryPlayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
             }
         }
-
+        
+        //player's hotbar
         for (i = 0; i < 9; ++i)
         {
             this.addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
