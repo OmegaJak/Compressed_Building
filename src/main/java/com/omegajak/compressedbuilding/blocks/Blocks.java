@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 
 import com.omegajak.compressedbuilding.CompressedBuilding;
 import com.omegajak.compressedbuilding.items.ItemSquareTemplate;
+//import com.omegajak.compressedbuilding.items.ItemSquareTemplate;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
 import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
@@ -17,10 +18,9 @@ public class Blocks {
 	
 	public static void init() {
 		squareTemplate = new BlockSquareTemplate();
-		GameData.blockRegistry.addObject(BlockInfo.SQTEMPLATE_ID, BlockInfo.SQTEMPLATE_NAME, squareTemplate);
-//		GameRegistry.registerBlock(squareTemplate, ItemSquareTemplate.class, BlockInfo.SQTEMPLATE_KEY);
+		GameRegistry.registerBlock(squareTemplate, ItemSquareTemplate.class, BlockInfo.SQTEMPLATE_KEY);
 		compactor = new BlockCompactor();
-		GameData.blockRegistry.addObject(BlockInfo.COMPACTOR_ID, BlockInfo.COMPACTOR_NAME, compactor);
+		GameRegistry.registerBlock(compactor, BlockInfo.COMPACTOR_KEY);
 	}
 	
 	public static void addNames() {

@@ -8,8 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-import com.omegajak.compressedbuilding.blocks.BlockCompactor;
-import com.omegajak.compressedbuilding.items.ItemSquareTemplate;
+import com.omegajak.compressedbuilding.blocks.BlockSquareTemplate;
 
 public class TileEntityCompactor extends TileEntity implements IInventory {
 	
@@ -199,7 +198,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 	
 	public ItemStack determineOutput() {
-		return new ItemStack(new ItemSquareTemplate(new BlockCompactor()), 1, 0);
+		return new ItemStack(new BlockSquareTemplate(), 1, 0);
 	}
 	
 	private void decrementInputs() {
