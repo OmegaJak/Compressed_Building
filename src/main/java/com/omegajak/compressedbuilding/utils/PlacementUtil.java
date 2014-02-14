@@ -66,14 +66,14 @@ public class PlacementUtil {
 								world.setBlock(x + i, y + j, z + orientationArr[4], block, 0, 2);
 								successCount++;
 							}else{
-								spawnCompensation(world, 1, x, y, z, player);
+								spawnCompensation(world, 1, x, y, z, player, block);
 							}
 						}else{
 							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlock(x + orientationArr[4], y + j, z + i).getMaterial().isSolid() || world.getBlock(x + orientationArr[4], y + j, z + i).getUnlocalizedName()  == Blocks.squareTemplate.getUnlocalizedName() ) {
 								world.setBlock(x + orientationArr[4], y + j, z + i, block, 0, 2);
 								successCount++;
 							}else{
-								spawnCompensation(world, 1, x, y, z, player);
+								spawnCompensation(world, 1, x, y, z, player, block);
 							}
 						}
 					}else{
@@ -81,7 +81,7 @@ public class PlacementUtil {
 							world.setBlock(x + i, y + orientationArr[4], z + j, block, 0, 2);
 							successCount++;
 						}else{
-							spawnCompensation(world, 1, x, y, z, player);
+							spawnCompensation(world, 1, x, y, z, player, block);
 						}
 					}
 				}
@@ -160,8 +160,8 @@ public class PlacementUtil {
 		}
 	}
 	
-	public void spawnCompensation(World world, int count, double x, double y, double z, EntityPlayer player) {
-		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(new ItemSquareTemplate(new BlockSquareTemplate()), count, 0));
+	public void spawnCompensation(World world, int count, double x, double y, double z, EntityPlayer player, Block block) {
+		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(block, count, 1));
 		double distance = getDistance(x, y, z, player.posX, player.posY, player.posZ);
 		entityItem.motionX = (double)((player.posX - x) * distance * 0.01D);
 		entityItem.motionY = (double)((player.posY - y) * distance * 0.01D);
