@@ -42,5 +42,5 @@ public class BlockSquareTemplate extends Block{
 	}
 	
 	
-
+	
 }

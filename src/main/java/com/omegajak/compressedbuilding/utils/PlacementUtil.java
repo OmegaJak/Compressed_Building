@@ -1,12 +1,12 @@
 package com.omegajak.compressedbuilding.utils;
 
-import net.minecraft.block.BlockStone;
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import com.omegajak.compressedbuilding.blocks.BlockCompactor;
+import com.omegajak.compressedbuilding.blocks.BlockSquareTemplate;
 import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.items.ItemSquareTemplate;
 
@@ -29,7 +29,7 @@ public class PlacementUtil {
 	 * @param sizeFactor1 Modifies the size of what's placed, 1 would keep it at the default 3 TODO Implement this
 	 * @param sizeFactor2 Modifies the size of what's placed, 1 would keep it at the default 3 TODO Implement this
 	 */
-	public boolean placeBlocks(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, int id, double sizeFactor1, double sizeFactor2) {
+	public boolean placeBlocks(EntityPlayer player, World world, int x, int y, int z, int side, Block block, double sizeFactor1, double sizeFactor2) {
 		if (!world.isRemote) {
 			sneaking = player.isSneaking();
 			orientationArr[0] = -1;//Starting of i
@@ -63,25 +63,25 @@ public class PlacementUtil {
 					if (sneaking) {
 						if (orientationArr[5] == 1) {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlock(x + i, y + j, z + orientationArr[4]).getMaterial().isSolid() || world.getBlock(x + i, y + j, z + orientationArr[4]).getUnlocalizedName() == Blocks.squareTemplate.getUnlocalizedName()) {
-								world.setBlock(x + i, y + j, z + orientationArr[4], new BlockStone(), 0, 2);
+								world.setBlock(x + i, y + j, z + orientationArr[4], block, 0, 2);
 								successCount++;
 							}else{
-								spawnCompensation(world, id, 1, x, y, z, player);
+								spawnCompensation(world, 1, x, y, z, player);
 							}
 						}else{
 							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlock(x + orientationArr[4], y + j, z + i).getMaterial().isSolid() || world.getBlock(x + orientationArr[4], y + j, z + i).getUnlocalizedName()  == Blocks.squareTemplate.getUnlocalizedName() ) {
-								world.setBlock(x + orientationArr[4], y + j, z + i, new BlockStone(), 0, 2);
+								world.setBlock(x + orientationArr[4], y + j, z + i, block, 0, 2);
 								successCount++;
 							}else{
-								spawnCompensation(world, id, 1, x, y, z, player);
+								spawnCompensation(world, 1, x, y, z, player);
 							}
 						}
 					}else{
 						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlock(x + i, y + orientationArr[4], z + j).getMaterial().isSolid() || world.getBlock(x + i, y + orientationArr[4], z + j).getUnlocalizedName()  == Blocks.squareTemplate.getUnlocalizedName() ) {
-							world.setBlock(x + i, y + orientationArr[4], z + j, new BlockStone(), 0, 2);
+							world.setBlock(x + i, y + orientationArr[4], z + j, block, 0, 2);
 							successCount++;
 						}else{
-							spawnCompensation(world, id, 1, x, y, z, player);
+							spawnCompensation(world, 1, x, y, z, player);
 						}
 					}
 				}
@@ -160,8 +160,8 @@ public class PlacementUtil {
 		}
 	}
 	
-	public void spawnCompensation(World world, int id, int count, double x, double y, double z, EntityPlayer player) {
-		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(new ItemSquareTemplate(new BlockCompactor()), count, 0));
+	public void spawnCompensation(World world, int count, double x, double y, double z, EntityPlayer player) {
+		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(new ItemSquareTemplate(new BlockSquareTemplate()), count, 0));
 		double distance = getDistance(x, y, z, player.posX, player.posY, player.posZ);
 		entityItem.motionX = (double)((player.posX - x) * distance * 0.01D);
 		entityItem.motionY = (double)((player.posY - y) * distance * 0.01D);

@@ -12,8 +12,10 @@ import net.minecraft.world.World;
 import com.omegajak.compressedbuilding.utils.PlacementUtil;
 
 public class ItemSquareTemplate extends ItemBlock{
+	Block correspondingBlock;
 	public ItemSquareTemplate(Block block) {
 		super(block);
+		this.correspondingBlock = block;
 	}
 	
 	@Override
@@ -21,7 +23,7 @@ public class ItemSquareTemplate extends ItemBlock{
 		player.swingItem();
 		if(!world.isRemote) {
 			PlacementUtil placementUtil = new PlacementUtil();
-			placementUtil.placeBlocks(stack, player, world, x, y, z, side, stack.getItemDamage(), 1, 1);
+			placementUtil.placeBlocks(player, world, x, y, z, side, correspondingBlock, 1, 1);
 			if (!player.capabilities.isCreativeMode) {
 				stack.stackSize--;
 			}
