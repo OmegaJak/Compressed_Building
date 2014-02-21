@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.omegajak.compressedbuilding.blocks.BlockSquareTemplate;
 import com.omegajak.compressedbuilding.blocks.Blocks;
+import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
 import com.omegajak.compressedbuilding.lib.ModInformation;
 
@@ -18,7 +19,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class TileEntityCompactor extends TileEntity implements IInventory {
 	
 	private ItemStack[] items;
+	public ContainerCompactor container;
 	int num = 0;
+	private boolean isValidInput = false;
+	ItemStack anItemStack = null;
 	
 	public TileEntityCompactor() {
 		items = new ItemStack[10];
@@ -40,12 +44,11 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		
 		if (itemStack != null) {
 			if (itemStack.stackSize <= count) {
-				setInventorySlotContents(slot, null);
+				setItem(slot, null);
 			}else{
 				itemStack = itemStack.splitStack(count);
-				if (itemStack.stackSize == 0)
-                {
-                    setInventorySlotContents(slot, null);
+				if (itemStack.stackSize == 0) {
+					setItem(slot, null);
                 }
 			}
 		}
@@ -57,7 +60,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		ItemStack itemStack = getStackInSlot(slot);
 		if (itemStack != null) {
-			setInventorySlotContents(slot, null);
+			setItem(slot, null);
 		}
 		return itemStack;
 	}
@@ -65,10 +68,13 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
 		items[slot] = itemstack;
-		
+		if (!worldObj.isRemote) {
+			checkForCompacting();
+		}
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
+		container.detectAndSendChanges();
 	}
 
 	@Override
@@ -133,21 +139,27 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 	
 	public void checkForCompacting() {
-	//	if (!worldObj.isRemote) {
+//		if (!worldObj.isRemote) {
 			System.out.println("checkForCompacting was called for the " + num + " time on the " + sideToString() + " side");
 			num++;
 			distributeItems();
 			if (determineIfHomogenous()) {
 				if (determineIfFilled()) {
 					System.out.println("Success!");
+					isValidInput = true;
 					ItemStack itemStack = determineOutput();
 					System.out.println(itemStack.getUnlocalizedName());
 					decrementInputs();
-					setInventorySlotContents(9, itemStack);
-					markDirty();
 				}
 			}
 //		}
+		if (isValidInput) {
+			ItemStack itemStack = determineOutput();
+//			setInventorySlotContents(9, itemStack);
+			setItem(9, itemStack);
+			markDirty();
+			isValidInput = false;
+		}
 	}
 	
 	private String sideToString() {
@@ -155,6 +167,13 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			return "client";
 		}else{
 			return "server";
+		}
+	}
+	
+	public void setItem(int index, ItemStack itemStack) {
+		items[index] = itemStack;
+		if (!worldObj.isRemote) {
+			container.detectAndSendChanges();
 		}
 	}
 	

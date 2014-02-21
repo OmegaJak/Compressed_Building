@@ -15,6 +15,7 @@ public class ContainerCompactor extends Container {
 
     public ContainerCompactor(InventoryPlayer inventoryPlayer, TileEntityCompactor compactor) {
     	this.compactor = compactor;
+    	compactor.container = this;
         int i;
         int k;
         

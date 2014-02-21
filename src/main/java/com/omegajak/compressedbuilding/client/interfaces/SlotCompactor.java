@@ -30,8 +30,9 @@ public class SlotCompactor extends Slot {
 	
 	@Override
 	public void onSlotChanged() {
-		if (isInputSlot) {
-			teInventory.checkForCompacting();
-		}
+//		if (isInputSlot) {
+//			teInventory.checkForCompacting();
+//		}
+		super.onSlotChanged();
 	}
 }
