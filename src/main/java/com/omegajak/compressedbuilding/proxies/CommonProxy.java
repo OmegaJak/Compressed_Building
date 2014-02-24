@@ -1,4 +1,4 @@
-package warlockjk.compressedBuilding.proxies;
+package com.omegajak.compressedbuilding.proxies;
 
 public class CommonProxy {
 

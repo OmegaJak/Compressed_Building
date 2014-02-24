@@ -1,12 +1,14 @@
-package warlockjk.compressedBuilding.blocks;
+package com.omegajak.compressedbuilding.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import warlockjk.compressedBuilding.CompressedBuilding;
-import warlockjk.compressedBuilding.lib.BlockInfo;
+
+import com.omegajak.compressedbuilding.CompressedBuilding;
+import com.omegajak.compressedbuilding.lib.BlockInfo;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

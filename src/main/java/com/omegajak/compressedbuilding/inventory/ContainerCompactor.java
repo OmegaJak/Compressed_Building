@@ -1,12 +1,13 @@
-package warlockjk.compressedBuilding.inventory;
+package com.omegajak.compressedbuilding.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import warlockjk.compressedBuilding.client.interfaces.SlotCompactor;
-import warlockjk.compressedBuilding.tileentities.TileEntityCompactor;
+
+import com.omegajak.compressedbuilding.client.interfaces.SlotCompactor;
+import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
 public class ContainerCompactor extends Container {
 
@@ -14,6 +15,7 @@ public class ContainerCompactor extends Container {
 
     public ContainerCompactor(InventoryPlayer inventoryPlayer, TileEntityCompactor compactor) {
     	this.compactor = compactor;
+    	compactor.container = this;
         int i;
         int k;
         

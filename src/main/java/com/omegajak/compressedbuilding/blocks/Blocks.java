@@ -1,9 +1,11 @@
-package warlockjk.compressedBuilding.blocks;
+package com.omegajak.compressedbuilding.blocks;
 
 import net.minecraft.block.Block;
-import warlockjk.compressedBuilding.items.ItemSquareTemplate;
-import warlockjk.compressedBuilding.lib.BlockInfo;
-import warlockjk.compressedBuilding.tileentities.TileEntityCompactor;
+
+import com.omegajak.compressedbuilding.items.ItemSquareTemplate;
+import com.omegajak.compressedbuilding.lib.BlockInfo;
+import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 

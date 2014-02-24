@@ -1,10 +1,11 @@
-package warlockjk.compressedBuilding.utils;
+package com.omegajak.compressedbuilding.utils;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import warlockjk.compressedBuilding.blocks.Blocks;
+
+import com.omegajak.compressedbuilding.blocks.Blocks;
 
 public class PlacementUtil {
 	

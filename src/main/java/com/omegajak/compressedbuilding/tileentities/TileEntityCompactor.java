@@ -1,4 +1,4 @@
-package warlockjk.compressedBuilding.tileentities;
+package com.omegajak.compressedbuilding.tileentities;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -6,12 +6,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import warlockjk.compressedBuilding.lib.BlockInfo;
+
+import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
+import com.omegajak.compressedbuilding.lib.BlockInfo;
 
 public class TileEntityCompactor extends TileEntity implements IInventory {
 	
 	private ItemStack[] items;
 	int num = 0;
+	public ContainerCompactor container;
+	private boolean isValidInput = false;
 	
 	public TileEntityCompactor() {
 		items = new ItemStack[10];
@@ -54,10 +58,13 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
 		items[slot] = itemstack;
 		
+		if (!worldObj.isRemote) {
+			checkForCompacting();
+		}
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
-		onInventoryChanged();
+		container.detectAndSendChanges();
 	}
 
 	@Override
@@ -128,17 +135,25 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 	
 	public void checkForCompacting() {
-		if (!worldObj.isRemote) {
+//		if (!worldObj.isRemote) {
 			System.out.println("checkForCompacting was called for the " + num + " time on the " + sideToString() + " side");
 			num++;
 			distributeItems();
 			if (determineIfHomogenous()) {
 				if (determineIfFilled()) {
 					System.out.println("Success!");
-					setInventorySlotContents(9, determineOutput());
+					isValidInput = true;
+					ItemStack itemStack = determineOutput();
+					System.out.println(itemStack.getUnlocalizedName());
 					decrementInputs();
 				}
 			}
+//		}
+		if (isValidInput) {
+			ItemStack itemStack = determineOutput();
+//			setInventorySlotContents(9, itemStack);
+			setItem(9, itemStack);
+			isValidInput = false;
 		}
 	}
 	
@@ -147,6 +162,13 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			return "client";
 		}else{
 			return "server";
+		}
+	}
+	
+	public void setItem(int index, ItemStack itemStack) {
+		items[index] = itemStack;
+		if (!worldObj.isRemote) {
+			container.detectAndSendChanges();
 		}
 	}
 	

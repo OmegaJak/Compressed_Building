@@ -1,4 +1,4 @@
-package warlockjk.compressedBuilding.items;
+package com.omegajak.compressedbuilding.items;
 
 import java.util.List;
 
@@ -8,7 +8,8 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import warlockjk.compressedBuilding.utils.PlacementUtil;
+
+import com.omegajak.compressedbuilding.utils.PlacementUtil;
 
 public class ItemSquareTemplate extends ItemBlock{
 	public ItemSquareTemplate(int id) {

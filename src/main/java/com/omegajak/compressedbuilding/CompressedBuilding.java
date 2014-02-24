@@ -19,6 +19,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 //import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkMod;
 
 @Mod(modid = ModInformation.ID, name = ModInformation.NAME, version = ModInformation.VERSION)
 @NetworkMod(channels = {ModInformation.CHANNEL}, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
@@ -29,7 +30,7 @@ public class CompressedBuilding {
 	@Instance(ModInformation.ID)
 	public static CompressedBuilding instance;
 	
-	@SidedProxy(clientSide = "warlockjk.compressedBuilding.proxies.ClientProxy", serverSide = "warlockjk.compressedBuilding.proxies.CommonProxy")
+	@SidedProxy(clientSide = "com.omegajak.compressedbuilding.proxies.ClientProxy", serverSide = "com.omegajak.compressedbuilding.proxies.CommonProxy")
 	public static CommonProxy proxy;
 	
 	@EventHandler

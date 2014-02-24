@@ -1,10 +1,11 @@
-package warlockjk.compressedBuilding.client.interfaces;
+package com.omegajak.compressedbuilding.client.interfaces;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import warlockjk.compressedBuilding.tileentities.TileEntityCompactor;
+
+import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
 public class SlotCompactor extends Slot {
 	
@@ -25,9 +26,9 @@ public class SlotCompactor extends Slot {
 	}
 	
 	public void onSlotChanged() {
-		if (isInputSlot) {
-			teInventory.checkForCompacting();
-		}
+//		if (isInputSlot) {
+//			teInventory.checkForCompacting();
+//		}
 //		super.onSlotChanged();
 	}
 }

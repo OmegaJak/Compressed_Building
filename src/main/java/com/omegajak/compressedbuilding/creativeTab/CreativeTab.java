@@ -1,8 +1,10 @@
-package warlockjk.compressedBuilding.creativeTab;
+package com.omegajak.compressedbuilding.creativeTab;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import warlockjk.compressedBuilding.blocks.Blocks;
+
+import com.omegajak.compressedbuilding.blocks.Blocks;
+
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class CreativeTab extends CreativeTabs {

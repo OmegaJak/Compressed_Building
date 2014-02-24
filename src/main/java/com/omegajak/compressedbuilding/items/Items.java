@@ -1,8 +1,10 @@
-package warlockjk.compressedBuilding.items;
+package com.omegajak.compressedbuilding.items;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import warlockjk.compressedBuilding.blocks.Blocks;
+
+import com.omegajak.compressedbuilding.blocks.Blocks;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Items {

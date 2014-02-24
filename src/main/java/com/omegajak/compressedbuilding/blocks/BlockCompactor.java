@@ -1,4 +1,4 @@
-package warlockjk.compressedBuilding.blocks;
+package com.omegajak.compressedbuilding.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -8,9 +8,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import warlockjk.compressedBuilding.CompressedBuilding;
-import warlockjk.compressedBuilding.lib.BlockInfo;
-import warlockjk.compressedBuilding.tileentities.TileEntityCompactor;
+
+import com.omegajak.compressedbuilding.CompressedBuilding;
+import com.omegajak.compressedbuilding.lib.BlockInfo;
+import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
+
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

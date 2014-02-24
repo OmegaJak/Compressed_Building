@@ -1,11 +1,13 @@
-package warlockjk.compressedBuilding.client.interfaces;
+package com.omegajak.compressedbuilding.client.interfaces;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import warlockjk.compressedBuilding.CompressedBuilding;
-import warlockjk.compressedBuilding.inventory.ContainerCompactor;
-import warlockjk.compressedBuilding.tileentities.TileEntityCompactor;
+
+import com.omegajak.compressedbuilding.CompressedBuilding;
+import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
+import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
+
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
