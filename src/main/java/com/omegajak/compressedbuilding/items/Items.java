@@ -14,7 +14,7 @@ public class Items {
 	}
 	
 	public static void registerRecipes() {
-		GameRegistry.addRecipe(new ItemStack(Blocks.squareTemplate), new Object[] { "XXX", "XXX", "XXX", 'X', Block.cobblestone});
+		GameRegistry.addRecipe(new ItemStack(Blocks.compactor), new Object[] { "XYX", "Y Y", "XYX", 'X', Block.cobblestone, 'Y', Block.pistonBase});
 	}
 	
 }
