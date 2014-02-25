@@ -2,20 +2,27 @@ package com.omegajak.compressedbuilding.tileentities;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
+import com.omegajak.compressedbuilding.blocks.BlockSquareTemplate;
+import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
+import com.omegajak.compressedbuilding.lib.ModInformation;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityCompactor extends TileEntity implements IInventory {
 	
 	private ItemStack[] items;
-	int num = 0;
 	public ContainerCompactor container;
+	int num = 0;
 	private boolean isValidInput = false;
+	ItemStack anItemStack = null;
 	
 	public TileEntityCompactor() {
 		items = new ItemStack[10];
@@ -33,31 +40,34 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 
 	@Override
 	public ItemStack decrStackSize(int slot, int count) {
-		ItemStack itemstack = getStackInSlot(slot);
+		ItemStack itemStack = getStackInSlot(slot);
 		
-		if (itemstack != null) {
-			if (itemstack.stackSize <= count) {
-				setInventorySlotContents(slot, null);
+		if (itemStack != null) {
+			if (itemStack.stackSize <= count) {
+				setItem(slot, null);
 			}else{
-				itemstack = itemstack.splitStack(count);
-				onInventoryChanged();
+				itemStack = itemStack.splitStack(count);
+				if (itemStack.stackSize == 0) {
+					setItem(slot, null);
+                }
 			}
 		}
 
-		return itemstack;
+		return itemStack;
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
-		ItemStack item = getStackInSlot(slot);
-		setInventorySlotContents(slot, null);
-		return item;
+		ItemStack itemStack = getStackInSlot(slot);
+		if (itemStack != null) {
+			setItem(slot, null);
+		}
+		return itemStack;
 	}
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
 		items[slot] = itemstack;
-		
 		if (!worldObj.isRemote) {
 			checkForCompacting();
 		}
@@ -77,6 +87,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		return false;
 	}
 
+	
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
@@ -102,34 +113,33 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		
-		NBTTagList items = new NBTTagList();
+		NBTTagList tagList = new NBTTagList();
 		
 		for (int i = 0; i < getSizeInventory(); i++) {
-			ItemStack stack = getStackInSlot(i);
-			
-			if (stack != null) {
-				NBTTagCompound item = new NBTTagCompound();
-				item.setByte("Slot", (byte)i);
-				stack.writeToNBT(item);
-				items.appendTag(item);
+			if (items[i] != null) {
+				NBTTagCompound tagCompound = new NBTTagCompound();
+				tagCompound.setByte("Slot", (byte)i);
+				items[i].writeToNBT(tagCompound);
+				tagList.appendTag(tagCompound);
 			}
 		}
 		
-		compound.setTag("Items", items);
+		compound.setTag("Items", tagList);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-		NBTTagList items = compound.getTagList("Items");
-		
-		for (int i = 0; i < items.tagCount(); i++) {
-			NBTTagCompound item = (NBTTagCompound)items.tagAt(i);
-			int slot = item.getByte("Slot");
+		//not entirely sure what this does...
+		NBTTagList list = compound.getTagList("Items");
+		items = new ItemStack[this.getSizeInventory()];
+		for (int i = 0; i < list.tagCount(); i++) {
+			NBTTagCompound tagCompound = (NBTTagCompound)list.tagAt(i);
+			int slot = tagCompound.getByte("Slot");
 			
 			if (slot >= 0 && slot < getSizeInventory()) {
-				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
+				items[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
 			}
 		}
 	}
@@ -143,17 +153,17 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 				if (determineIfFilled()) {
 					System.out.println("Success!");
 					isValidInput = true;
-					ItemStack itemStack = determineOutput();
+					ItemStack itemStack = determineOutput(items[4].itemID);
 					System.out.println(itemStack.getUnlocalizedName());
-					decrementInputs();
 				}
 			}
 //		}
 		if (isValidInput) {
-			ItemStack itemStack = determineOutput();
+			ItemStack itemStack = determineOutput(items[4].itemID);
 //			setInventorySlotContents(9, itemStack);
 			setItem(9, itemStack);
 			isValidInput = false;
+			decrementInputs();
 		}
 	}
 	
@@ -207,13 +217,15 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public void distributeItems() {
 	}
 	
-	public ItemStack determineOutput() {
-		return new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, items[4].itemID);
+	public ItemStack determineOutput(int itemID) {
+//		System.out.println("This is on the " + sideToString() + " side and in items[4] there is a " + items[4].getDisplayName());
+		return new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, itemID);
 	}
 	
 	private void decrementInputs() {
 		for (int i = 0; i < items.length - 1; i++) {
-			items[i].stackSize--;
+	//		items[i].stackSize--;
+			decrStackSize(i, 1);
 		}
 	}
 }
