@@ -161,9 +161,10 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		if (isValidInput) {
 			ItemStack itemStack = determineOutput(items[4].itemID);
 //			setInventorySlotContents(9, itemStack);
-			setItem(9, itemStack);
+			if (setItem(9, itemStack)) {//make sure that item actually changed
+				decrementInputs();
+			}
 			isValidInput = false;
-			decrementInputs();
 		}
 	}
 	
@@ -175,11 +176,22 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		}
 	}
 	
-	public void setItem(int index, ItemStack itemStack) {
+	//Returns true if the item there is actually changed, returns false if nothing was changed
+	public boolean setItem(int index, ItemStack itemStack) {
+		if(items[index] != null && itemStack != null) {//avoiding nullPointerExceptions
+			ItemStack oldItemStack = items[index];
+			if (oldItemStack.isItemEqual(itemStack) && oldItemStack.stackSize == itemStack.stackSize) {//if the stacks are exactly the same
+				return false;
+			}
+		}
+		
+		//if it makes it through the above, then set that item slot
 		items[index] = itemStack;
-		if (!worldObj.isRemote) {
+		if (!worldObj.isRemote) {//if it's on the server side, tell the container to look for changes and send them to each listener
+			//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 			container.detectAndSendChanges();
 		}
+		return true;
 	}
 	
 	//Determines if everything in the compacting grid is the same item
