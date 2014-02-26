@@ -48,6 +48,10 @@ public class ContainerCompactor extends Container {
 	public boolean canInteractWith(EntityPlayer entityPlayer) {
 		return compactor.isUseableByPlayer(entityPlayer);
 	}
+    
+    public TileEntityCompactor getCompactor() {
+    	return (TileEntityCompactor)compactor;
+    }
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {

@@ -2,19 +2,14 @@ package com.omegajak.compressedbuilding.tileentities;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-import com.omegajak.compressedbuilding.blocks.BlockSquareTemplate;
-import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
-import com.omegajak.compressedbuilding.lib.ModInformation;
-
-import cpw.mods.fml.common.registry.GameRegistry;
+import com.omegajak.compressedbuilding.network.PacketHandler;
 
 public class TileEntityCompactor extends TileEntity implements IInventory {
 	
@@ -68,13 +63,16 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
 		items[slot] = itemstack;
-		if (!worldObj.isRemote) {
-			checkForCompacting();
-		}
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
-		container.detectAndSendChanges();
+		if (!worldObj.isRemote) {
+			onInventoryChanged(true);
+		}else if(worldObj.isRemote && slot == 9 && itemstack == null) {
+			if (determineIfHomogenous() && determineIfFilled()) {
+				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);
+			}
+		}
 	}
 
 	@Override
@@ -166,6 +164,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			}
 			isValidInput = false;
 		}
+		container.detectAndSendChanges();
 	}
 	
 	private String sideToString() {
@@ -188,10 +187,23 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		//if it makes it through the above, then set that item slot
 		items[index] = itemStack;
 		if (!worldObj.isRemote) {//if it's on the server side, tell the container to look for changes and send them to each listener
-			//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
-			container.detectAndSendChanges();
+			onInventoryChanged();
 		}
 		return true;
+	}
+	
+	@Override
+	public void onInventoryChanged() {
+		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
+		container.detectAndSendChanges();
+		super.onInventoryChanged();
+	}
+	
+	public void onInventoryChanged(boolean shouldCheckForCompacting) {
+		checkForCompacting();
+		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
+		container.detectAndSendChanges();
+		super.onInventoryChanged();
 	}
 	
 	//Determines if everything in the compacting grid is the same item
@@ -238,6 +250,15 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		for (int i = 0; i < items.length - 1; i++) {
 	//		items[i].stackSize--;
 			decrStackSize(i, 1);
+		}
+	}
+	
+	public void recieveInterfaceEvent(byte eventID, int itemID) {
+		switch (eventID) {
+		case 0:
+			setInventorySlotContents(9, null);
+//			decrementInputs();
+			break;
 		}
 	}
 }
