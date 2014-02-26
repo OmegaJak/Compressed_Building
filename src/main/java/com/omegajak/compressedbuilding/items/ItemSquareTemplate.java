@@ -14,6 +14,7 @@ import com.omegajak.compressedbuilding.utils.PlacementUtil;
 public class ItemSquareTemplate extends ItemBlock{
 	public ItemSquareTemplate(int id) {
 		super(id);
+		super.setHasSubtypes(true);
 	}
 	
 	@Override
