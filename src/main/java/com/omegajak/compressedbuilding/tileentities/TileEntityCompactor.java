@@ -159,9 +159,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		if (isValidInput) {
 			ItemStack itemStack = determineOutput(items[4].itemID);
 //			setInventorySlotContents(9, itemStack);
-			if (setItem(9, itemStack)) {//make sure that item actually changed
-				decrementInputs();
-			}
+			setItem(9, itemStack);
 			isValidInput = false;
 		}
 		container.detectAndSendChanges();
@@ -257,7 +255,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		switch (eventID) {
 		case 0:
 			setInventorySlotContents(9, null);
-//			decrementInputs();
+			decrementInputs();
 			break;
 		}
 	}
