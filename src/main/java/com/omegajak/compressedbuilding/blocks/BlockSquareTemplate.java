@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 
 import com.omegajak.compressedbuilding.CompressedBuilding;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
+import com.omegajak.compressedbuilding.proxies.ClientProxy;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -43,5 +44,34 @@ public class BlockSquareTemplate extends Block{
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
+	}
+	
+	@Override
+	public boolean isBlockNormalCube(World world, int x, int y, int z) {
+		return false;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return BlockInfo.SQTEMPLATE_RENDER_ID;
+	}
+	
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+	
+	@Override
+	public boolean canRenderInPass(int pass) {
+		//set the static variable in the clientProxy
+		ClientProxy.renderPass = pass;
+		
+		//the block can render in both passes, so always return true
+		return true;
+	}
+	
+	@Override
+	public int getRenderBlockPass() {
+		return 1;
 	}
 }

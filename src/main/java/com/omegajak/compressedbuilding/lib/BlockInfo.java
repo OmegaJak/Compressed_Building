@@ -13,6 +13,8 @@ public class BlockInfo {
 	
 	public static final String SQTEMPLATE_TEXTURE = "square_template";
 	
+	public static int SQTEMPLATE_RENDER_ID;
+	
 	//Compactor
 	public static int COMPACTOR_ID;
 	public static final String COMPACTOR_KEY = "compactor";
