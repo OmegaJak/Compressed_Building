@@ -52,4 +52,29 @@ public class BlockCompactor extends BlockContainer {
         }
         return true;
 	}
+	
+	//A bunch of methods for rendering it specially
+	
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+	
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return DoubleRenderClientProxy.squareTemplateRenderType;
+	}
+	
+	@Override
+	public boolean canRenderInPass(int pass) {
+		//Set the static variable in the clientProxy
+		DoubleRenderClientProxy.renderPass = pass;
+		//the block can render in both passes, so return true always
+		return true;
+	}
 }
