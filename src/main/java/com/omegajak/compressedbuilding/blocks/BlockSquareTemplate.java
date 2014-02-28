@@ -18,7 +18,7 @@ public class BlockSquareTemplate extends Block{
 		super(id, Material.rock);
 		setCreativeTab(CompressedBuilding.tabCompressedBuilding);
 		setUnlocalizedName(BlockInfo.SQTEMPLATE_UNLOCALIZED_NAME);
-		setBlockBounds(0F, .25F, 0F, 1F, .75F, 1F);
+		setBlockBounds(0F, .33F, 0F, 1F, .66F, 1F);
 	}
 	
 	@Override
@@ -40,6 +40,8 @@ public class BlockSquareTemplate extends Block{
 		}
 	}
 	
-	
-
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
 }
