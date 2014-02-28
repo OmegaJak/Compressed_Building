@@ -9,6 +9,7 @@ import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
 public class SlotCompactor extends Slot {
 	
+	public boolean doNotDecrement = false;
 	boolean isInputSlot;
 	TileEntityCompactor teInventory = (TileEntityCompactor)this.inventory;
 	
@@ -24,6 +25,13 @@ public class SlotCompactor extends Slot {
 		}
 		return false;
 	}
+	
+	 public void putStack(ItemStack itemStack)
+	 {
+		 if (teInventory.worldObj.isRemote && itemStack == null && this.slotNumber != 9)
+			 teInventory.doNotDecrement = true;
+		 super.putStack(itemStack);
+	 }
 	
 	public void onSlotChanged() {
 //		if (isInputSlot) {

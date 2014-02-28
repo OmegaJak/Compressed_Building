@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
+import com.omegajak.compressedbuilding.client.interfaces.SlotCompactor;
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
 import com.omegajak.compressedbuilding.network.PacketHandler;
@@ -19,6 +20,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	private boolean isValidInput = false;
 	ItemStack anItemStack = null;
 	boolean masterShouldDecrement = false;
+	public boolean doNotDecrement = false;
 	
 	public TileEntityCompactor() {
 		items = new ItemStack[10];
@@ -69,8 +71,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
 		if (!worldObj.isRemote) {
-			onInventoryChanged(true, itemstack == null || masterShouldDecrement);
-		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.container.isTransferring) {
+			onInventoryChanged(true, (itemstack == null && slot == 9) || masterShouldDecrement);
+		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.container.isTransferring && !doNotDecrement) {
 			if (determineIfHomogenous() && determineIfFilled()) {
 				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);
 			}
