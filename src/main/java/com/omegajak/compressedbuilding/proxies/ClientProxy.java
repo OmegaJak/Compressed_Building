@@ -2,14 +2,13 @@ package com.omegajak.compressedbuilding.proxies;
 
 import net.minecraftforge.client.MinecraftForgeClient;
 
+import com.omegajak.compressedbuilding.client.RenderItemSquareTemplate;
 import com.omegajak.compressedbuilding.client.RenderSquareTemplate;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
-
 public class ClientProxy extends CommonProxy{
 	
-	public static int renderPass;
+//	public static int renderPass;
 	
 	@Override
 	public void initSounds() {
@@ -18,8 +17,7 @@ public class ClientProxy extends CommonProxy{
 	
 	@Override
 	public void initRenderers() {
-		RenderSquareTemplate sqTemplateRender = new RenderSquareTemplate();
-		BlockInfo.SQTEMPLATE_RENDER_ID = sqTemplateRender.getRenderId();
-		RenderingRegistry.registerBlockHandler(BlockInfo.SQTEMPLATE_RENDER_ID, sqTemplateRender);;
+		RenderItemSquareTemplate sqTemplateRender = new RenderItemSquareTemplate();
+		MinecraftForgeClient.registerItemRenderer(BlockInfo.SQTEMPLATE_ID, sqTemplateRender);;
 	}
 }

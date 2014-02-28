@@ -41,7 +41,7 @@ public class BlockSquareTemplate extends Block{
 		}
 	}
 	
-	@Override
+/**	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
@@ -59,19 +59,5 @@ public class BlockSquareTemplate extends Block{
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
-	}
-	
-	@Override
-	public boolean canRenderInPass(int pass) {
-		//set the static variable in the clientProxy
-		ClientProxy.renderPass = pass;
-		
-		//the block can render in both passes, so always return true
-		return true;
-	}
-	
-	@Override
-	public int getRenderBlockPass() {
-		return 1;
-	}
+	}*/
 }
