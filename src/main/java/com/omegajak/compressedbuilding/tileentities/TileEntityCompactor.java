@@ -74,6 +74,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			if (determineIfHomogenous() && determineIfFilled()) {
 				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);
 			}
+		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {
+			PacketHandler.sendInterfacePacket((byte)1, 0);
 		}
 	}
 
@@ -264,7 +266,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		switch (eventID) {
 		case 0:
 			setInventorySlotContents(9, null);
-//			decrementInputs();
+			break;
+		case 1:
+			setItem(9, null);
 			break;
 		}
 	}
