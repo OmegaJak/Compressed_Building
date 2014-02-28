@@ -18,6 +18,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	int num = 0;
 	private boolean isValidInput = false;
 	ItemStack anItemStack = null;
+	boolean masterShouldDecrement = false;
 	
 	public TileEntityCompactor() {
 		items = new ItemStack[10];
@@ -62,12 +63,13 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
+
 		items[slot] = itemstack;
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
 		if (!worldObj.isRemote) {
-			onInventoryChanged(true);
+			onInventoryChanged(true, itemstack == null || masterShouldDecrement);
 		}else if(worldObj.isRemote && slot == 9 && itemstack == null) {
 			if (determineIfHomogenous() && determineIfFilled()) {
 				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);
@@ -142,8 +144,12 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		}
 	}
 	
-	public void checkForCompacting() {
+	public void checkForCompacting(boolean shouldDecrement) {
 //		if (!worldObj.isRemote) {
+		if (shouldDecrement) {
+			decrementInputs();
+			shouldDecrement = false;
+		}
 			System.out.println("checkForCompacting was called for the " + num + " time on the " + sideToString() + " side");
 			num++;
 			distributeItems();
@@ -159,9 +165,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		if (isValidInput) {
 			ItemStack itemStack = determineOutput(items[4].itemID);
 //			setInventorySlotContents(9, itemStack);
-			if (setItem(9, itemStack)) {
-				decrementInputs();
-			}
+			setItem(9, itemStack);
 			isValidInput = false;
 		}
 		container.detectAndSendChanges();
@@ -177,6 +181,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	
 	//Returns true if the item there is actually changed, returns false if nothing was changed
 	public boolean setItem(int index, ItemStack itemStack) {
+//		if (items[index] == null && itemStack != null && index == 9) {
+//			masterShouldDecrement = true;
+//		}
 		if(items[index] != null && itemStack != null) {//avoiding nullPointerExceptions
 			ItemStack oldItemStack = items[index];
 			if (oldItemStack.isItemEqual(itemStack) && oldItemStack.stackSize == itemStack.stackSize) {//if the stacks are exactly the same
@@ -199,8 +206,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		super.onInventoryChanged();
 	}
 	
-	public void onInventoryChanged(boolean shouldCheckForCompacting) {
-		checkForCompacting();
+	public void onInventoryChanged(boolean shouldCheckForCompacting, boolean shouldDecrement) {
+		checkForCompacting(shouldDecrement);
 		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 		container.detectAndSendChanges();
 		super.onInventoryChanged();
