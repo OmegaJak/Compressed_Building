@@ -13,6 +13,7 @@ import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 public class ContainerCompactor extends Container {
 
     private TileEntityCompactor compactor;
+    public boolean isTransferring = false;
 
     public ContainerCompactor(InventoryPlayer inventoryPlayer, TileEntityCompactor compactor) {
     	this.compactor = compactor;
@@ -55,6 +56,9 @@ public class ContainerCompactor extends Container {
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
+		if (getCompactor().worldObj.isRemote) {
+			this.isTransferring = true;
+		}
 		Slot slot = getSlot(i);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack = slot.getStack();
@@ -62,9 +66,11 @@ public class ContainerCompactor extends Container {
 			
 			if (i >= 36) {
 				if (!mergeItemStack(stack, 0, 36, false)) {
+					this.isTransferring = false;
 					return null;
 				}
 			}else if(!(stack.getItem() instanceof ItemBlock) || !mergeItemStack(stack, 36, 36 + compactor.getSizeInventory() - 1, false)) {
+				this.isTransferring = false;
 				return null;
 			}
 			
@@ -76,9 +82,10 @@ public class ContainerCompactor extends Container {
 			
 			slot.onPickupFromSlot(player, stack);
 			
+			this.isTransferring = false;
 			return result;
 		}
-		
+		this.isTransferring = false;
 		return null;
 	}
 

@@ -70,7 +70,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		}
 		if (!worldObj.isRemote) {
 			onInventoryChanged(true, itemstack == null || masterShouldDecrement);
-		}else if(worldObj.isRemote && slot == 9 && itemstack == null) {
+		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.container.isTransferring) {
 			if (determineIfHomogenous() && determineIfFilled()) {
 				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);
 			}
