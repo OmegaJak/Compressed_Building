@@ -28,10 +28,12 @@ public class SlotCompactor extends Slot {
 	
 	 public void putStack(ItemStack itemStack)
 	 {
-		 if (teInventory.worldObj.isRemote && itemStack == null && this.slotNumber != 9)
-			 teInventory.doNotDecrement = true;
 		 super.putStack(itemStack);
 	 }
+	 
+/**	 public void putStackInitial(ItemStack itemStack) {
+		 super.putStack(itemStack);
+	 }*/
 	
 	public void onSlotChanged() {
 //		if (isInputSlot) {

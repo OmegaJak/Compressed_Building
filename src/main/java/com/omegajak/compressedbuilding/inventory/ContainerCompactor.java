@@ -1,5 +1,6 @@
 package com.omegajak.compressedbuilding.inventory;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -87,6 +88,14 @@ public class ContainerCompactor extends Container {
 		}
 		this.isTransferring = false;
 		return null;
+	}
+	
+	@Override
+	public void putStackInSlot(int slotNumber, ItemStack itemStack) {
+		if (this.compactor.worldObj.isRemote && itemStack == null && slotNumber == 0 &&  this.compactor.getItemInSlot(slotNumber) != null && !this.compactor.isDecrementing && !this.compactor.pendingServerDecrement)
+			this.compactor.doNotDecrement = true;
+	//	this.compactor.pendingServerDecrement = false;
+		super.putStackInSlot(slotNumber, itemStack);
 	}
 
 }

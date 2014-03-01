@@ -21,6 +21,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	ItemStack anItemStack = null;
 	boolean masterShouldDecrement = false;
 	public boolean doNotDecrement = false;
+	public boolean isDecrementing;
+	public boolean pendingServerDecrement;
 	
 	public TileEntityCompactor() {
 		items = new ItemStack[10];
@@ -74,10 +76,14 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			onInventoryChanged(true, (itemstack == null && slot == 9) || masterShouldDecrement);
 		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.container.isTransferring && !doNotDecrement) {
 			if (determineIfHomogenous() && determineIfFilled()) {
+				pendingServerDecrement = true;
 				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);
 			}
 		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {
 			PacketHandler.sendInterfacePacket((byte)1, 0);
+		}
+		if (doNotDecrement) {
+			doNotDecrement = false;
 		}
 	}
 
@@ -258,10 +264,12 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 	
 	private void decrementInputs() {
+		this.isDecrementing = true;
 		for (int i = 0; i < items.length - 1; i++) {
 	//		items[i].stackSize--;
 			decrStackSize(i, 1);
 		}
+		this.isDecrementing = false;
 	}
 	
 	public void recieveInterfaceEvent(byte eventID, int itemID) {
@@ -273,5 +281,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			setItem(9, null);
 			break;
 		}
+	}
+
+	public ItemStack getItemInSlot(int slotNumber) {
+		return  items[slotNumber];
 	}
 }
