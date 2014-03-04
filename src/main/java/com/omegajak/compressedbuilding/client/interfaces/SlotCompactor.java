@@ -25,20 +25,4 @@ public class SlotCompactor extends Slot {
 		}
 		return false;
 	}
-	
-	 public void putStack(ItemStack itemStack)
-	 {
-		 super.putStack(itemStack);
-	 }
-	 
-/**	 public void putStackInitial(ItemStack itemStack) {
-		 super.putStack(itemStack);
-	 }*/
-	
-	public void onSlotChanged() {
-//		if (isInputSlot) {
-//			teInventory.checkForCompacting();
-//		}
-//		super.onSlotChanged();
-	}
 }

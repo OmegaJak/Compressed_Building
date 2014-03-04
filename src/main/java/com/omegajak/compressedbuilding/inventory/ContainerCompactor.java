@@ -91,9 +91,6 @@ public class ContainerCompactor extends Container {
 	
 	@Override
 	public void putStackInSlot(int slotNumber, ItemStack itemStack) {
-//		if (this.compactor.worldObj.isRemote && itemStack == null && slotNumber == 0 &&  this.compactor.getItemInSlot(slotNumber) != null && !this.compactor.isDecrementing && !this.compactor.pendingServerDecrement && this.isTransferring)
-//			this.compactor.doNotDecrement = true;
-//		this.compactor.pendingServerDecrement = false;
 		super.putStackInSlot(slotNumber, itemStack);
 	}
 

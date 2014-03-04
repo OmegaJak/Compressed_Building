@@ -18,14 +18,10 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public ContainerCompactor container;
 	int num = 0;
 	private boolean isValidInput = false;
-	ItemStack anItemStack = null;
-	boolean masterShouldDecrement = false;
-	public boolean doNotDecrement = false;
 	public boolean isDecrementing;
-	public boolean pendingServerDecrement;
-    public boolean isTransferring = false;
-    public int transferPass = 0;
-    public int smallestIn = 0;
+    public boolean isTransferring = false;//set to true when user shift-clicks, when its true setInterfacePacket(0,0) cant be called
+    public int transferPass = 0;//used to keep track of how many times setInvSlotContents has been called after someone shift-clicks, so isTransferring can be false again
+    public int smallestIn = 0;//the number of items in the smallest input stack
 	
 	
 	public TileEntityCompactor() {
@@ -77,29 +73,25 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
 		
-		if (!worldObj.isRemote) {
-			onInventoryChanged(true, (itemstack == null && slot == 9) || masterShouldDecrement);
-		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring && !doNotDecrement) {
-			if (determineIfHomogenous() && determineIfFilled()) {
-//				pendingServerDecrement = true;
-				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);
+		if (!worldObj.isRemote) {//if its on the server side
+			onInventoryChanged(true, (itemstack == null && slot == 9));
+		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring) {//if youre simply removing the output, no shift clicking though
+			if (determineIfHomogenous() && determineIfFilled()) {//always good to check
+				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);//tells the server to set output to null and do normal updating stuff
+																			//including decrementing
 			}
-		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {
-			PacketHandler.sendInterfacePacket((byte)1, 0);
-		}
-		if (doNotDecrement) {
-			doNotDecrement = false;
+		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {//if you take an input out
+			PacketHandler.sendInterfacePacket((byte)1, 0);//let the server know
 		}
 		if(worldObj.isRemote && this.isTransferring && slot != 9) {
-			if (transferPass == 0) {
+			if (transferPass == 0) {//need this because it is reset each time
 				findSmallestInput();
 			}
-			if (transferPass == smallestIn * 9) {
-				this.transferPass = 0;
-				this.isTransferring = false;
-				items[slot] = itemstack;
+			if (transferPass == smallestIn * 9) {//this method is called once for each item it decrements
+				this.transferPass = 0;//reset
+				this.isTransferring = false;//allow future actions on client side to call sendInterfacePacket
 			}else{
-				this.transferPass++;
+				this.transferPass++;//the counter
 			}
 		}
 	}
@@ -171,9 +163,10 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		}
 	}
 	
+	//set the field smallestIn to the input found to have the smallest stack size, used for incrementing transferPass
 	public void findSmallestInput() {
 		if (determineIfHomogenous() && determineIfFilled()) {
-			smallestIn = 64;
+			smallestIn = 66;//any stack should be smaller than this, its just a starting point
 			for (int i = 0; i < items.length - 1; i++) {
 				if (items[i].stackSize < smallestIn) {
 					smallestIn = items[i].stackSize;
@@ -182,46 +175,26 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		}
 	}
 	
+	//this determines whether the inputs are valid and whether an output should be set
 	public void checkForCompacting(boolean shouldDecrement) {
-//		if (!worldObj.isRemote) {
-		if (shouldDecrement) {
+		if (shouldDecrement) {//decrement upon removing the output
 			decrementInputs();
 			shouldDecrement = false;
 		}
-			System.out.println("checkForCompacting was called for the " + num + " time on the " + sideToString() + " side");
-			num++;
-			distributeItems();
-			if (determineIfHomogenous()) {
-				if (determineIfFilled()) {
-					System.out.println("Success!");
-					isValidInput = true;
-					ItemStack itemStack = determineOutput(items[4].itemID);
-					System.out.println(itemStack.getUnlocalizedName());
-				}
-			}
-//		}
+		distributeItems();//non-functional at the moment
+		if (determineIfHomogenous() && determineIfFilled()) {
+			isValidInput = true;//it was determined that the inputs are valid
+		}
 		if (isValidInput) {
-			ItemStack itemStack = determineOutput(items[4].itemID);
-//			setInventorySlotContents(9, itemStack);
-			setItem(9, itemStack);
-			isValidInput = false;
+			ItemStack itemStack = determineOutput(items[4].itemID);//itemstack with stackSize of 1, id of squareTemplate, and damage of the inputs
+			setItem(9, itemStack);//don't want it to call checkForCompacting, though we do want the updates to be sent
+			isValidInput = false;//might no longer be valid
 		}
 		container.detectAndSendChanges();
 	}
 	
-	private String sideToString() {
-		if (worldObj.isRemote) {
-			return "client";
-		}else{
-			return "server";
-		}
-	}
-	
 	//Returns true if the item there is actually changed, returns false if nothing was changed
 	public boolean setItem(int index, ItemStack itemStack) {
-//		if (items[index] == null && itemStack != null && index == 9) {
-//			masterShouldDecrement = true;
-//		}
 		if(items[index] != null && itemStack != null) {//avoiding nullPointerExceptions
 			ItemStack oldItemStack = items[index];
 			if (oldItemStack.isItemEqual(itemStack) && oldItemStack.stackSize == itemStack.stackSize) {//if the stacks are exactly the same
@@ -258,15 +231,12 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 				int itemID = items[i].itemID;
 				for (int k = i; k < items.length - 1; k++) {
 					if (items[k] != null && items[k].itemID != itemID) {
-						System.out.println("It was not homogenous!");
 						return false;
 					}
 				}
-				System.out.println("It was homogenous!");
 				return true;
 			}
 		}
-		System.out.println("It was empty!");
 		return false;
 	}
 	
@@ -274,11 +244,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public boolean determineIfFilled() {
 		for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] == null) {
-				System.out.println("It was not filled!");
 				return false;
 			}
 		}
-		System.out.println("It was filled!");
 		return true;
 	}
 	
@@ -287,25 +255,25 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	}
 	
 	public ItemStack determineOutput(int itemID) {
-//		System.out.println("This is on the " + sideToString() + " side and in items[4] there is a " + items[4].getDisplayName());
 		return new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, itemID);
 	}
 	
+	//well... it goes through each of the input stacks and decrements it
 	private void decrementInputs() {
 		this.isDecrementing = true;
 		for (int i = 0; i < items.length - 1; i++) {
-	//		items[i].stackSize--;
 			decrStackSize(i, 1);
 		}
 		this.isDecrementing = false;
 	}
 	
+	//server side end of sendInterfaceEvent
 	public void recieveInterfaceEvent(byte eventID, int itemID) {
 		switch (eventID) {
-		case 0:
+		case 0://set the output to null and call checkForCompacting, decrementInputs
 			setInventorySlotContents(9, null);
 			break;
-		case 1:
+		case 1://avoids calling checkForCompacting
 			setItem(9, null);
 			break;
 		}
