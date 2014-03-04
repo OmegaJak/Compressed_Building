@@ -23,6 +23,10 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public boolean doNotDecrement = false;
 	public boolean isDecrementing;
 	public boolean pendingServerDecrement;
+    public boolean isTransferring = false;
+    public int transferPass = 0;
+    public int smallestIn = 0;
+	
 	
 	public TileEntityCompactor() {
 		items = new ItemStack[10];
@@ -72,11 +76,12 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
+		
 		if (!worldObj.isRemote) {
 			onInventoryChanged(true, (itemstack == null && slot == 9) || masterShouldDecrement);
-		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.container.isTransferring && !doNotDecrement) {
+		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring && !doNotDecrement) {
 			if (determineIfHomogenous() && determineIfFilled()) {
-				pendingServerDecrement = true;
+//				pendingServerDecrement = true;
 				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);
 			}
 		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {
@@ -84,6 +89,18 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 		}
 		if (doNotDecrement) {
 			doNotDecrement = false;
+		}
+		if(worldObj.isRemote && this.isTransferring && slot != 9) {
+			if (transferPass == 0) {
+				findSmallestInput();
+			}
+			if (transferPass == smallestIn * 9) {
+				this.transferPass = 0;
+				this.isTransferring = false;
+				items[slot] = itemstack;
+			}else{
+				this.transferPass++;
+			}
 		}
 	}
 
@@ -150,6 +167,17 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			
 			if (slot >= 0 && slot < getSizeInventory()) {
 				items[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
+			}
+		}
+	}
+	
+	public void findSmallestInput() {
+		if (determineIfHomogenous() && determineIfFilled()) {
+			smallestIn = 64;
+			for (int i = 0; i < items.length - 1; i++) {
+				if (items[i].stackSize < smallestIn) {
+					smallestIn = items[i].stackSize;
+				}
 			}
 		}
 	}
