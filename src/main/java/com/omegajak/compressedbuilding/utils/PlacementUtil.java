@@ -59,20 +59,23 @@ public class PlacementUtil {
 					if (sneaking) {
 						if (orientationArr[5] == 1) {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareTemplate.blockID) {
-								world.setBlock(x + i, y + j, z + orientationArr[4], id);
+								world.setBlock(x + i, y + j, z + orientationArr[4], id >>> 8);
+								world.setBlockMetadataWithNotify(x + i, y = j, z + orientationArr[4], 0xFF & id, 2);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}else{
 							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlockMaterial(x + orientationArr[4], y + j, z + i).isSolid() || world.getBlockId(x + orientationArr[4], y + j, z + i) == Blocks.squareTemplate.blockID) {
-								world.setBlock(x + orientationArr[4], y + j, z + i, id);
+								world.setBlock(x + orientationArr[4], y + j, z + i, id >>> 8);
+								world.setBlockMetadataWithNotify(x + orientationArr[4], y + j, z + i, 0xFF & id, 2);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}
 					}else{
 						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlockMaterial(x + i, y + orientationArr[4], z + j).isSolid() || world.getBlockId(x + i, y + orientationArr[4], z + j) == Blocks.squareTemplate.blockID) {
-							world.setBlock(x + i, y + orientationArr[4], z + j, id);
+							world.setBlock(x + i, y + orientationArr[4], z + j, id >>> 8);
+							world.setBlockMetadataWithNotify(x + i, y + orientationArr[4], z + j, 0xFF & id, 2);
 						}else{
 							spawnCompensation(world, id, 1, x, y, z, player);
 						}

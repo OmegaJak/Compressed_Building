@@ -186,7 +186,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 			isValidInput = true;//it was determined that the inputs are valid
 		}
 		if (isValidInput) {
-			ItemStack itemStack = determineOutput(items[4].itemID);//itemstack with stackSize of 1, id of squareTemplate, and damage of the inputs
+			ItemStack itemStack = determineOutput(items[4].itemID,items[4].getItemDamage());//itemstack with stackSize of 1, id of squareTemplate, and damage of the inputs
 			setItem(9, itemStack);//don't want it to call checkForCompacting, though we do want the updates to be sent
 			isValidInput = false;//might no longer be valid
 		}
@@ -254,8 +254,11 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 	public void distributeItems() {
 	}
 	
-	public ItemStack determineOutput(int itemID) {
-		return new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, itemID);
+	public ItemStack determineOutput(int itemID, int itemMetadata) {
+		int newItemDamage = 0;
+		int newID = itemID << 8;
+		newItemDamage = newID | itemMetadata;
+		return new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, newItemDamage);
 	}
 	
 	//well... it goes through each of the input stacks and decrements it

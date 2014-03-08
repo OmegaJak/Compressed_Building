@@ -1,8 +1,7 @@
 package com.omegajak.compressedbuilding.client;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.client.IItemRenderer;
@@ -123,8 +122,8 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 		
 		tessellator.startDrawingQuads();
 		
-		ItemStack tempItem = new ItemStack(item.getItemDamage() > 0 ? item.getItemDamage() : 2, 1, 0);
-		icon = tempItem.getItem().getIcon(tempItem, 1);
+		ItemStack tempItem = new ItemStack(((item.getItemDamage() >>> 8) > 0) ? (item.getItemDamage() >>> 8) : 56, 1, 0xFF & item.getItemDamage());
+		icon = tempItem.getItem().getIconFromDamage(0xFF & item.getItemDamage());
 		
 //		icon = item.getItem().getIcon(new ItemStack(item.getItemDamage(), 1, 0), 0);
 		
