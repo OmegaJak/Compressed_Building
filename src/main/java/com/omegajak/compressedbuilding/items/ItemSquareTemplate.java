@@ -11,6 +11,8 @@ import net.minecraft.world.World;
 
 import com.omegajak.compressedbuilding.utils.PlacementUtil;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 public class ItemSquareTemplate extends ItemBlock{
 	public ItemSquareTemplate(int id) {
 		super(id);
@@ -27,8 +29,8 @@ public class ItemSquareTemplate extends ItemBlock{
 				stack.stackSize--;
 			}
 		}
-		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.soundStoneFootstep.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.8F);
-		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.soundStoneFootstep.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.9F);
+		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[stack.getItemDamage() >>> 8].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.8F);
+		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[stack.getItemDamage() >>> 8].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.9F);
 		return false;
 	}
 	
@@ -39,6 +41,6 @@ public class ItemSquareTemplate extends ItemBlock{
 	
 	@Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean useExtraInfo) {
-		info.add("This places the block with ID " + itemStack.getItemDamage());
+		info.add("This block has the damage of " + (0xFF & itemStack.getItemDamage()));
 	}
 }
