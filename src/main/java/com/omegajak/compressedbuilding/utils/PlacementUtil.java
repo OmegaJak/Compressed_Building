@@ -63,7 +63,7 @@ public class PlacementUtil {
 					if (sneaking) {
 						if (orientationArr[5] == 1) {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareTemplate.blockID) {
-								world.setBlock(x + i, y = j, z + orientationArr[4], id >>> 8);
+								world.setBlock(x + i, y + j, z + orientationArr[4], id >>> 8);
 								world.setBlockMetadataWithNotify(x + i, y + j, z + orientationArr[4], 0xFF & id, 2);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
