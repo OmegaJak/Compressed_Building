@@ -152,7 +152,7 @@ public class PlacementUtil {
 	}
 	
 	public void spawnCompensation(World world, int id, int count, double x, double y, double z, EntityPlayer player) {
-		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(id, count, 0));
+		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(id >>> 8, count, 0xFF & id));
 		double distance = getDistance(x, y, z, player.posX, player.posY, player.posZ);
 		entityItem.motionX = (double)((player.posX - x) * distance * 0.01D);
 		entityItem.motionY = (double)((player.posY - y) * distance * 0.01D);
