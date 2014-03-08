@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.omegajak.compressedbuilding.blocks.Blocks;
+import com.omegajak.compressedbuilding.config.ConfigSettings;
 
 public class PlacementUtil {
 	
@@ -28,6 +29,9 @@ public class PlacementUtil {
 	public void placeBlocks(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, int id, double sizeFactor1, double sizeFactor2) {
 		if (!world.isRemote) {
 			sneaking = player.isSneaking();
+			if (!ConfigSettings.SHIFT_VERTICAL) {//so it pays attention to the config setting
+				sneaking = !sneaking;
+			}
 			orientationArr[0] = -1;//Starting of i
 			orientationArr[1] = 2;//One greater than the ending of i
 			orientationArr[2] = -1;//Starting of k
@@ -59,8 +63,8 @@ public class PlacementUtil {
 					if (sneaking) {
 						if (orientationArr[5] == 1) {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareTemplate.blockID) {
-								world.setBlock(x + i, y + j, z + orientationArr[4], id >>> 8);
-								world.setBlockMetadataWithNotify(x + i, y = j, z + orientationArr[4], 0xFF & id, 2);
+								world.setBlock(x + i, y = j, z + orientationArr[4], id >>> 8);
+								world.setBlockMetadataWithNotify(x + i, y + j, z + orientationArr[4], 0xFF & id, 2);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
