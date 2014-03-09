@@ -15,6 +15,7 @@ public class Items {
 	
 	public static void registerRecipes() {
 		GameRegistry.addRecipe(new ItemStack(Blocks.compactor), new Object[] { "XYX", "Y Y", "XYX", 'X', Block.cobblestone, 'Y', Block.pistonBase});
+		GameRegistry.addShapelessRecipe(new ItemStack(Block.cobblestone, 9), new ItemStack(Blocks.squareTemplate));
 	}
 	
 }
