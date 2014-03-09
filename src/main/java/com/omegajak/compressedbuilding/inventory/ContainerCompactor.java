@@ -65,11 +65,11 @@ public class ContainerCompactor extends Container {
 			ItemStack result = stack.copy();
 			
 			if (i >= 36) {
-				if (!mergeItemStack(stack, 0, 36, false)) {
+				if (!mergeItemStack(stack, 1, 9, false)) {
 	//				this.isTransferring = false;
 					return null;
 				}
-			}else if(!(stack.getItem() instanceof ItemBlock) || !mergeItemStack(stack, 36, 36 + compactor.getSizeInventory() - 1, false)) {
+			}else if(!(stack.getItem() instanceof ItemBlock) || !mergeItemStack(stack, 37, 36 + compactor.getSizeInventory() - 1, false)) {
 	//			this.isTransferring = false;
 				return null;
 			}
