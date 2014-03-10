@@ -5,6 +5,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
+import com.omegajak.compressedbuilding.lib.BlockInfo;
 import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
 public class SlotCompactor extends Slot {
@@ -20,7 +21,7 @@ public class SlotCompactor extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		if (isInputSlot && stack.getItem() instanceof ItemBlock) {
+		if (isInputSlot && stack.getItem() instanceof ItemBlock && stack.getItem().itemID != BlockInfo.SQTEMPLATE_ID) {
 			return true;
 		}
 		return false;
