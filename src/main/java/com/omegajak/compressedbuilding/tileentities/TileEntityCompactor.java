@@ -1,7 +1,7 @@
 package com.omegajak.compressedbuilding.tileentities;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -11,7 +11,7 @@ import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
 import com.omegajak.compressedbuilding.network.PacketHandler;
 
-public class TileEntityCompactor extends TileEntity implements IInventory {
+public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	
 	private ItemStack[] items;
 	public ContainerCompactor container;
@@ -283,5 +283,20 @@ public class TileEntityCompactor extends TileEntity implements IInventory {
 
 	public ItemStack getItemInSlot(int slotNumber) {
 		return  items[slotNumber];
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		return new int[]{0,1,2,3,4,5,6,7,8,9};
+	}
+
+	@Override
+	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
+		return slotIndex >= 0 && slotIndex < 9;
+	}
+
+	@Override
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+		return slotIndex == 9;
 	}
 }
