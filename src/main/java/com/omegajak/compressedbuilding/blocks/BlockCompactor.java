@@ -32,16 +32,26 @@ public class BlockCompactor extends BlockContainer {
 		return new TileEntityCompactor();
 	}
 	
+	@SideOnly(Side.CLIENT)
+	private Icon topIcon;
+	@SideOnly(Side.CLIENT)
+	private Icon otherIcons;
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister register) {
-		blockIcon = register.registerIcon(BlockInfo.TEXTURE_LOCATION + ":" + BlockInfo.COMPACTOR_TEXTURE);
+		topIcon = register.registerIcon(BlockInfo.TEXTURE_LOCATION + ":" + BlockInfo.COMPACTOR_TEXTURE_TOP);
+		otherIcons = register.registerIcon(BlockInfo.TEXTURE_LOCATION + ":" + BlockInfo.COMPACTOR_TEXTURE_SIDES);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int meta) {
-		return blockIcon;
+		if (side == 1) {
+			return topIcon;
+		}else{
+			return otherIcons;
+		}
 	}
 	
 	@Override

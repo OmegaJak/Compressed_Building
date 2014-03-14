@@ -23,7 +23,8 @@ public class BlockInfo {
 	public static final String COMPACTOR_UNLOCALIZED_NAME = "compactor";
 	public static final String COMPACTOR_NAME = "Compactor";
 	
-	public static final String COMPACTOR_TEXTURE = "compactor";
+	public static final String COMPACTOR_TEXTURE_TOP = "CompactorTop";
+	public static final String COMPACTOR_TEXTURE_SIDES = "CompactorSides";
 	
 	public static final String COMPACTOR_TE_KEY = "compactorTileEntity";
 }
