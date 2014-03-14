@@ -122,7 +122,7 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 		
 		tessellator.startDrawingQuads();
 		
-		ItemStack tempItem = new ItemStack(((item.getItemDamage() >>> 8) > 0) ? (item.getItemDamage() >>> 8) : 2, 1, 0xFF & item.getItemDamage());
+		ItemStack tempItem = new ItemStack(((item.getItemDamage() >>> 8) > 0) ? (item.getItemDamage() >>> 8) : 4, 1, 0xFF & item.getItemDamage());
 		icon = tempItem.getItem().getIconFromDamage(0xFF & item.getItemDamage());
 		
 //		icon = item.getItem().getIcon(new ItemStack(item.getItemDamage(), 1, 0), 0);

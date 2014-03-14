@@ -24,15 +24,27 @@ public class ItemSquareTemplate extends ItemBlock{
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		player.swingItem();
-		if(!world.isRemote) {
-			PlacementUtil placementUtil = new PlacementUtil();
-			placementUtil.placeBlocks(stack, player, world, x, y, z, side, stack.getItemDamage(), 1, 1);
-			if (!player.capabilities.isCreativeMode) {
-				stack.stackSize--;
+		if (stack.getItemDamage() >>> 8 != 0) {
+			if(!world.isRemote) {
+				PlacementUtil placementUtil = new PlacementUtil();
+				placementUtil.placeBlocks(stack, player, world, x, y, z, side, stack.getItemDamage(), 1, 1);
+				if (!player.capabilities.isCreativeMode) {
+					stack.stackSize--;
+				}
 			}
+			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[stack.getItemDamage() >>> 8].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.8F);
+			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[stack.getItemDamage() >>> 8].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.9F);
+		}else{
+			if(!world.isRemote) {
+				PlacementUtil placementUtil = new PlacementUtil();
+				placementUtil.placeBlocks(stack, player, world, x, y, z, side, 4 << 8, 1, 1);
+				if (!player.capabilities.isCreativeMode) {
+					stack.stackSize--;
+				}
+			}
+			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[4].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.8F);
+			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[4].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.9F);
 		}
-		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[stack.getItemDamage() >>> 8].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.8F);
-		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[stack.getItemDamage() >>> 8].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.9F);
 		return false;
 	}
 	
