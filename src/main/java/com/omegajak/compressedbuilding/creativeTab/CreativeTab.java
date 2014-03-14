@@ -20,6 +20,7 @@ public class CreativeTab extends CreativeTabs {
 	public ItemStack getIconItemStack() {
 		if (stack == null) {
 			stack = new ItemStack(Blocks.squareTemplate);
+			stack.setItemDamage(2 << 8);
 		}
 		return stack;
 	}
