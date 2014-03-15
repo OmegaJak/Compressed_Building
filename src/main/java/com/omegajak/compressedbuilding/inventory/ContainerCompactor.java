@@ -1,6 +1,5 @@
 package com.omegajak.compressedbuilding.inventory;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -64,13 +63,11 @@ public class ContainerCompactor extends Container {
 			ItemStack stack = slot.getStack();
 			ItemStack result = stack.copy();
 			
-			if (i >= 36) {
-				if (!mergeItemStack(stack, 1, 9, false)) {
-	//				this.isTransferring = false;
+			if (i <= 9) {
+				if (!mergeItemStack(stack, 10, 46, false)) {
 					return null;
 				}
-			}else if(!(stack.getItem() instanceof ItemBlock) || !mergeItemStack(stack, 37, 36 + compactor.getSizeInventory() - 1, false)) {
-	//			this.isTransferring = false;
+			}else if(!(stack.getItem() instanceof ItemBlock) || !mergeItemStack(stack, 1, compactor.getSizeInventory(), false)) {
 				return null;
 			}
 			
