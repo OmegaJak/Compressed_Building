@@ -66,7 +66,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-
+		System.out.println("setInventorySlotContents");
 		items[slot] = itemstack;
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
 			itemstack.stackSize = getInventoryStackLimit();
@@ -84,8 +84,9 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		}
 		if(worldObj.isRemote && this.isTransferring && slot != 9) {
 			int smallestInput = 0;
+			int smallestIndex = findExtremumIndex(0);
 			if (transferPass == 0) {//need this because it is reset each time
-				smallestInput = items[findExtremumIndex(0)].stackSize;
+				smallestInput = items[smallestIndex] != null ? items[smallestIndex].stackSize : 66;
 			}
 			if (transferPass == smallestInput * 9) {//this method is called once for each item it decrements
 				this.transferPass = 0;//reset
@@ -125,6 +126,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		System.out.println("isItemValidForSlot()");
 		return true;
 	}
 	
@@ -163,39 +165,54 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		}
 	}
 	
-	//set the field smallestIn to the input found to have the smallest stack size, used for incrementing transferPass
+	/**set the field smallestIn to the input found to have the smallest stack size, used for incrementing transferPass
+	 *@param type 0 means find the smallest and check if its compactable, 1 means just find the smallest, 2 means find the max
+	 */
 	public int findExtremumIndex(int type) {
 		int returnInt = 0;
 		int returnIndex = 1;
-		if (type == 0) {//the minimum
-			if (determineIfHomogenous() && determineIfFilled()) {
+		if (type == 0) {
+			if (determineIfFilled() && determineIfHomogenous()) {
 				returnInt = 66;//any stack should be smaller than this, its just a starting point
 				for (int i = 0; i < items.length - 1; i++) {
 					if (items[i].stackSize < returnInt) {
 						returnIndex = i;
+						returnInt = items[i].stackSize;
 					}
 				}
 			}
-		}else if(type == 1) {//the maximum
-			if (determineIfHomogenous() && determineIfFilled()) {
-				returnInt = 0;//any stack should be bigger than this, its just a starting point
-				for (int i = 0; i < items.length - 1; i++) {
-					if (items[i].stackSize > returnInt) {
-						returnIndex = i;
-					}
+		}else if (type == 1) {//the minimum
+			returnInt = 66;//any stack should be smaller than this, its just a starting point
+			for (int i = 0; i < items.length - 1; i++) {
+				if (items[i] != null ? (items[i].stackSize < returnInt) : (0 < returnInt)) {//if there's an item there, see if its stack is smaller than the last smallest one, else 0
+					returnIndex = i;
+					returnInt = items[i] != null ? items[i].stackSize : 0;
+				}
+			}
+		}else if(type == 2) {//the maximum
+			returnInt = 0;//any stack should be bigger than this, its just a starting point
+			for (int i = 0; i < items.length - 1; i++) {
+				if (items[i] != null ? (items[i].stackSize > returnInt) : (false)) {
+					returnIndex = i;
+					returnInt = items[i].stackSize;
 				}
 			}
 		}
 		return returnIndex;
 	}
 	
-	//this determines whether the inputs are valid and whether an output should be set
+	/**
+	 * this determines whether the inputs are valid and whether an output should be set
+	 */
 	public void checkForCompacting(boolean shouldDecrement) {
 		if (shouldDecrement) {//decrement upon removing the output
 			decrementInputs();
 			shouldDecrement = false;
 		}
-		distributeItems();//non-functional at the moment
+		
+		if (!isDistributing)
+			distributeItems();
+		
 		if (determineIfHomogenous() && determineIfFilled()) {
 			isValidInput = true;//it was determined that the inputs are valid
 		}
@@ -207,7 +224,12 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		container.detectAndSendChanges();
 	}
 	
-	//Returns true if the item there is actually changed, returns false if nothing was changed
+	/**
+	 * Returns true if the item there is actually changed, returns false if nothing was changed
+	 * @param index the index of the slot to set
+	 * @param itemStack the itemstack to set the slot to
+	 * @return whether or not it actually did anything
+	 */
 	public boolean setItem(int index, ItemStack itemStack) {
 		if(items[index] != null && itemStack != null) {//avoiding nullPointerExceptions
 			ItemStack oldItemStack = items[index];
@@ -238,7 +260,10 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		super.onInventoryChanged();
 	}
 	
-	//Determines if everything in the compacting grid is the same item
+	/**
+	 * Determines if everything in the compacting grid is the same item
+	 * @return whether or not the inputs homogenous
+	 */
 	public boolean determineIfHomogenous() {
 		for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] != null) {
@@ -254,7 +279,10 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		return false;
 	}
 	
-	//Determines if the compacting grid is filled, will only be called if it's homogenous
+	/**
+	 * Determines if the compacting grid is filled, will only be called if it's homogenous
+	 * @return whether or not the inputs grid is filled
+	 */
 	public boolean determineIfFilled() {
 		for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] == null) {
@@ -264,27 +292,38 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		return true;
 	}
 	
-	//Equally distributes the items in the crafting grid between each other 
+	/**
+	 * Equally distributes the items in the crafting grid between each other 
+	 */
 	public void distributeItems() {
-		int maxIndex = findExtremumIndex(1);
-		int minIndex = findExtremumIndex(0);
+		int maxIndex = findExtremumIndex(2);
+		int minIndex = findExtremumIndex(1);
 		int minStackSize;
+		
 		if (items[minIndex] != null)
-			minStackSize = items[minIndex].stackSize;
+			minStackSize = items[minIndex] != null ? items[minIndex].stackSize : 0;
 		else
 			minStackSize = 0;
-		if (Math.abs(items[maxIndex].stackSize - minStackSize) > 1) {
+		
+		if (Math.abs((items[maxIndex] != null ? items[maxIndex].stackSize : 0) - minStackSize) > 1) 
 			isDistributing = true;
-		}else
+		else {
+			if (isDistributing)
+				checkForCompacting(false);
+			
 			isDistributing = false;
+		}
+		
 		if (isDistributing) {
 			decrStackSize(maxIndex, 1);
 			if(items[minIndex] != null) {
-				items[minIndex].stackSize++;
+				if (items[minIndex].stackSize <= items[minIndex].getMaxStackSize())
+					items[minIndex].stackSize++;
 			}else{
-				items[minIndex] = new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, items[maxIndex].itemID);
+				items[minIndex] = new ItemStack(items[maxIndex].itemID, 1, items[maxIndex].getItemDamage());
 			}
 		}
+		System.out.println(worldObj.isRemote);
 	}
 	
 	public ItemStack determineOutput(int itemID, int itemMetadata) {
@@ -294,7 +333,9 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		return new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, newItemDamage);
 	}
 	
-	//well... it goes through each of the input stacks and decrements it
+	/**
+	 * well... it goes through each of the input stacks and decrements it
+	 */
 	private void decrementInputs() {
 		this.isDecrementing = true;
 		for (int i = 0; i < items.length - 1; i++) {
@@ -303,13 +344,17 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		this.isDecrementing = false;
 	}
 	
-	//server side end of sendInterfaceEvent
+	/**
+	 * server side end of sendInterfaceEvent
+	 * @param eventID 0 will set the output to null and call checkForCompacting, decrementInputs; 1 will avoid calling checkForCompacting
+	 * @param itemID I don't think i really use this at this point...
+	 */
 	public void recieveInterfaceEvent(byte eventID, int itemID) {
 		switch (eventID) {
-		case 0://set the output to null and call checkForCompacting, decrementInputs
+		case 0:
 			setInventorySlotContents(9, null);
 			break;
-		case 1://avoids calling checkForCompacting
+		case 1:
 			setItem(9, null);
 			break;
 		}
