@@ -20,7 +20,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	public boolean isDecrementing;
     public boolean isTransferring = false;//set to true when user shift-clicks, when its true setInterfacePacket(0,0) cant be called
     public int transferPass = 0;//used to keep track of how many times setInvSlotContents has been called after someone shift-clicks, so isTransferring can be false again
-    public int smallestIn = 0;//the number of items in the smallest input stack
+    private boolean isDistributing = false;//this is true when the inputs aren't equalized enough
 	
 	
 	public TileEntityCompactor() {
@@ -83,10 +83,11 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 			PacketHandler.sendInterfacePacket((byte)1, 0);//let the server know
 		}
 		if(worldObj.isRemote && this.isTransferring && slot != 9) {
+			int smallestInput = 0;
 			if (transferPass == 0) {//need this because it is reset each time
-				findSmallestInput();
+				smallestInput = items[findExtremumIndex(0)].stackSize;
 			}
-			if (transferPass == smallestIn * 9) {//this method is called once for each item it decrements
+			if (transferPass == smallestInput * 9) {//this method is called once for each item it decrements
 				this.transferPass = 0;//reset
 				this.isTransferring = false;//allow future actions on client side to call sendInterfacePacket
 			}else{
@@ -163,15 +164,29 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	}
 	
 	//set the field smallestIn to the input found to have the smallest stack size, used for incrementing transferPass
-	public void findSmallestInput() {
-		if (determineIfHomogenous() && determineIfFilled()) {
-			smallestIn = 66;//any stack should be smaller than this, its just a starting point
-			for (int i = 0; i < items.length - 1; i++) {
-				if (items[i].stackSize < smallestIn) {
-					smallestIn = items[i].stackSize;
+	public int findExtremumIndex(int type) {
+		int returnInt = 0;
+		int returnIndex = 1;
+		if (type == 0) {//the minimum
+			if (determineIfHomogenous() && determineIfFilled()) {
+				returnInt = 66;//any stack should be smaller than this, its just a starting point
+				for (int i = 0; i < items.length - 1; i++) {
+					if (items[i].stackSize < returnInt) {
+						returnIndex = i;
+					}
+				}
+			}
+		}else if(type == 1) {//the maximum
+			if (determineIfHomogenous() && determineIfFilled()) {
+				returnInt = 0;//any stack should be bigger than this, its just a starting point
+				for (int i = 0; i < items.length - 1; i++) {
+					if (items[i].stackSize > returnInt) {
+						returnIndex = i;
+					}
 				}
 			}
 		}
+		return returnIndex;
 	}
 	
 	//this determines whether the inputs are valid and whether an output should be set
@@ -251,6 +266,25 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	
 	//Equally distributes the items in the crafting grid between each other 
 	public void distributeItems() {
+		int maxIndex = findExtremumIndex(1);
+		int minIndex = findExtremumIndex(0);
+		int minStackSize;
+		if (items[minIndex] != null)
+			minStackSize = items[minIndex].stackSize;
+		else
+			minStackSize = 0;
+		if (Math.abs(items[maxIndex].stackSize - minStackSize) > 1) {
+			isDistributing = true;
+		}else
+			isDistributing = false;
+		if (isDistributing) {
+			decrStackSize(maxIndex, 1);
+			if(items[minIndex] != null) {
+				items[minIndex].stackSize++;
+			}else{
+				items[minIndex] = new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, items[maxIndex].itemID);
+			}
+		}
 	}
 	
 	public ItemStack determineOutput(int itemID, int itemMetadata) {
@@ -298,5 +332,12 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
 		return slotIndex == 9;
+	}
+	
+	@Override
+	public void updateEntity() {
+		if (isDistributing)
+			distributeItems();
+		super.updateEntity();
 	}
 }
