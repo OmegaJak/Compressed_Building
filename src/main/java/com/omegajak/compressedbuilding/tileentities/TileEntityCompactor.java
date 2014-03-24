@@ -21,6 +21,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
     public boolean isTransferring = false;//set to true when user shift-clicks, when its true setInterfacePacket(0,0) cant be called
     public int transferPass = 0;//used to keep track of how many times setInvSlotContents has been called after someone shift-clicks, so isTransferring can be false again
     private boolean isDistributing = false;//this is true when the inputs aren't equalized enough
+    private boolean isAddingToStack = false;
 	
 	
 	public TileEntityCompactor() {
@@ -66,11 +67,20 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		System.out.println("setInventorySlotContents");
+		if (worldObj.isRemote && itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize)
+			PacketHandler.sendInterfacePacket((byte)2, 0);
+//		System.out.println("setInventorySlotContents");
+		
+//		if (worldObj.isRemote && itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize)
+//			distributeItems();
+		
 		items[slot] = itemstack;
+		
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
+			
 			itemstack.stackSize = getInventoryStackLimit();
 		}
+		
 		
 		if (!worldObj.isRemote) {//if its on the server side
 			onInventoryChanged(true, (itemstack == null && slot == 9));
@@ -126,7 +136,6 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		System.out.println("isItemValidForSlot()");
 		return true;
 	}
 	
@@ -351,12 +360,15 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	 */
 	public void recieveInterfaceEvent(byte eventID, int itemID) {
 		switch (eventID) {
-		case 0:
-			setInventorySlotContents(9, null);
-			break;
-		case 1:
-			setItem(9, null);
-			break;
+			case 0:
+				setInventorySlotContents(9, null);
+				break;
+			case 1:
+				setItem(9, null);
+				break;
+			case 2:
+				distributeItems();
+				break;
 		}
 	}
 
