@@ -67,7 +67,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		if (worldObj.isRemote && itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize)
+		if (worldObj.isRemote && (itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize) || itemstack == null)
 			PacketHandler.sendInterfacePacket((byte)2, 0);
 //		System.out.println("setInventorySlotContents");
 		
