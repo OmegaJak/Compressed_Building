@@ -355,7 +355,8 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	
 	/**
 	 * server side end of sendInterfaceEvent
-	 * @param eventID 0 will set the output to null and call checkForCompacting, decrementInputs; 1 will avoid calling checkForCompacting
+	 * @param eventID 0 will set the output to null and call checkForCompacting, decrementInputs; 1 will avoid calling checkForCompacting;
+	 * 				  2 will distribute the inputs
 	 * @param itemID I don't think i really use this at this point...
 	 */
 	public void recieveInterfaceEvent(byte eventID, int itemID) {
