@@ -11,7 +11,7 @@ import com.omegajak.compressedbuilding.config.ConfigSettings;
 public class PlacementUtil {
 	
 	private boolean sneaking = false;
-	private byte[] orientationArr = new byte[6];
+	private byte[] orientationArr = new byte[7];
 	private byte originalCount = 0;
 	private byte newCount = 0;
 //	private byte radius = 1;
@@ -39,12 +39,21 @@ public class PlacementUtil {
 			orientationArr[4] = 1;//The offset of various directions depending on where it is used below
 			
 			/**
-			 * Used to determine which direction to orient it when the player is sneaking
+			 * Used to determine which direction to orient it when the player is sneaking and placing on the top or bottom
 			 * 1 means East-West
 			 * 2 means North-South
 			 */
 			orientationArr[5] = 1;
 			
+			/**
+			 * This is used similarly to the 5th index, except it's for when you're placing on the side
+			 * It's determined by orientationLogic
+			 * 1 means vertical
+			 * 2 means horizontal
+			 */
+			orientationArr[6] = 1;
+			
+			orientationLogic(world, x, y, z, side);//Changes the east-west vs north-south orientation
 			sideBasedLogic(side);//Manipulates where the loops below start and end for proper orientation based on the side
 			orientationLogic(world, x, y, z, side);//Changes the east-west vs north-south orientation
 			if(!world.getBlockMaterial(x, y, z).isSolid()) {
@@ -60,7 +69,7 @@ public class PlacementUtil {
 			}*/
 			for (int i = orientationArr[0]; i < orientationArr[1]; i++) {
 				for(int j = orientationArr[2]; j < orientationArr[3]; j++) {
-					if (sneaking || side > 1) {
+					if ((sneaking || side > 1) && orientationArr[6] == 1) {
 						if (orientationArr[5] == 1) {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareTemplate.blockID) {
 								world.setBlock(x + i, y + j, z + orientationArr[4], id >>> 8);
@@ -96,6 +105,7 @@ public class PlacementUtil {
 				orientationArr[3] = 4;
 				orientationArr[4] = 0;
 				orientationArr[5] = 1;//This is the default and shouldn't need to be changed, but it's good to be safe if it doesn't make any significant impact on resources
+				orientationArr[6] = 1;
 			}else{
 				orientationArr[4] = 1;
 			}
@@ -105,6 +115,7 @@ public class PlacementUtil {
 				orientationArr[3] = 0;
 				orientationArr[4] = 0;
 				orientationArr[5] = 1;
+				orientationArr[6] = 1;
 			}else{
 				orientationArr[4] = -1;
 			}
@@ -117,26 +128,40 @@ public class PlacementUtil {
 			}else{
 				orientationArr[4] = 1;
 				orientationArr[5] = 2;
+				orientationArr[6] = 1;
 			}
 		}else if (side == 2) {//The more negative z side
 			if (sneaking) {
-				orientationArr[0] = -3;
-				orientationArr[1] = 0;
+				if (orientationArr[6] == 1) {
+					orientationArr[0] = -3;
+					orientationArr[1] = 0;
+				}else{
+					orientationArr[2] = -3;
+					orientationArr[3] = 0;
+				}
 				orientationArr[4] = 0;
 				orientationArr[5] = 2;
+				
 			}else{
 				orientationArr[4] = -1;
 				orientationArr[5] = 1;
+				orientationArr[6] = 1;
 			}
 		}else if (side == 3) {//The more positive z side
 			if (sneaking) {
-				orientationArr[0] = 1;
-				orientationArr[1] = 4;
+				if (orientationArr[6] == 1) {
+					orientationArr[0] = 1;
+					orientationArr[1] = 4;
+				}else{
+					orientationArr[2] = 1;
+					orientationArr[3] = 4;
+				}
 				orientationArr[4] = 0;
 				orientationArr[5] = 2;
 			}else{
 				orientationArr[4] = 1;
 				orientationArr[5] = 1;
+				orientationArr[6] = 1;
 			}
 		}else if (side == 4) {//The more negative x side
 			if (sneaking) {
@@ -147,6 +172,7 @@ public class PlacementUtil {
 			}else{
 				orientationArr[4] = -1;
 				orientationArr[5] = 2;
+				orientationArr[6] = 1;
 			}
 		}
 	}
