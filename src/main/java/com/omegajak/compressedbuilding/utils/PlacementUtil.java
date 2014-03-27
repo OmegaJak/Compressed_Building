@@ -60,7 +60,7 @@ public class PlacementUtil {
 			}*/
 			for (int i = orientationArr[0]; i < orientationArr[1]; i++) {
 				for(int j = orientationArr[2]; j < orientationArr[3]; j++) {
-					if (sneaking) {
+					if (sneaking || side > 1) {
 						if (orientationArr[5] == 1) {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlockMaterial(x + i, y + j, z + orientationArr[4]).isSolid() || world.getBlockId(x + i, y + j, z + orientationArr[4]) == Blocks.squareTemplate.blockID) {
 								world.setBlock(x + i, y + j, z + orientationArr[4], id >>> 8);
@@ -115,9 +115,8 @@ public class PlacementUtil {
 				orientationArr[4] = 0;
 				orientationArr[5] = 1;
 			}else{
-				orientationArr[0] = 1;
-				orientationArr[1] = 4;
-				orientationArr[4] = 0;
+				orientationArr[4] = 1;
+				orientationArr[5] = 2;
 			}
 		}else if (side == 2) {//The more negative z side
 			if (sneaking) {
@@ -126,9 +125,8 @@ public class PlacementUtil {
 				orientationArr[4] = 0;
 				orientationArr[5] = 2;
 			}else{
-				orientationArr[2] = -3;
-				orientationArr[3] = 0;
-				orientationArr[4] = 0;
+				orientationArr[4] = -1;
+				orientationArr[5] = 1;
 			}
 		}else if (side == 3) {//The more positive z side
 			if (sneaking) {
@@ -137,9 +135,8 @@ public class PlacementUtil {
 				orientationArr[4] = 0;
 				orientationArr[5] = 2;
 			}else{
-				orientationArr[2] = 1;
-				orientationArr[3] = 4;
-				orientationArr[4] = 0;
+				orientationArr[4] = 1;
+				orientationArr[5] = 1;
 			}
 		}else if (side == 4) {//The more negative x side
 			if (sneaking) {
@@ -148,9 +145,8 @@ public class PlacementUtil {
 				orientationArr[4] = 0;
 				orientationArr[5] = 1;
 			}else{
-				orientationArr[0] = -3;
-				orientationArr[1] = 0;
-				orientationArr[4] = 0;
+				orientationArr[4] = -1;
+				orientationArr[5] = 2;
 			}
 		}
 	}
