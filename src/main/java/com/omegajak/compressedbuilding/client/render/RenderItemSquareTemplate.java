@@ -1,4 +1,4 @@
-package com.omegajak.compressedbuilding.client;
+package com.omegajak.compressedbuilding.client.render;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemBlock;

@@ -7,7 +7,7 @@ import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
 
-import com.omegajak.compressedbuilding.client.RenderCompactor;
+import com.omegajak.compressedbuilding.client.render.RenderCompactor;
 
 public class RenderItemCompactor implements IItemRenderer {
 	

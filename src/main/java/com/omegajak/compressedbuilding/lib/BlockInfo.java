@@ -17,6 +17,10 @@ public class BlockInfo {
 	
 	//Compactor
 	public static int COMPACTOR_ID;
+
+	public static int COMPACTOR_RENDER_ID;
+	public static String COMPACTOR_MODEL_RENDER_LOCATION = "/assets/" + TEXTURE_LOCATION + "/models/Compactor.obj";
+	
 	public static final String COMPACTOR_KEY = "compactor";
 	public static final int COMPACTOR_DEFAULT = 2077;
 	
