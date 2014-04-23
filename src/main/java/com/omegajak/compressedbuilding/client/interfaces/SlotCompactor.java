@@ -21,7 +21,7 @@ public class SlotCompactor extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		if (isInputSlot && stack.getItem() instanceof ItemBlock && stack.getItem().itemID != BlockInfo.SQTEMPLATE_ID) {
+		if (isInputSlot && stack.getItem() instanceof ItemBlock && stack.getItem().getIdFromItem(stack.getItem()) != BlockInfo.SQTEMPLATE_ID) {
 			return true;
 		}
 		return false;

@@ -8,7 +8,6 @@ import com.omegajak.compressedbuilding.config.ConfigHandler;
 import com.omegajak.compressedbuilding.creativeTab.CreativeTab;
 import com.omegajak.compressedbuilding.items.Items;
 import com.omegajak.compressedbuilding.lib.ModInformation;
-import com.omegajak.compressedbuilding.network.PacketHandler;
 import com.omegajak.compressedbuilding.proxies.CommonProxy;
 
 import cpw.mods.fml.common.Mod;
@@ -19,10 +18,9 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 //import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkMod;
 
 @Mod(modid = ModInformation.ID, name = ModInformation.NAME, version = ModInformation.VERSION)
-@NetworkMod(channels = {ModInformation.CHANNEL}, clientSideRequired = true, serverSideRequired = true, packetHandler = PacketHandler.class)
+//@NetworkMod(channels = {ModInformation.CHANNEL}, clientSideRequired = true, serverSideRequired = true, packetHandler = PacketHandler.class)
 public class CompressedBuilding {
 	
 	public static CreativeTabs tabCompressedBuilding;

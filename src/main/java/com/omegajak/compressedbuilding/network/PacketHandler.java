@@ -1,4 +1,6 @@
-package com.omegajak.compressedbuilding.network;
+/**package com.omegajak.compressedbuilding.network;
+
+import ibxm.Player;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -6,18 +8,12 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet250CustomPayload;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
 import com.omegajak.compressedbuilding.lib.ModInformation;
 import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
-
-import cpw.mods.fml.common.network.IPacketHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 
 public class PacketHandler implements IPacketHandler {
 
@@ -59,4 +55,4 @@ public class PacketHandler implements IPacketHandler {
 			System.err.append("Failed to send interface packet");
 		}
 	}
-}
+}*/

@@ -1,6 +1,7 @@
 package com.omegajak.compressedbuilding.creativeTab;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.omegajak.compressedbuilding.blocks.Blocks;
@@ -23,6 +24,11 @@ public class CreativeTab extends CreativeTabs {
 			stack.setItemDamage(4 << 8);
 		}
 		return stack;
+	}
+
+	@Override
+	public Item getTabIconItem() {
+		return null;
 	}
 	
 }

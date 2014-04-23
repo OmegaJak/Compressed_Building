@@ -1,9 +1,8 @@
 package com.omegajak.compressedbuilding.client;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
@@ -53,7 +52,7 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
 		
-		Icon icon = item.getItem().getIcon(item, 0);
+		IIcon icon = item.getItem().getIcon(item, 0);
 		
 		 switch (type) {
 	      case EQUIPPED:

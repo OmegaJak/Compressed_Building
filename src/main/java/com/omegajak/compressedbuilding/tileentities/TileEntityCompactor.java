@@ -2,6 +2,7 @@ package com.omegajak.compressedbuilding.tileentities;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -9,7 +10,6 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
-import com.omegajak.compressedbuilding.network.PacketHandler;
 
 public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	
@@ -108,16 +108,10 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	}
 
 	@Override
-	public String getInvName() {
+	public String getInventoryName() {
 		return "InventoryCompactor";
 	}
 
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
@@ -129,10 +123,10 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	}
 
 	@Override
-	public void openChest() {}
+	public void openInventory() {}
 
 	@Override
-	public void closeChest() {}
+	public void closeInventory() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -162,10 +156,10 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		super.readFromNBT(compound);
 		
 		//not entirely sure what this does...
-		NBTTagList list = compound.getTagList("Items");
+		NBTTagList list = compound.getTagList("Items", 0);
 		items = new ItemStack[this.getSizeInventory()];
 		for (int i = 0; i < list.tagCount(); i++) {
-			NBTTagCompound tagCompound = (NBTTagCompound)list.tagAt(i);
+			NBTTagCompound tagCompound = (NBTTagCompound)list.getCompoundTagAt(i);
 			int slot = tagCompound.getByte("Slot");
 			
 			if (slot >= 0 && slot < getSizeInventory()) {
@@ -226,7 +220,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 			isValidInput = true;//it was determined that the inputs are valid
 		}
 		if (isValidInput) {
-			ItemStack itemStack = determineOutput(items[4].itemID,items[4].getItemDamage());//itemstack with stackSize of 1, id of squareTemplate, and damage of the inputs
+			ItemStack itemStack = determineOutput(Item.getIdFromItem(items[4].getItem()),items[4].getItemDamage());//itemstack with stackSize of 1, id of squareTemplate, and damage of the inputs
 			setItem(9, itemStack);//don't want it to call checkForCompacting, though we do want the updates to be sent
 			isValidInput = false;//might no longer be valid
 		}
@@ -276,9 +270,9 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	public boolean determineIfHomogenous() {
 		for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] != null) {
-				int itemID = items[i].itemID;
+				int itemID = Item.getIdFromItem(items[i].getItem());
 				for (int k = i; k < items.length - 1; k++) {
-					if (items[k] != null && items[k].itemID != itemID) {
+					if (items[k] != null && Item.getIdFromItem(items[k].getItem()) != itemID) {
 						return false;
 					}
 				}
@@ -329,7 +323,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 				if (items[minIndex].stackSize <= items[minIndex].getMaxStackSize())
 					items[minIndex].stackSize++;
 			}else{
-				items[minIndex] = new ItemStack(items[maxIndex].itemID, 1, items[maxIndex].getItemDamage());
+				items[minIndex] = new ItemStack(Item.getIdFromItem(items[maxIndex].getItem()), 1, items[maxIndex].getItemDamage());
 			}
 		}
 		System.out.println(worldObj.isRemote);
@@ -397,5 +391,11 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		if (isDistributing)
 			distributeItems();
 		super.updateEntity();
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

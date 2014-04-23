@@ -55,7 +55,7 @@ public class ContainerCompactor extends Container {
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
-		if (getCompactor().worldObj.isRemote) {
+		if (getCompactor().getWorldObj().isRemote) {
 			this.compactor.isTransferring = true;
 		}
 		Slot slot = getSlot(i);
