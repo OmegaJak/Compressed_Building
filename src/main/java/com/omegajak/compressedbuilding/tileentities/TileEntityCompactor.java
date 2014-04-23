@@ -323,7 +323,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 				if (items[minIndex].stackSize <= items[minIndex].getMaxStackSize())
 					items[minIndex].stackSize++;
 			}else{
-				items[minIndex] = new ItemStack(Item.getIdFromItem(items[maxIndex].getItem()), 1, items[maxIndex].getItemDamage());
+				items[minIndex] = new ItemStack(items[maxIndex].getItem(), 1, items[maxIndex].getItemDamage());
 			}
 		}
 		System.out.println(worldObj.isRemote);
@@ -333,7 +333,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		int newItemDamage = 0;
 		int newID = itemID << 8;
 		newItemDamage = newID | itemMetadata;
-		return new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, newItemDamage);
+		return new ItemStack(Item.getItemById(BlockInfo.SQTEMPLATE_ID), 1, newItemDamage);
 	}
 	
 	/**

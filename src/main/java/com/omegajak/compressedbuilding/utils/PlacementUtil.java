@@ -3,6 +3,7 @@ package com.omegajak.compressedbuilding.utils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -179,7 +180,7 @@ public class PlacementUtil {
 	}
 	
 	public void spawnCompensation(World world, int id, int count, double x, double y, double z, EntityPlayer player) {
-		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(id >>> 8, count, 0xFF & id));
+		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(Item.getItemById(id >>> 8), count, 0xFF & id));
 		double distance = getDistance(x, y, z, player.posX, player.posY, player.posZ);
 		entityItem.motionX = (double)((player.posX - x) * distance * 0.01D);
 		entityItem.motionY = (double)((player.posY - y) * distance * 0.01D);

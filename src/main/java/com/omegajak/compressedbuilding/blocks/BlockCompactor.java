@@ -72,7 +72,7 @@ public class BlockCompactor extends BlockContainer {
 	
 	//This method comes straight from the BlockChest class in vanilla minecraft
 	@Override
-    public void breakBlock(World world, int x, int y, int z, int oldID, int oldMeta)
+    public void breakBlock(World world, int x, int y, int z, Block oldBlock, int oldMeta)
     {
         TileEntityCompactor tileEntityCompactor = (TileEntityCompactor)world.getTileEntity(x, y, z);
         final Random random = new Random();
@@ -98,7 +98,7 @@ public class BlockCompactor extends BlockContainer {
                         }
 
                         itemstack.stackSize -= k1;
-                        entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.getItem().getIdFromItem(itemstack.getItem()), k1, itemstack.getItemDamage()));
+                        entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.getItem(), k1, itemstack.getItemDamage()));
                         float f3 = 0.05F;
                         entityitem.motionX = (double)((float)random.nextGaussian() * f3);
                         entityitem.motionY = (double)((float)random.nextGaussian() * f3 + 0.2F);
@@ -112,9 +112,9 @@ public class BlockCompactor extends BlockContainer {
                 }
             }
 
-            world.func_96440_m(x, y, z, oldID);
+            world.func_147453_f(x, y, z, oldBlock);
         }
 
-        super.breakBlock(world, x, y, z, oldID, oldMeta);
+        super.breakBlock(world, x, y, z, oldBlock, oldMeta);
     }
 }
