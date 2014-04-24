@@ -48,7 +48,14 @@ public class CompressedBuilding {
 	}
 	
 	@EventHandler
-	public void load(FMLInitializationEvent event) {
+	public void postInit(FMLPostInitializationEvent event) {
+		packetPipeline.postInitialise();
+	}
+	
+	@EventHandler
+	public void init(FMLInitializationEvent event) {
+		packetPipeline.initialise();
+		
 		Blocks.addNames();
 		
 		Items.registerRecipes();
