@@ -85,7 +85,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		
 		
 		if (!worldObj.isRemote) {//if its on the server side
-//			onInventoryChanged(true, (itemstack == null && slot == 9));
+			onInventoryChanged(true, (itemstack == null && slot == 9));
 		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring) {//if youre simply removing the output, no shift clicking though
 			if (determineIfHomogenous() && determineIfFilled()) {//always good to check
 				CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)0, this.xCoord, this.yCoord, this.zCoord));//tells the server to set output to null and do normal updating stuff
@@ -256,14 +256,14 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 		container.detectAndSendChanges();
 		super.onInventoryChanged();
-	}
+	}*/
 	
 	public void onInventoryChanged(boolean shouldCheckForCompacting, boolean shouldDecrement) {
 		checkForCompacting(shouldDecrement);
 		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 		container.detectAndSendChanges();
-		super.onInventoryChanged();
-	}*/
+//		super.onInventoryChanged();
+	}
 	
 	/**
 	 * Determines if everything in the compacting grid is the same item

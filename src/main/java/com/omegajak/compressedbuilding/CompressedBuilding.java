@@ -39,9 +39,15 @@ public class CompressedBuilding {
 	public void preInit(FMLPreInitializationEvent event) {//Doesn't have to be named preInit
 		ConfigHandler.init(event.getSuggestedConfigurationFile());
 		tabCompressedBuilding = new CreativeTab("Compressed Building");
-		Items.init();
-		Blocks.init();
 		
+		Items.init();
+		Items.registerRecipes();
+		
+		Blocks.init();
+		Blocks.addNames();
+		Blocks.registerTileEntities();
+		
+		new GuiHandler();
 		
 		proxy.initSounds();
 		proxy.initRenderers();
@@ -55,14 +61,6 @@ public class CompressedBuilding {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		packetPipeline.initialise();
-		
-		Blocks.addNames();
-		
-		Items.registerRecipes();
-		
-		Blocks.registerTileEntities();
-		
-		new GuiHandler();
 	}
 	
 	@EventHandler

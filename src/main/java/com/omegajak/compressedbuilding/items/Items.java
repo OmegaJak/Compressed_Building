@@ -17,7 +17,7 @@ public class Items {
 		GameRegistry.addRecipe(new ItemStack(Blocks.compactor), new Object[] { "XYX", "Y Y", "XYX", 'X', Block.getBlockFromName("cobblestone"), 'Y', Block.getBlockFromName("piston")});
 		
 		ItemStack squareTemplate = new ItemStack(Blocks.squareTemplate);
-		GameRegistry.addShapelessRecipe(new ItemStack(Block.getBlockById(squareTemplate.getItemDamage() >>> 8), 9), squareTemplate);//no way this is going to work
+//		GameRegistry.addShapelessRecipe(new ItemStack(Block.getBlockById(squareTemplate.getItemDamage() >>> 8), 9), squareTemplate);//no way this is going to work
 	}
 	
 }
