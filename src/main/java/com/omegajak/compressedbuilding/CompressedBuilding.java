@@ -8,6 +8,7 @@ import com.omegajak.compressedbuilding.config.ConfigHandler;
 import com.omegajak.compressedbuilding.creativeTab.CreativeTab;
 import com.omegajak.compressedbuilding.items.Items;
 import com.omegajak.compressedbuilding.lib.ModInformation;
+import com.omegajak.compressedbuilding.network.PacketPipeline;
 import com.omegajak.compressedbuilding.proxies.CommonProxy;
 
 import cpw.mods.fml.common.Mod;
@@ -30,6 +31,9 @@ public class CompressedBuilding {
 	
 	@SidedProxy(clientSide = "com.omegajak.compressedbuilding.proxies.ClientProxy", serverSide = "com.omegajak.compressedbuilding.proxies.CommonProxy")
 	public static CommonProxy proxy;
+	
+	//the packet pipeline
+	public static final PacketPipeline packetPipeline = new PacketPipeline();
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {//Doesn't have to be named preInit

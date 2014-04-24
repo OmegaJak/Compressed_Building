@@ -8,8 +8,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
+import com.omegajak.compressedbuilding.CompressedBuilding;
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
+import com.omegajak.compressedbuilding.network.PacketCompactor;
 
 public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	
@@ -68,7 +70,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
 		if (worldObj.isRemote && (itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize) || itemstack == null)
-			PacketHandler.sendInterfacePacket((byte)2, 0);
+			CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)2, this.xCoord, this.yCoord, this.zCoord));
 //		System.out.println("setInventorySlotContents");
 		
 //		if (worldObj.isRemote && itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize)
@@ -83,14 +85,14 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		
 		
 		if (!worldObj.isRemote) {//if its on the server side
-			onInventoryChanged(true, (itemstack == null && slot == 9));
+//			onInventoryChanged(true, (itemstack == null && slot == 9));
 		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring) {//if youre simply removing the output, no shift clicking though
 			if (determineIfHomogenous() && determineIfFilled()) {//always good to check
-				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);//tells the server to set output to null and do normal updating stuff
+				CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)0, this.xCoord, this.yCoord, this.zCoord));//tells the server to set output to null and do normal updating stuff
 																			//including decrementing
 			}
 		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {//if you take an input out
-			PacketHandler.sendInterfacePacket((byte)1, 0);//let the server know
+			CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)1, this.xCoord, this.yCoord, this.zCoord));//let the server know
 		}
 		if(worldObj.isRemote && this.isTransferring && slot != 9) {
 			int smallestInput = 0;
@@ -244,12 +246,12 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		//if it makes it through the above, then set that item slot
 		items[index] = itemStack;
 		if (!worldObj.isRemote) {//if it's on the server side, tell the container to look for changes and send them to each listener
-			onInventoryChanged();
+//			onInventoryChanged();
 		}
 		return true;
 	}
 	
-	@Override
+/**	@Override
 	public void onInventoryChanged() {
 		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 		container.detectAndSendChanges();
@@ -261,7 +263,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 		container.detectAndSendChanges();
 		super.onInventoryChanged();
-	}
+	}*/
 	
 	/**
 	 * Determines if everything in the compacting grid is the same item
@@ -353,6 +355,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	 * 				  2 will distribute the inputs
 	 * @param itemID I don't think i really use this at this point...
 	 */
+	/**
 	public void recieveInterfaceEvent(byte eventID, int itemID) {
 		switch (eventID) {
 			case 0:
@@ -365,7 +368,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 				distributeItems();
 				break;
 		}
-	}
+	}*/
 
 	public ItemStack getItemInSlot(int slotNumber) {
 		return  items[slotNumber];
