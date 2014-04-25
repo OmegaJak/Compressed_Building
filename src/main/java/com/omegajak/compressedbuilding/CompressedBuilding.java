@@ -11,11 +11,13 @@ import com.omegajak.compressedbuilding.lib.ModInformation;
 import com.omegajak.compressedbuilding.network.PacketPipeline;
 import com.omegajak.compressedbuilding.proxies.CommonProxy;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 //import cpw.mods.fml.common.network.NetworkMod;
@@ -40,12 +42,12 @@ public class CompressedBuilding {
 		ConfigHandler.init(event.getSuggestedConfigurationFile());
 		tabCompressedBuilding = new CreativeTab("Compressed Building");
 		
-		Items.init();
-		Items.registerRecipes();
-		
 		Blocks.init();
 		Blocks.addNames();
 		Blocks.registerTileEntities();
+		
+		Items.init();
+		Items.registerRecipes();
 		
 		new GuiHandler();
 		

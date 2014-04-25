@@ -69,6 +69,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
+		System.out.println(Item.getItemById(165));
 		if (worldObj.isRemote && (itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize) || itemstack == null)
 			CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)2, this.xCoord, this.yCoord, this.zCoord));
 //		System.out.println("setInventorySlotContents");
@@ -328,7 +329,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 				items[minIndex] = new ItemStack(items[maxIndex].getItem(), 1, items[maxIndex].getItemDamage());
 			}
 		}
-		System.out.println(worldObj.isRemote);
+		//System.out.println(worldObj.isRemote);
 	}
 	
 	public ItemStack determineOutput(int itemID, int itemMetadata) {
