@@ -247,7 +247,8 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		//if it makes it through the above, then set that item slot
 		items[index] = itemStack;
 		if (!worldObj.isRemote) {//if it's on the server side, tell the container to look for changes and send them to each listener
-//			onInventoryChanged();
+			markDirty();
+			container.detectAndSendChanges();
 		}
 		return true;
 	}
@@ -263,7 +264,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		checkForCompacting(shouldDecrement);
 		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 		container.detectAndSendChanges();
-//		super.onInventoryChanged();
+		super.markDirty();
 	}
 	
 	/**

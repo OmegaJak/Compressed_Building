@@ -55,6 +55,9 @@ public class PacketCompactor extends AbstractPacket {
 			case 2:
 				((TileEntityCompactor)te).distributeItems();
 				break;
+			case 3:
+				((TileEntityCompactor)te).checkForCompacting(false);
+				break;
 		}
 		}
 	}
