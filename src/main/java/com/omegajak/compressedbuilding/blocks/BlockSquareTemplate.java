@@ -40,13 +40,13 @@ public class BlockSquareTemplate extends Block{
 		}
 	}
 	
-/**	@Override
+	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
 	
 	@Override
-	public boolean isBlockNormalCube(World world, int x, int y, int z) {
+	public boolean isBlockNormalCube() {
 		return false;
 	}
 	
@@ -58,5 +58,5 @@ public class BlockSquareTemplate extends Block{
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
-	}*/
+	}
 }
