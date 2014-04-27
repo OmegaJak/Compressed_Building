@@ -69,6 +69,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
+		System.out.println(Item.getItemById(165));
 		if (worldObj.isRemote && (itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize) || itemstack == null)
 			CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)2, this.xCoord, this.yCoord, this.zCoord));
 //		System.out.println("setInventorySlotContents");
@@ -89,7 +90,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring) {//if youre simply removing the output, no shift clicking though
 			if (determineIfHomogenous() && determineIfFilled()) {//always good to check
 				CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)0, this.xCoord, this.yCoord, this.zCoord));//tells the server to set output to null and do normal updating stuff
-																																	//including decrementing
+																			//including decrementing
 			}
 		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {//if you take an input out
 			CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)1, this.xCoord, this.yCoord, this.zCoord));//let the server know
@@ -224,7 +225,6 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		if (isValidInput) {
 			ItemStack itemStack = determineOutput(Item.getIdFromItem(items[4].getItem()),items[4].getItemDamage());//itemstack with stackSize of 1, id of squareTemplate, and damage of the inputs
 			setItem(9, itemStack);//don't want it to call checkForCompacting, though we do want the updates to be sent
-			CompressedBuilding.packetPipeline.sendToClient(new PacketCompactor((byte)1, this.xCoord, this.yCoord, this.zCoord));
 			isValidInput = false;//might no longer be valid
 		}
 		container.detectAndSendChanges();
