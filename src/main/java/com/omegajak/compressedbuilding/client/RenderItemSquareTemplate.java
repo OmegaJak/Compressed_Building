@@ -126,8 +126,6 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 		ItemStack tempItem = new ItemStack(((item.getItemDamage() >>> 8) > 0) ? ((Item)Item.getItemById(item.getItemDamage() >>> 8)) : Item.getItemById(4), 1, 0xFF & item.getItemDamage());
 		icon = tempItem.getItem().getIconFromDamage(0xFF & item.getItemDamage());
 		
-		icon = item.getItem().getIcon(new ItemStack(Item.getItemById(0xFF & /*item.getItemDamage()*/5), 1, 0), 0);
-		
 		switch (type) {
 			case INVENTORY:
 				GL11.glTranslatef(0.0F, 0.01F, 0.0F);
