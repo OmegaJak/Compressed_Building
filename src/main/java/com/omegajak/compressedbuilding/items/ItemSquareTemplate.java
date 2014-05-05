@@ -53,6 +53,6 @@ public class ItemSquareTemplate extends ItemBlock{
 	
 	@Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean useExtraInfo) {
-		info.add("This block has the damage of " + (0xFF & itemStack.getItemDamage()));
+		info.add("This item holds the block with Id " + (itemStack.getItemDamageForDisplay() >>> 8) + " and damage of " + (itemStack.getItemDamageForDisplay() & 0xFF));
 	}
 }
