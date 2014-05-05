@@ -3,6 +3,7 @@ package com.omegajak.compressedbuilding.proxies;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 
+import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.client.RenderItemSquareTemplate;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
 
@@ -18,6 +19,6 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void initRenderers() {
 		RenderItemSquareTemplate sqTemplateRender = new RenderItemSquareTemplate();
-		MinecraftForgeClient.registerItemRenderer(Item.getItemById(BlockInfo.SQTEMPLATE_ID), sqTemplateRender);;
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.squareTemplate), sqTemplateRender);
 	}
 }

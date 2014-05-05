@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 import com.omegajak.compressedbuilding.CompressedBuilding;
+import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
 import com.omegajak.compressedbuilding.network.PacketCompactor;
@@ -69,10 +70,8 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		System.out.println(Item.getItemById(165));
 		if (worldObj.isRemote && (itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize) || itemstack == null)
 			CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)2, this.xCoord, this.yCoord, this.zCoord));
-//		System.out.println("setInventorySlotContents");
 		
 //		if (worldObj.isRemote && itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize)
 //			distributeItems();
@@ -337,7 +336,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		int newItemDamage = 0;
 		int newID = itemID << 8;
 		newItemDamage = newID | itemMetadata;
-		return new ItemStack(Item.getItemById(BlockInfo.SQTEMPLATE_ID), 1, newItemDamage);
+		return new ItemStack(Item.getItemFromBlock(Blocks.squareTemplate), 1, newItemDamage);
 	}
 	
 	/**
