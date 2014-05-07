@@ -11,7 +11,6 @@ import net.minecraft.tileentity.TileEntity;
 import com.omegajak.compressedbuilding.CompressedBuilding;
 import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
-import com.omegajak.compressedbuilding.lib.BlockInfo;
 import com.omegajak.compressedbuilding.network.PacketCompactor;
 
 public class TileEntityCompactor extends TileEntity implements ISidedInventory {
@@ -246,7 +245,6 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		//if it makes it through the above, then set that item slot
 		items[index] = itemStack;
 		if (!worldObj.isRemote) {//if it's on the server side, tell the container to look for changes and send them to each listener
-			markDirty();
 			container.detectAndSendChanges();
 		}
 		return true;
@@ -263,7 +261,6 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		checkForCompacting(shouldDecrement);
 		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 		container.detectAndSendChanges();
-		super.markDirty();
 	}
 	
 	/**
