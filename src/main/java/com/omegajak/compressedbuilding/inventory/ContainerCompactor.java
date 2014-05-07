@@ -4,9 +4,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
+import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.client.interfaces.SlotCompactor;
 import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
@@ -62,6 +64,9 @@ public class ContainerCompactor extends Container {
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack = slot.getStack();
 			ItemStack result = stack.copy();
+			
+			if (stack.getItem().equals(Item.getItemFromBlock(Blocks.squareTemplate)))
+				return null;
 			
 			if (i <= 9) {
 				if (!mergeItemStack(stack, 10, 46, false)) {

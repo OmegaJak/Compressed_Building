@@ -2,9 +2,11 @@ package com.omegajak.compressedbuilding.client.interfaces;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
+import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
 import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
@@ -21,7 +23,7 @@ public class SlotCompactor extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		if (isInputSlot && stack.getItem() instanceof ItemBlock && stack.getItem().getIdFromItem(stack.getItem()) != BlockInfo.SQTEMPLATE_ID) {
+		if (isInputSlot && stack.getItem() instanceof ItemBlock && !stack.getItem().equals(Item.getItemFromBlock(Blocks.squareTemplate))) {
 			return true;
 		}
 		return false;
