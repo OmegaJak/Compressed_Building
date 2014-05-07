@@ -69,7 +69,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		if (worldObj.isRemote && (itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize) || itemstack == null)
+		if (worldObj.isRemote && (itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize) /*|| itemstack == null*/)
 			CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)2, this.xCoord, this.yCoord, this.zCoord));
 		
 //		if (worldObj.isRemote && itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize)
@@ -85,7 +85,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		
 		if (!worldObj.isRemote) {//if its on the server side
 			onInventoryChanged(true, (itemstack == null && slot == 9));
-		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring) {//if youre simply removing the output, no shift clicking though
+		}else if(worldObj.isRemote && slot == 9 && itemstack == null /*&& !this.isTransferring*/) {//if youre simply removing the output, no shift clicking though
 			if (determineIfHomogenous() && determineIfFilled()) {//always good to check
 				CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)0, this.xCoord, this.yCoord, this.zCoord));//tells the server to set output to null and do normal updating stuff
 																			//including decrementing
@@ -105,6 +105,9 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 			}else{
 				this.transferPass++;//the counter
 			}
+		}
+		if (this.isDistributing) {
+			System.out.println("isDistributing");
 		}
 	}
 

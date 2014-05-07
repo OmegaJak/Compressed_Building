@@ -65,7 +65,7 @@ public class ContainerCompactor extends Container {
 			ItemStack stack = slot.getStack();
 			ItemStack result = stack.copy();
 			
-			if (stack.getItem().equals(Item.getItemFromBlock(Blocks.squareTemplate)))
+			if (stack.getItem().equals(Item.getItemFromBlock(Blocks.squareTemplate)) && i > 9)
 				return null;
 			
 			if (i <= 9) {
