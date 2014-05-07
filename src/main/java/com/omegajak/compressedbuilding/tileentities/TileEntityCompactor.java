@@ -93,11 +93,11 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {//if you take an input out
 			CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)1, this.xCoord, this.yCoord, this.zCoord));//let the server know
 		}
-		if(worldObj.isRemote && this.isTransferring && slot != 9) {
+		if(worldObj.isRemote && this.isTransferring && slot != 9) {//if we're on the client side, and we're transferring, and it's an input
 			int smallestInput = 0;
 			int smallestIndex = findExtremumIndex(0);
 			if (transferPass == 0) {//need this because it is reset each time
-				smallestInput = items[smallestIndex] != null ? items[smallestIndex].stackSize : 66;
+				smallestInput = items[smallestIndex] != null ? items[smallestIndex].stackSize : 66;//the limiting factor
 			}
 			if (transferPass == smallestInput * 9) {//this method is called once for each item it decrements
 				this.transferPass = 0;//reset
