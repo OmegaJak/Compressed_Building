@@ -57,13 +57,16 @@ public class ContainerCompactor extends Container {
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
+		
+		ItemStack newItemStack = null;
+		
 		if (getCompactor().getWorldObj().isRemote) {
 			this.compactor.isTransferring = true;
 		}
 		Slot slot = getSlot(i);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack = slot.getStack();
-			ItemStack result = stack.copy();
+			newItemStack = stack.copy();
 			
 			if (stack.getItem().equals(Item.getItemFromBlock(Blocks.squareTemplate)) && i > 9)
 				return null;
@@ -82,13 +85,8 @@ public class ContainerCompactor extends Container {
 				slot.onSlotChanged();
 			}
 			
-			slot.onPickupFromSlot(player, stack);
-			
-//			this.isTransferring = false;
-			return result;
 		}
-//		this.isTransferring = false;
-		return null;
+		return newItemStack;
 	}
 	
 	@Override
