@@ -28,4 +28,9 @@ public class SlotCompactor extends Slot {
 		}
 		return false;
 	}
+	
+	@Override
+	public void putStack(ItemStack itemStack) {
+		super.putStack(itemStack);
+	}
 }
