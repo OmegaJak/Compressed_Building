@@ -193,9 +193,8 @@ public class PlacementUtil {
 	}
 	
 	private void orientationLogic(World world,int x,int y,int z, int side) {
-		originalCount = 0;
-		newCount = 0;
 		if (side == 0 || side == 1) {
+			originalCount = 0;
 			for (int n = orientationArr[0]; n < orientationArr[1]; n++) {
 				if(orientationArr[5] == 1) {
 					if(!(world.isAirBlock(x + n, y, z + orientationArr[4]) || !world.getBlock(x + n, y, z + orientationArr[4]).getMaterial().isSolid())){
@@ -207,6 +206,7 @@ public class PlacementUtil {
 					}
 				}
 			}
+			newCount = 0;
 			for (int n = orientationArr[0]; n < orientationArr[1]; n++) {
 				if(orientationArr[5] == 1) {//It might look like this is the same as above, but I switched the if statements so it does the opposite
 					if(!world.isAirBlock(x + orientationArr[4], y, z + n)) {
@@ -225,30 +225,6 @@ public class PlacementUtil {
 					orientationArr[5] = 1;
 				}
 			}
-		}else{
-			for (int n = -1; n < 2; n++) {
-				if (!(world.isAirBlock(x, y + n, z) || !world.getBlock(x, y + n, z).getMaterial().isSolid())) {
-					originalCount++;
-				}
-			}
-			if (side == 2 || side == 3) {
-				for (int n = -1; n < 2; n++) {
-					if (!(world.isAirBlock(x + n, y, z) || !world.getBlock(x + n, y, z).getMaterial().isSolid())) {
-						newCount++;
-					}
-				}
-			}else if (side == 4 || side == 5) {
-				for (int n = -1; n < 2; n++) {
-					if (!(world.isAirBlock(x, y, z + n) || !world.getBlock(x, y, z + n).getMaterial().isSolid())) {
-						newCount++;
-					}
-				}
-			}
-			if (newCount >= originalCount) {
-				orientationArr[6] = 2;
-			}else{
-				orientationArr[6] = 1;
-			}
-		} 
+		}
 	}	
 }
