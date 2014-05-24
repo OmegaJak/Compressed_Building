@@ -41,8 +41,8 @@ public class ItemSquareTemplate extends ItemBlock{
 				}
 			}
 		}
-		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.getBlockById(stack.getItemDamage()).stepSound.getBreakSound(), 1.0F, Block.soundTypeStone.getPitch() * 0.8F);
-		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.getBlockById(stack.getItemDamage()).stepSound.getBreakSound(), 1.0F, Block.soundTypeStone.getPitch() * 0.9F);
+		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.getBlockById(stack.getItemDamage() >>> 8).stepSound.getBreakSound(), 1.0F, world.rand.nextFloat() * 0.1F + 0.5F);
+		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.getBlockById(stack.getItemDamage() >>> 8).stepSound.getBreakSound(), 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
 		return false;
 	}
 	

@@ -50,7 +50,6 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		
-		
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
 		
@@ -128,7 +127,8 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 		tessellator.startDrawingQuads();
 		
 		ItemStack tempItem = new ItemStack(((item.getItemDamage() >>> 8) > 0) ? ((Item)Item.getItemById(item.getItemDamage() >>> 8)) : Item.getItemById(4), 1, 0xFF & item.getItemDamage());
-		icon = tempItem.getItem().getIconFromDamage(0xFF & item.getItemDamage());
+//		icon = tempItem.getItem().getIconFromDamage(0xFF & item.getItemDamage());
+		icon = Block.getBlockById((item.getItemDamage() >>> 8) > 0 ? item.getItemDamage() >>> 8 : 4).getBlockTextureFromSide(1);
 		
 		switch (type) {
 			case INVENTORY:
@@ -138,7 +138,11 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 				GL11.glTranslatef(0.01F, 0.01F, 0.01F);
 		}
 		
-		GL11.glScalef(0.98F, 0.98F, 0.98F);
+		GL11.glScalef(0.98F, 0.98F, 0.98F);//so that the inner block doesn't clip with the outer mesh thing
+		
+		//this is for rendering the proper color, adapted from EntityDiggingFX
+		int j = Block.getBlockById(item.getItemDamage() >>> 8).getRenderColor(0);//the getRenderColor parameter doesn't seem to matter
+		tessellator.setColorOpaque_F((float)(j >> 16 & 255) / 255.0F, (float)(j >> 8 & 255) / 255.0F, (float)(j & 255) / 255.0F);
 		
 		// xpos face
 	    tessellator.setNormal(1.0F, 0.0F, 0.0F);
