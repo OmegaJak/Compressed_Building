@@ -249,6 +249,6 @@ public class PlacementUtil {
 			}else{
 				orientationArr[6] = 1;
 			}
-		}
+		} 
 	}	
 }
