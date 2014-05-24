@@ -128,7 +128,8 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 		
 		ItemStack tempItem = new ItemStack(((item.getItemDamage() >>> 8) > 0) ? ((Item)Item.getItemById(item.getItemDamage() >>> 8)) : Item.getItemById(4), 1, 0xFF & item.getItemDamage());
 //		icon = tempItem.getItem().getIconFromDamage(0xFF & item.getItemDamage());
-		icon = Block.getBlockById((item.getItemDamage() >>> 8) > 0 ? item.getItemDamage() >>> 8 : 4).getBlockTextureFromSide(1);
+		Block tempBlock = Block.getBlockById((item.getItemDamage() >>> 8) > 0 ? item.getItemDamage() >>> 8 : 4);
+
 		
 		switch (type) {
 			case INVENTORY:
@@ -144,14 +145,18 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 		int j = Block.getBlockById(item.getItemDamage() >>> 8).getRenderColor(0);//the getRenderColor parameter doesn't seem to matter
 		tessellator.setColorOpaque_F((float)(j >> 16 & 255) / 255.0F, (float)(j >> 8 & 255) / 255.0F, (float)(j & 255) / 255.0F);
 		
+		
+				
 		// xpos face
+		icon = tempBlock.getBlockTextureFromSide(5);//change the texture being used
 	    tessellator.setNormal(1.0F, 0.0F, 0.0F);
 	    tessellator.addVertexWithUV(1.0, 0.33, 0.0, (double)icon.getInterpolatedU(16), (double)icon.getInterpolatedV(12));
 	    tessellator.addVertexWithUV(1.0, 0.66, 0.0, (double)icon.getInterpolatedU(16), (double)icon.getInterpolatedV(4));
 	    tessellator.addVertexWithUV(1.0, 0.66, 1.0, (double)icon.getInterpolatedU(0), (double)icon.getInterpolatedV(4));
 	    tessellator.addVertexWithUV(1.0, 0.33, 1.0, (double)icon.getInterpolatedU(0), (double)icon.getInterpolatedV(12));
-
+	    
 	    // xneg face
+	    icon = tempBlock.getBlockTextureFromSide(4);
 	    tessellator.setNormal(-1.0F, 0.0F, 0.0F);
 	    tessellator.addVertexWithUV(0.0, 0.33, 1.0, (double)icon.getInterpolatedU(16), (double)icon.getInterpolatedV(12));
 	    tessellator.addVertexWithUV(0.0, 0.66, 1.0, (double)icon.getInterpolatedU(16), (double)icon.getInterpolatedV(4)); 
@@ -159,6 +164,7 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 	    tessellator.addVertexWithUV(0.0, 0.33, 0.0, (double)icon.getInterpolatedU(0), (double)icon.getInterpolatedV(12)); 
 
 	    // zneg face
+	    icon = tempBlock.getBlockTextureFromSide(2);
 	    tessellator.setNormal(0.0F, 0.0F, -1.0F);
 	    tessellator.addVertexWithUV(0.0, 0.33, 0.0, (double)icon.getInterpolatedU(16), (double)icon.getInterpolatedV(12));
 	    tessellator.addVertexWithUV(0.0, 0.66, 0.0, (double)icon.getInterpolatedU(16), (double)icon.getInterpolatedV(4)); 
@@ -166,6 +172,7 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 	    tessellator.addVertexWithUV(1.0, 0.33, 0.0, (double)icon.getInterpolatedU(0), (double)icon.getInterpolatedV(12)); 
 
 	    // zpos face
+	    icon = tempBlock.getBlockTextureFromSide(3);
 	    tessellator.setNormal(0.0F, 0.0F, -1.0F);
 	    tessellator.addVertexWithUV(1.0, 0.33, 1.0, (double)icon.getInterpolatedU(16), (double)icon.getInterpolatedV(12));
 	    tessellator.addVertexWithUV(1.0, 0.66, 1.0, (double)icon.getInterpolatedU(16), (double)icon.getInterpolatedV(4)); 
@@ -173,6 +180,7 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 	    tessellator.addVertexWithUV(0.0, 0.33, 1.0, (double)icon.getInterpolatedU(0), (double)icon.getInterpolatedV(12)); 
 
 	    // ypos face
+	    icon = tempBlock.getBlockTextureFromSide(1);
 	    tessellator.setNormal(0.0F, 1.0F, 0.0F);
 	    tessellator.addVertexWithUV(1.0, 0.66, 1.0, (double)icon.getMaxU(), (double)icon.getMaxV());
 	    tessellator.addVertexWithUV(1.0, 0.66, 0.0, (double)icon.getMaxU(), (double)icon.getMinV());
@@ -180,6 +188,7 @@ public class RenderItemSquareTemplate implements IItemRenderer{
 	    tessellator.addVertexWithUV(0.0, 0.66, 1.0, (double)icon.getMinU(), (double)icon.getMaxV());
 
 	    // yneg face 
+	    icon = tempBlock.getBlockTextureFromSide(0);
 	    tessellator.setNormal(0.0F, -1.0F, 0.0F);
 	    tessellator.addVertexWithUV(0.0, 0.33, 1.0, (double)icon.getMaxU(), (double)icon.getMaxV());
 	    tessellator.addVertexWithUV(0.0, 0.33, 0.0, (double)icon.getMaxU(), (double)icon.getMinV());
