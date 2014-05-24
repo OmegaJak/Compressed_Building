@@ -18,11 +18,6 @@ public class Blocks {
 		GameRegistry.registerBlock(compactor, BlockInfo.COMPACTOR_KEY);
 	}
 	
-	public static void addNames() {
-		LanguageRegistry.addName(squareTemplate, BlockInfo.SQTEMPLATE_NAME);
-		LanguageRegistry.addName(compactor, BlockInfo.COMPACTOR_NAME);
-	}
-	
 	public static void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileEntityCompactor.class, BlockInfo.COMPACTOR_TE_KEY);
 	}

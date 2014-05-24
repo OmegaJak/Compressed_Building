@@ -31,7 +31,7 @@ public class BlockCompactor extends BlockContainer {
 		setCreativeTab(CompressedBuilding.tabCompressedBuilding);
 		setHardness(2F);
 		setStepSound(Block.soundTypeStone);
-//		setUnlocalizedName(BlockInfo.COMPACTOR_UNLOCALIZED_NAME);
+		setBlockName(BlockInfo.COMPACTOR_KEY);
 	}
 	
 	@Override

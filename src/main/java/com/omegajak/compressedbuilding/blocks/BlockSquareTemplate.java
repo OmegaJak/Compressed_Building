@@ -17,7 +17,7 @@ public class BlockSquareTemplate extends Block{
 	public BlockSquareTemplate() {
 		super(Material.rock);
 		setCreativeTab(CompressedBuilding.tabCompressedBuilding);
-//		setUnlocalizedName(BlockInfo.SQTEMPLATE_UNLOCALIZED_NAME);
+		setBlockName(BlockInfo.SQTEMPLATE_KEY);
 		setBlockBounds(0F, .33F, 0F, 1F, .66F, 1F);
 	}
 	

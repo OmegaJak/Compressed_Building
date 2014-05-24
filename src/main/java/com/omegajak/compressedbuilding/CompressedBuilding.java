@@ -43,7 +43,6 @@ public class CompressedBuilding {
 		tabCompressedBuilding = new CreativeTab("Compressed Building");
 		
 		Blocks.init();
-		Blocks.addNames();
 		Blocks.registerTileEntities();
 		
 		Items.init();
