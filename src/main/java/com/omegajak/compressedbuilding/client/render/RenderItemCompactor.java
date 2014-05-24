@@ -1,4 +1,4 @@
-package com.omegajak.compressedbuilding.proxies;
+package com.omegajak.compressedbuilding.client.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
