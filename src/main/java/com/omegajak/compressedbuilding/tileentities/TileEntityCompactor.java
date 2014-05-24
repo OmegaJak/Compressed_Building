@@ -78,7 +78,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		
 		
 		if (!worldObj.isRemote) {//if its on the server side
-			onInventoryChanged(true, (itemstack == null && slot == 9));
+			onInventoryChanged(true, (itemstack == null && slot == 9) && determineIfFilled() && determineIfHomogenous());
 		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring) {//if youre simply removing the output, no shift clicking though
 			if (determineIfHomogenous() && determineIfFilled()) {//always good to check
 				CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)0, this.xCoord, this.yCoord, this.zCoord));//tells the server to set output to null and do normal updating stuff
@@ -93,15 +93,12 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 			if (transferPass == 0) {//need this because it is reset each time
 				smallestInput = items[smallestIndex] != null ? items[smallestIndex].stackSize : 66;//the limiting factor
 			}
-			if (transferPass >= smallestInput * 9) {//this method is called once for each item it decrements
+			if (transferPass >= smallestInput * 9 - 9) {//this method is called once for each item it decrements
 				this.transferPass = 0;//reset
 				this.isTransferring = false;//allow future actions on client side to call sendInterfacePacket
 			}else{
 				this.transferPass++;//the counter
 			}
-		}
-		if (this.isDistributing) {
-			System.out.println("isDistributing");
 		}
 	}
 
@@ -214,7 +211,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		if (!isDistributing)
 			distributeItems();
 		
-		if (determineIfHomogenous() && determineIfFilled()) {
+		if (determineIfFilled() && determineIfHomogenous()) {
 			isValidInput = true;//it was determined that the inputs are valid
 		}
 		if (isValidInput) {
