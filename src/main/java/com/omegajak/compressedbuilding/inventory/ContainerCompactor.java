@@ -4,9 +4,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
+import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.client.interfaces.SlotCompactor;
 import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
@@ -55,13 +57,19 @@ public class ContainerCompactor extends Container {
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
-		if (getCompactor().worldObj.isRemote) {
+		
+		ItemStack newItemStack = null;
+		
+		if (getCompactor().getWorldObj().isRemote) {
 			this.compactor.isTransferring = true;
 		}
 		Slot slot = getSlot(i);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack = slot.getStack();
-			ItemStack result = stack.copy();
+			newItemStack = stack.copy();
+			
+			if (stack.getItem().equals(Item.getItemFromBlock(Blocks.squareTemplate)) && i > 9)
+				return null;
 			
 			if (i <= 9) {
 				if (!mergeItemStack(stack, 10, 46, false)) {
@@ -77,13 +85,8 @@ public class ContainerCompactor extends Container {
 				slot.onSlotChanged();
 			}
 			
-			slot.onPickupFromSlot(player, stack);
-			
-//			this.isTransferring = false;
-			return result;
 		}
-//		this.isTransferring = false;
-		return null;
+		return newItemStack;
 	}
 	
 	@Override

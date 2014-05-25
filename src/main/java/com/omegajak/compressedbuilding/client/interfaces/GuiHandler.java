@@ -14,14 +14,14 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 public class GuiHandler implements IGuiHandler {
 
 	public GuiHandler() {
-		NetworkRegistry.instance().registerGuiHandler(CompressedBuilding.instance, this);
+		NetworkRegistry.INSTANCE.registerGuiHandler(CompressedBuilding.instance, this);
 	}
 
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		switch (id) {
 		case 0:
-			TileEntity te = world.getBlockTileEntity(x, y, z);
+			TileEntity te = world.getTileEntity(x, y, z);
 			if (te != null && te instanceof TileEntityCompactor) {
 				return new ContainerCompactor(player.inventory, (TileEntityCompactor)te);
 			}
@@ -34,7 +34,7 @@ public class GuiHandler implements IGuiHandler {
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		switch(id) {
 		case 0:
-			TileEntity te = world.getBlockTileEntity(x, y, z);
+			TileEntity te = world.getTileEntity(x, y, z);
 			if (te != null && te instanceof TileEntityCompactor) {
 				return new GuiCompactor(player.inventory, (TileEntityCompactor)te);
 			}

@@ -16,8 +16,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSquareTemplate extends ItemBlock{
-	public ItemSquareTemplate(int id) {
-		super(id);
+	public ItemSquareTemplate(Block block) {
+		super(block);
 		super.setHasSubtypes(true);
 	}
 	
@@ -32,8 +32,6 @@ public class ItemSquareTemplate extends ItemBlock{
 					stack.stackSize--;
 				}
 			}
-			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[stack.getItemDamage() >>> 8].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.8F);
-			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[stack.getItemDamage() >>> 8].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.9F);
 		}else{
 			if(!world.isRemote) {
 				PlacementUtil placementUtil = new PlacementUtil();
@@ -42,9 +40,9 @@ public class ItemSquareTemplate extends ItemBlock{
 					stack.stackSize--;
 				}
 			}
-			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[4].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.8F);
-			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.blocksList[4].stepSound.getPlaceSound(), 1.0F, Block.soundStoneFootstep.getPitch() * 0.9F);
 		}
+		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.getBlockById(stack.getItemDamage() >>> 8).stepSound.getBreakSound(), 1.0F, world.rand.nextFloat() * 0.1F + 0.5F);
+		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.getBlockById(stack.getItemDamage() >>> 8).stepSound.getBreakSound(), 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
 		return false;
 	}
 	
@@ -55,6 +53,6 @@ public class ItemSquareTemplate extends ItemBlock{
 	
 	@Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean useExtraInfo) {
-		info.add("This block has the damage of " + (0xFF & itemStack.getItemDamage()));
+		info.add("This item holds the block with Id " + (itemStack.getItemDamageForDisplay() >>> 8) + " and damage of " + (itemStack.getItemDamageForDisplay() & 0xFF));
 	}
 }

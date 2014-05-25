@@ -1,9 +1,12 @@
 package com.omegajak.compressedbuilding.proxies;
 
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
+import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.client.render.RenderCompactor;
 import com.omegajak.compressedbuilding.client.render.RenderItemCompactor;
 import com.omegajak.compressedbuilding.client.render.RenderItemSquareTemplate;
@@ -25,11 +28,11 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void initRenderers() {
 		RenderItemSquareTemplate sqTemplateRender = new RenderItemSquareTemplate();
-		MinecraftForgeClient.registerItemRenderer(BlockInfo.SQTEMPLATE_ID, sqTemplateRender);;
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.squareTemplate), sqTemplateRender);
 		
 		BlockInfo.COMPACTOR_RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
-		IModelCustom modelCompactor = AdvancedModelLoader.loadModel(BlockInfo.COMPACTOR_MODEL_RENDER_LOCATION);
+		IModelCustom modelCompactor = AdvancedModelLoader.loadModel(new ResourceLocation(BlockInfo.TEXTURE_LOCATION, BlockInfo.COMPACTOR_MODEL_RENDER_LOCATION));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCompactor.class, new RenderCompactor(modelCompactor));
-		MinecraftForgeClient.registerItemRenderer(BlockInfo.COMPACTOR_ID, new RenderItemCompactor(modelCompactor));
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.compactor), new RenderItemCompactor(modelCompactor));
 	}
 }

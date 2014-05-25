@@ -5,14 +5,14 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -20,40 +20,40 @@ import com.omegajak.compressedbuilding.CompressedBuilding;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
 import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 
-import cpw.mods.fml.common.network.FMLNetworkHandler;
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCompactor extends BlockContainer {
-	public BlockCompactor(int id) {
-		super(id, Material.rock);
+	public BlockCompactor() {
+		super(Material.rock);
 		
 		setCreativeTab(CompressedBuilding.tabCompressedBuilding);
 		setHardness(2F);
-		setStepSound(Block.soundStoneFootstep);
-		setUnlocalizedName(BlockInfo.COMPACTOR_UNLOCALIZED_NAME);
+		setStepSound(Block.soundTypeStone);
+		setBlockName(BlockInfo.COMPACTOR_KEY);
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int par2) {
 		return new TileEntityCompactor();
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private Icon topIcon;
+	private IIcon topIcon;
 	@SideOnly(Side.CLIENT)
-	private Icon otherIcons;
+	private IIcon otherIcons;
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister register) {
+	public void registerBlockIcons(IIconRegister register) {
 		topIcon = register.registerIcon(BlockInfo.TEXTURE_LOCATION + ":" + BlockInfo.COMPACTOR_TEXTURE_TOP);
 		otherIcons = register.registerIcon(BlockInfo.TEXTURE_LOCATION + ":" + BlockInfo.COMPACTOR_TEXTURE_SIDES);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta) {
+	public IIcon getIcon(int side, int meta) {
 		if (side == 1) {
 			return topIcon;
 		}else{
@@ -72,9 +72,9 @@ public class BlockCompactor extends BlockContainer {
 	
 	//This method comes straight from the BlockChest class in vanilla minecraft
 	@Override
-    public void breakBlock(World world, int x, int y, int z, int oldID, int oldMeta)
+    public void breakBlock(World world, int x, int y, int z, Block oldBlock, int oldMeta)
     {
-        TileEntityCompactor tileEntityCompactor = (TileEntityCompactor)world.getBlockTileEntity(x, y, z);
+        TileEntityCompactor tileEntityCompactor = (TileEntityCompactor)world.getTileEntity(x, y, z);
         final Random random = new Random();
         if (tileEntityCompactor != null)
         {
@@ -98,7 +98,7 @@ public class BlockCompactor extends BlockContainer {
                         }
 
                         itemstack.stackSize -= k1;
-                        entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
+                        entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.getItem(), k1, itemstack.getItemDamage()));
                         float f3 = 0.05F;
                         entityitem.motionX = (double)((float)random.nextGaussian() * f3);
                         entityitem.motionY = (double)((float)random.nextGaussian() * f3 + 0.2F);
@@ -112,10 +112,10 @@ public class BlockCompactor extends BlockContainer {
                 }
             }
 
-            world.func_96440_m(x, y, z, oldID);
+            world.func_147453_f(x, y, z, oldBlock);
         }
 
-        super.breakBlock(world, x, y, z, oldID, oldMeta);
+        super.breakBlock(world, x, y, z, oldBlock, oldMeta);
     }
 	
 	@Override
@@ -134,15 +134,10 @@ public class BlockCompactor extends BlockContainer {
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World world, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
-//		if (world.isRemote) {
-			//This math was copied from vanilla code to determine the direction the player's looking
-			byte direction = (byte)(MathHelper.floor_double((double)(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
-			((TileEntityCompactor)world.getBlockTileEntity(par2, par3, par4)).direction = direction;
-//		}
-		super.onBlockPlacedBy(world, par2, par3, par4, par5EntityLivingBase, par6ItemStack);
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack) {
+		//This math was copied from vanilla code to determine the direction the player's looking
+		byte direction = (byte)(MathHelper.floor_double((double)(entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
+		((TileEntityCompactor)world.getTileEntity(x, y, z)).direction = direction;
+		super.onBlockPlacedBy(world, x, y, z, entityLiving, itemStack);
 	}
 }
-
-
-

@@ -2,14 +2,16 @@ package com.omegajak.compressedbuilding.tileentities;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
+import com.omegajak.compressedbuilding.CompressedBuilding;
+import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
-import com.omegajak.compressedbuilding.lib.BlockInfo;
-import com.omegajak.compressedbuilding.network.PacketHandler;
+import com.omegajak.compressedbuilding.network.PacketCompactor;
 
 public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	
@@ -22,7 +24,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
     public int transferPass = 0;//used to keep track of how many times setInvSlotContents has been called after someone shift-clicks, so isTransferring can be false again
     private boolean isDistributing = false;//this is true when the inputs aren't equalized enough
     private boolean isAddingToStack = false;
-    public byte direction = -1;//this is used for rendering and changed when the block is placed
+    public byte direction = -1;//this is used for rending and changed when the block is placed
 	
 	
 	public TileEntityCompactor() {
@@ -68,13 +70,6 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		if (worldObj.isRemote && (itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize) || itemstack == null)
-			PacketHandler.sendInterfacePacket((byte)2, 0);
-//		System.out.println("setInventorySlotContents");
-		
-//		if (worldObj.isRemote && itemstack != null && items[slot] != null && itemstack.getItem().equals(items[slot].getItem()) && itemstack.stackSize >= items[slot].stackSize)
-//			distributeItems();
-		
 		items[slot] = itemstack;
 		
 		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
@@ -84,22 +79,22 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		
 		
 		if (!worldObj.isRemote) {//if its on the server side
-			onInventoryChanged(true, (itemstack == null && slot == 9));
+			onInventoryChanged(true, (itemstack == null && slot == 9) && determineIfFilled() && determineIfHomogenous());
 		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring) {//if youre simply removing the output, no shift clicking though
 			if (determineIfHomogenous() && determineIfFilled()) {//always good to check
-				PacketHandler.sendInterfacePacket((byte)0, items[4].itemID);//tells the server to set output to null and do normal updating stuff
+				CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)0, this.xCoord, this.yCoord, this.zCoord));//tells the server to set output to null and do normal updating stuff
 																			//including decrementing
 			}
 		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {//if you take an input out
-			PacketHandler.sendInterfacePacket((byte)1, 0);//let the server know
+			CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)1, this.xCoord, this.yCoord, this.zCoord));//let the server know
 		}
-		if(worldObj.isRemote && this.isTransferring && slot != 9) {
+		if(worldObj.isRemote && this.isTransferring && slot != 9) {//if we're on the client side, and we're transferring, and it's an input
 			int smallestInput = 0;
 			int smallestIndex = findExtremumIndex(0);
 			if (transferPass == 0) {//need this because it is reset each time
-				smallestInput = items[smallestIndex] != null ? items[smallestIndex].stackSize : 66;
+				smallestInput = items[smallestIndex] != null ? items[smallestIndex].stackSize : 66;//the limiting factor
 			}
-			if (transferPass == smallestInput * 9) {//this method is called once for each item it decrements
+			if (transferPass >= smallestInput * 9 - 9) {//this method is called once for each item it decrements
 				this.transferPass = 0;//reset
 				this.isTransferring = false;//allow future actions on client side to call sendInterfacePacket
 			}else{
@@ -109,16 +104,10 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	}
 
 	@Override
-	public String getInvName() {
+	public String getInventoryName() {
 		return "InventoryCompactor";
 	}
 
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
@@ -130,10 +119,10 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	}
 
 	@Override
-	public void openChest() {}
+	public void openInventory() {}
 
 	@Override
-	public void closeChest() {}
+	public void closeInventory() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -143,11 +132,8 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		System.out.println("write " + this.worldObj.isRemote);
-		System.out.println(this.direction != -1);
-		if (this.direction != -1) {
+		if (this.direction != -1)
 			compound.setByte("Direction", direction);
-		}
 		
 		NBTTagList tagList = new NBTTagList();
 		
@@ -167,16 +153,15 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-		System.out.println(compound.hasKey("Direction"));
 		if (compound.hasKey("Direction")) {
 			this.direction = compound.getByte("Direction");
 		}
 		
 		//not entirely sure what this does...
-		NBTTagList list = compound.getTagList("Items");
+		NBTTagList list = compound.getTagList("Items", 0);
 		items = new ItemStack[this.getSizeInventory()];
 		for (int i = 0; i < list.tagCount(); i++) {
-			NBTTagCompound tagCompound = (NBTTagCompound)list.tagAt(i);
+			NBTTagCompound tagCompound = (NBTTagCompound)list.getCompoundTagAt(i);
 			int slot = tagCompound.getByte("Slot");
 			
 			if (slot >= 0 && slot < getSizeInventory()) {
@@ -233,11 +218,11 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		if (!isDistributing)
 			distributeItems();
 		
-		if (determineIfHomogenous() && determineIfFilled()) {
+		if (determineIfFilled() && determineIfHomogenous()) {
 			isValidInput = true;//it was determined that the inputs are valid
 		}
 		if (isValidInput) {
-			ItemStack itemStack = determineOutput(items[4].itemID,items[4].getItemDamage());//itemstack with stackSize of 1, id of squareTemplate, and damage of the inputs
+			ItemStack itemStack = determineOutput(Item.getIdFromItem(items[4].getItem()),items[4].getItemDamage());//itemstack with stackSize of 1, id of squareTemplate, and damage of the inputs
 			setItem(9, itemStack);//don't want it to call checkForCompacting, though we do want the updates to be sent
 			isValidInput = false;//might no longer be valid
 		}
@@ -261,23 +246,22 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		//if it makes it through the above, then set that item slot
 		items[index] = itemStack;
 		if (!worldObj.isRemote) {//if it's on the server side, tell the container to look for changes and send them to each listener
-			onInventoryChanged();
+			container.detectAndSendChanges();
 		}
 		return true;
 	}
 	
-	@Override
+/**	@Override
 	public void onInventoryChanged() {
 		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 		container.detectAndSendChanges();
 		super.onInventoryChanged();
-	}
+	}*/
 	
 	public void onInventoryChanged(boolean shouldCheckForCompacting, boolean shouldDecrement) {
 		checkForCompacting(shouldDecrement);
 		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 		container.detectAndSendChanges();
-		super.onInventoryChanged();
 	}
 	
 	/**
@@ -287,9 +271,9 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	public boolean determineIfHomogenous() {
 		for (int i = 0; i < items.length - 1; i++) {
 			if (items[i] != null) {
-				int itemID = items[i].itemID;
+				int itemID = Item.getIdFromItem(items[i].getItem());
 				for (int k = i; k < items.length - 1; k++) {
-					if (items[k] != null && items[k].itemID != itemID) {
+					if (items[k] != null && Item.getIdFromItem(items[k].getItem()) != itemID) {
 						return false;
 					}
 				}
@@ -340,17 +324,17 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 				if (items[minIndex].stackSize <= items[minIndex].getMaxStackSize())
 					items[minIndex].stackSize++;
 			}else{
-				items[minIndex] = new ItemStack(items[maxIndex].itemID, 1, items[maxIndex].getItemDamage());
+				items[minIndex] = new ItemStack(items[maxIndex].getItem(), 1, items[maxIndex].getItemDamage());
 			}
 		}
-		System.out.println(worldObj.isRemote);
+		//System.out.println(worldObj.isRemote);
 	}
 	
 	public ItemStack determineOutput(int itemID, int itemMetadata) {
 		int newItemDamage = 0;
 		int newID = itemID << 8;
 		newItemDamage = newID | itemMetadata;
-		return new ItemStack(BlockInfo.SQTEMPLATE_ID, 1, newItemDamage);
+		return new ItemStack(Item.getItemFromBlock(Blocks.squareTemplate), 1, newItemDamage);
 	}
 	
 	/**
@@ -370,6 +354,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	 * 				  2 will distribute the inputs
 	 * @param itemID I don't think i really use this at this point...
 	 */
+	/**
 	public void recieveInterfaceEvent(byte eventID, int itemID) {
 		switch (eventID) {
 			case 0:
@@ -382,7 +367,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 				distributeItems();
 				break;
 		}
-	}
+	}*/
 
 	public ItemStack getItemInSlot(int slotNumber) {
 		return  items[slotNumber];
@@ -408,5 +393,11 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		if (isDistributing)
 			distributeItems();
 		super.updateEntity();
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

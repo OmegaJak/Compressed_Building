@@ -2,52 +2,51 @@ package com.omegajak.compressedbuilding.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import com.omegajak.compressedbuilding.CompressedBuilding;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
-import com.omegajak.compressedbuilding.proxies.ClientProxy;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSquareTemplate extends Block{
 
-	public BlockSquareTemplate(int id) {
-		super(id, Material.rock);
+	public BlockSquareTemplate() {
+		super(Material.rock);
 		setCreativeTab(CompressedBuilding.tabCompressedBuilding);
-		setUnlocalizedName(BlockInfo.SQTEMPLATE_UNLOCALIZED_NAME);
+		setBlockName(BlockInfo.SQTEMPLATE_KEY);
 		setBlockBounds(0F, .33F, 0F, 1F, .66F, 1F);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister register) {
+	public void registerBlockIcons(IIconRegister register) {
 		blockIcon = register.registerIcon(BlockInfo.TEXTURE_LOCATION + ":" + BlockInfo.SQTEMPLATE_TEXTURE);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta) {
+	public IIcon getIcon(int side, int meta) {
 		return blockIcon;
 	}
 	
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		if(!world.isRemote){
-			world.setBlock(x, y, z, Block.cobblestone.blockID);
+			world.setBlock(x, y, z, Block.getBlockFromName("cobblestone"));
 		}
 	}
 	
-/**	@Override
+	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
 	
 	@Override
-	public boolean isBlockNormalCube(World world, int x, int y, int z) {
+	public boolean isBlockNormalCube() {
 		return false;
 	}
 	
@@ -59,5 +58,5 @@ public class BlockSquareTemplate extends Block{
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
-	}*/
+	}
 }
