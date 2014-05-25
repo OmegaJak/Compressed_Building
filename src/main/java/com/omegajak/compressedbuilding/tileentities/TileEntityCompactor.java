@@ -158,7 +158,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 		}
 		
 		//not entirely sure what this does...
-		NBTTagList list = compound.getTagList("Items", 0);
+		NBTTagList list = compound.getTagList("Items", 10);
 		items = new ItemStack[this.getSizeInventory()];
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound tagCompound = (NBTTagCompound)list.getCompoundTagAt(i);
