@@ -24,6 +24,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
     public int transferPass = 0;//used to keep track of how many times setInvSlotContents has been called after someone shift-clicks, so isTransferring can be false again
     private boolean isDistributing = false;//this is true when the inputs aren't equalized enough
     private boolean isAddingToStack = false;
+    public byte direction = -1;//this is used for rending and changed when the block is placed
 	
 	
 	public TileEntityCompactor() {
@@ -131,6 +132,8 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
+		if (this.direction != -1)
+			compound.setByte("Direction", direction);
 		
 		NBTTagList tagList = new NBTTagList();
 		
@@ -149,6 +152,10 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
+		
+		if (compound.hasKey("Direction")) {
+			this.direction = compound.getByte("Direction");
+		}
 		
 		//not entirely sure what this does...
 		NBTTagList list = compound.getTagList("Items", 0);
