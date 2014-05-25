@@ -7,9 +7,9 @@ import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
 import com.omegajak.compressedbuilding.blocks.Blocks;
-import com.omegajak.compressedbuilding.client.RenderCompactor;
-import com.omegajak.compressedbuilding.client.RenderItemCompactor;
-import com.omegajak.compressedbuilding.client.RenderItemSquareTemplate;
+import com.omegajak.compressedbuilding.client.render.RenderCompactor;
+import com.omegajak.compressedbuilding.client.render.RenderItemCompactor;
+import com.omegajak.compressedbuilding.client.render.RenderItemSquareTemplate;
 import com.omegajak.compressedbuilding.lib.BlockInfo;
 import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
 

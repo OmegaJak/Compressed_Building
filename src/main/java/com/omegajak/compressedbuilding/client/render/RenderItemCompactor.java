@@ -1,4 +1,4 @@
-package com.omegajak.compressedbuilding.client;
+package com.omegajak.compressedbuilding.client.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -7,7 +7,7 @@ import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
 
-import com.omegajak.compressedbuilding.client.RenderCompactor;
+import com.omegajak.compressedbuilding.client.render.RenderCompactor;
 
 public class RenderItemCompactor implements IItemRenderer {
 
