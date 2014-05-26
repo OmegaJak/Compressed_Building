@@ -370,7 +370,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	}*/
 
 	public ItemStack getItemInSlot(int slotNumber) {
-		return  items[slotNumber];
+		return items[slotNumber];
 	}
 
 	@Override

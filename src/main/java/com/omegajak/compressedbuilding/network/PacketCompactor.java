@@ -56,7 +56,6 @@ public class PacketCompactor extends AbstractPacket {
 		if (te instanceof TileEntityCompactor) {
 			switch(eventID) {
 				case 0:
-					System.out.println("Recieving a message on the client with a direction of " + this.direction);
 					((TileEntityCompactor)te).direction = this.direction;
 			}
 		}
@@ -77,7 +76,6 @@ public class PacketCompactor extends AbstractPacket {
 					((TileEntityCompactor)te).distributeItems();
 					break;
 				case 3:
-					System.out.println("Receiving a message on the server and \nSending message to client with a direction of " + ((TileEntityCompactor)te).direction);
 					CompressedBuilding.packetPipeline.sendTo(new PacketCompactor((byte)0, (int)x, (int)y, (int)z, ((TileEntityCompactor)te).direction), (EntityPlayerMP)player);
 			}
 		}else{
