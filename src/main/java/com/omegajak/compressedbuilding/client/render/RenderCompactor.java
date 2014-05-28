@@ -61,7 +61,7 @@ public class RenderCompactor extends TileEntitySpecialRenderer {
 		}else if (direction == 3) {
 			GL11.glRotatef(270F, 0F, 1F, 0F);
 		}
-
+		
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		model.renderAll();
 
@@ -78,13 +78,33 @@ public class RenderCompactor extends TileEntitySpecialRenderer {
 			for (int i=0; i<((TileEntityCompactor)tileentity).getSizeInventory();i++) {//find the first filled slot
 				if (((TileEntityCompactor)tileentity).getItemInSlot(i) != null) {
 					filled = i;
+//					break;
 				}
 			}
 			innerItemEntity.setEntityItemStack(((TileEntityCompactor)tileentity).getItemInSlot(filled));
 			
-			GL11.glTranslatef((float)x + 0.45F, (float)y + 0.5F, (float)z + 0.35F);
+			orientationBasedTranslation(direction, x, y, z);
 			
 			innerItemRender.doRender(innerItemEntity, 0, 0, 0, 0, 0);
+		}
+		
+		GL11.glPopMatrix();
+	}
+
+	private void orientationBasedTranslation(int direction, double x, double y, double z) {
+		switch (direction) {
+			case 0:
+				GL11.glTranslatef((float)x + 0.5F, (float)y + 0.5F, (float)z + 0.3F);
+				break;
+			case 1:
+				GL11.glTranslatef((float)x + 0.7F, (float)y + 0.5F, (float)z + 0.5F);
+				break;
+			case 2:
+				GL11.glTranslatef((float)x + 0.5F, (float)y + 0.5F, (float)z + .7F);
+				break;
+			case 3:
+				GL11.glTranslatef((float)x + 0.3F, (float)y + 0.5F, (float)z + 0.5F);
+				break;
 		}
 	}
 }
