@@ -78,7 +78,7 @@ public class BlockCompactor extends BlockContainer {
         final Random random = new Random();
         if (tileEntityCompactor != null)
         {
-            for (int j1 = 0; j1 < tileEntityCompactor.getSizeInventory(); j1++)
+            for (int j1 = 0; j1 < tileEntityCompactor.getSizeInventory() - 1; j1++)
             {
                 ItemStack itemstack = tileEntityCompactor.getStackInSlot(j1);
 
