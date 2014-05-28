@@ -1,6 +1,5 @@
 package com.omegajak.compressedbuilding.network;
 
-import ibxm.Player;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.omegajak.compressedbuilding.CompressedBuilding;
 import com.omegajak.compressedbuilding.tileentities.TileEntityCompactor;
+
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class PacketCompactor extends AbstractPacket {
 	
@@ -56,7 +57,7 @@ public class PacketCompactor extends AbstractPacket {
 		if (te instanceof TileEntityCompactor) {
 			switch(eventID) {
 				case 0:
-					((TileEntityCompactor)te).direction = this.direction;
+					((TileEntityCompactor)te).direction = this.direction;					
 			}
 		}
 	}
@@ -77,6 +78,11 @@ public class PacketCompactor extends AbstractPacket {
 					break;
 				case 3:
 					CompressedBuilding.packetPipeline.sendTo(new PacketCompactor((byte)0, (int)x, (int)y, (int)z, ((TileEntityCompactor)te).direction), (EntityPlayerMP)player);
+					break;
+				case 4:
+//					CompressedBuilding.packetPipeline.sendToAllAround(new PacketCompactor((byte)1, (int)x, (int)y, (int)z), new TargetPoint(player.dimension, x, y, z, 25));
+//					((TileEntityCompactor)te).container.c;
+					break;
 			}
 		}else{
 			System.out.println("The tileEntity at " + x + ", " + y + ", " + z + ", " + "isn't a TileEntityCompactor");

@@ -74,17 +74,13 @@ public class RenderCompactor extends TileEntitySpecialRenderer {
 			EntityItem innerItemEntity = new EntityItem(tileentity.getWorldObj());
 			innerItemEntity.hoverStart = 0.0F;
 			
-			int filled = -1;
-			if (((TileEntityCompactor)tileentity).getItemInSlot(((TileEntityCompactor)tileentity).getSizeInventory() - 1) == null) {
-				for (int i=0; i<((TileEntityCompactor)tileentity).getSizeInventory();i++) {//find the first filled slot
-					if (((TileEntityCompactor)tileentity).getItemInSlot(i) != null) {
-						filled = i;
-						break;
-					}
-				}
-			}else{
-				filled = ((TileEntityCompactor)tileentity).getSizeInventory() - 1;
+			int filled = findFilledSlot((TileEntityCompactor)tileentity);
+			if (filled == -1 && !((TileEntityCompactor)tileentity).hasAlreadyCheckedForItems) {
+				CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)4, (int)tileentity.xCoord, (int)tileentity.yCoord, (int)tileentity.zCoord));
+				((TileEntityCompactor)tileentity).hasAlreadyCheckedForItems = true;
+				filled = findFilledSlot((TileEntityCompactor)tileentity);
 			}
+			
 			innerItemEntity.setEntityItemStack(((TileEntityCompactor)tileentity).getItemInSlot(filled));
 			
 			orientationBasedTranslation(direction, x, y, z);
@@ -110,5 +106,20 @@ public class RenderCompactor extends TileEntitySpecialRenderer {
 				GL11.glTranslatef((float)x + 0.3F, (float)y + 0.5F, (float)z + 0.5F);
 				break;
 		}
+	}
+	
+	private int findFilledSlot(TileEntityCompactor compactor) {
+		int filled = -1;
+		if (compactor.getItemInSlot(compactor.getSizeInventory() - 1) == null) {
+			for (int i=0; i<compactor.getSizeInventory();i++) {//find the first filled slot
+				if (compactor.getItemInSlot(i) != null) {
+					filled = i;
+					break;
+				}
+			}
+		}else{
+			filled = compactor.getSizeInventory() - 1;
+		}
+		return filled;
 	}
 }

@@ -13,6 +13,9 @@ import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
 import com.omegajak.compressedbuilding.network.PacketCompactor;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	
 	private ItemStack[] items;
@@ -25,7 +28,9 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
     private boolean isDistributing = false;//this is true when the inputs aren't equalized enough
     private boolean isAddingToStack = false;
     public byte direction = -1;//this is used for rending and changed when the block is placed
-	
+    
+    @SideOnly(Side.CLIENT)
+	public boolean hasAlreadyCheckedForItems; //used for efficiency on the client side
 	
 	public TileEntityCompactor() {
 		items = new ItemStack[10];
