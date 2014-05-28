@@ -75,11 +75,15 @@ public class RenderCompactor extends TileEntitySpecialRenderer {
 			innerItemEntity.hoverStart = 0.0F;
 			
 			int filled = -1;
-			for (int i=0; i<((TileEntityCompactor)tileentity).getSizeInventory();i++) {//find the first filled slot
-				if (((TileEntityCompactor)tileentity).getItemInSlot(i) != null) {
-					filled = i;
-//					break;
+			if (((TileEntityCompactor)tileentity).getItemInSlot(((TileEntityCompactor)tileentity).getSizeInventory() - 1) == null) {
+				for (int i=0; i<((TileEntityCompactor)tileentity).getSizeInventory();i++) {//find the first filled slot
+					if (((TileEntityCompactor)tileentity).getItemInSlot(i) != null) {
+						filled = i;
+						break;
+					}
 				}
+			}else{
+				filled = ((TileEntityCompactor)tileentity).getSizeInventory() - 1;
 			}
 			innerItemEntity.setEntityItemStack(((TileEntityCompactor)tileentity).getItemInSlot(filled));
 			
