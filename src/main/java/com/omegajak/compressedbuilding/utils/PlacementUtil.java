@@ -183,12 +183,14 @@ public class PlacementUtil {
 	}
 	
 	public void spawnCompensation(World world, int id, int count, double x, double y, double z, EntityPlayer player) {
-		EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(Item.getItemById(id >>> 8), count, 0xFF & id));
-		double distance = getDistance(x, y, z, player.posX, player.posY, player.posZ);
-		entityItem.motionX = (double)((player.posX - x) * distance * 0.01D);
-		entityItem.motionY = (double)((player.posY - y) * distance * 0.01D);
-		entityItem.motionZ = (double)((player.posZ - z) * distance * 0.01D);
-		world.spawnEntityInWorld(entityItem);
+		if (!world.isRemote) {
+			EntityItem entityItem = new EntityItem(world, x, y, z, new ItemStack(Item.getItemById(id >>> 8), count, 0xFF & id));
+			double distance = getDistance(x, y, z, player.posX, player.posY, player.posZ);
+			entityItem.motionX = (double)((player.posX - x) * distance * 0.01D);
+			entityItem.motionY = (double)((player.posY - y) * distance * 0.01D);
+			entityItem.motionZ = (double)((player.posZ - z) * distance * 0.01D);
+			world.spawnEntityInWorld(entityItem);
+		}
 	}
 	
 	public double getDistance(double x1, double y1, double z1, double x2, double y2, double z2) {
