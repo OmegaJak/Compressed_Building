@@ -29,7 +29,7 @@ public class PlacementUtil {
 	 * @param sizeFactor2 Modifies the size of what's placed, 1 would keep it at the default 3 TODO Implement this
 	 */
 	public void placeBlocks(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, int id, double sizeFactor1, double sizeFactor2) {
-		if (!world.isRemote) {
+		//if (!world.isRemote) {
 			sneaking = player.isSneaking();
 			if (!ConfigSettings.SHIFT_VERTICAL) {//so it pays attention to the config setting
 				sneaking = !sneaking;
@@ -74,30 +74,33 @@ public class PlacementUtil {
 					if ((sneaking || side > 1) && orientationArr[6] == 1) {
 						if (orientationArr[5] == 1) {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlock(x + i, y + j, z + orientationArr[4]).getMaterial().isSolid() || Block.getIdFromBlock(world.getBlock(x + i, y + j, z + orientationArr[4])) == Block.getIdFromBlock(Blocks.squareTemplate)) {
-								world.setBlock(x + i, y + j, z + orientationArr[4], Block.getBlockById(id >>> 8));
-								world.setBlockMetadataWithNotify(x + i, y + j, z + orientationArr[4], 0xFF & id, 2);
+								world.setBlock(x + i, y + j, z + orientationArr[4], Block.getBlockById(id >>> 8), 0xFF & id, 2);
+								System.out.println((x + i) + ", " + (y + j) + ", " + (z + orientationArr[4]) + ", " + (Block.getBlockById(id >>> 8)));
+								//world.setBlockMetadataWithNotify(x + i, y + j, z + orientationArr[4], 0xFF & id, 2);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}else{
 							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlock(x + orientationArr[4], y + j, z + i).getMaterial().isSolid() || Block.getIdFromBlock(world.getBlock(x + orientationArr[4], y + j, z + i)) == Block.getIdFromBlock(Blocks.squareTemplate)) {
-								world.setBlock(x + orientationArr[4], y + j, z + i, Block.getBlockById(id >>> 8));
-								world.setBlockMetadataWithNotify(x + orientationArr[4], y + j, z + i, 0xFF & id, 2);
+								world.setBlock(x + orientationArr[4], y + j, z + i, Block.getBlockById(id >>> 8), 0xFF & id, 2);
+								System.out.println((x + orientationArr[4]) + ", " + (y + j) + ", " + (z + i) + ", " + (Block.getBlockById(id >>> 8)));
+								//world.setBlockMetadataWithNotify(x + orientationArr[4], y + j, z + i, 0xFF & id, 2);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
 						}
 					}else{
 						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlock(x + i, y + orientationArr[4], z + j).getMaterial().isSolid() || Block.getIdFromBlock(world.getBlock(x + i, y + orientationArr[4], z + j)) == Block.getIdFromBlock(Blocks.squareTemplate)) {
-							world.setBlock(x + i, y + orientationArr[4], z + j, Block.getBlockById(id >>> 8));
-							world.setBlockMetadataWithNotify(x + i, y + orientationArr[4], z + j, 0xFF & id, 2);
+							world.setBlock(x + i, y + orientationArr[4], z + j, Block.getBlockById(id >>> 8), 0xFF & id, 2);
+							System.out.println((x + i) + ", " + (y + orientationArr[4]) + ", " + (z + j) + ", " + (Block.getBlockById(id >>> 8)));
+							//world.setBlockMetadataWithNotify(x + i, y + orientationArr[4], z + j, 0xFF & id, 2);
 						}else{
 							spawnCompensation(world, id, 1, x, y, z, player);
 						}
 					}
 				}
 			}
-		}
+		//}
 	}
 	
 	private void sideBasedLogic(int side) {

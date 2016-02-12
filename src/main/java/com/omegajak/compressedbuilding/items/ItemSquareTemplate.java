@@ -25,21 +25,22 @@ public class ItemSquareTemplate extends ItemBlock{
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		player.swingItem();
 		if (stack.getItemDamage() >>> 8 != 0) {
-			if(!world.isRemote) {
+			//if(!world.isRemote) {
 				PlacementUtil placementUtil = new PlacementUtil();
 				placementUtil.placeBlocks(stack, player, world, x, y, z, side, stack.getItemDamage(), 1, 1);
 				if (!player.capabilities.isCreativeMode) {
 					stack.stackSize--;
 				}
-			}
+			//}
 		}else{
-			if(!world.isRemote) {
+			//if(!world.isRemote) { // I guess I don't need these any more?
 				PlacementUtil placementUtil = new PlacementUtil();
 				placementUtil.placeBlocks(stack, player, world, x, y, z, side, 4 << 8, 1, 1);
+				//world.setBlock(x, y, z, Block.getBlockById(2), 0, 2);
 				if (!player.capabilities.isCreativeMode) {
 					stack.stackSize--;
 				}
-			}
+			//}
 		}
 		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.getBlockById(stack.getItemDamage() >>> 8).stepSound.getBreakSound(), 1.0F, world.rand.nextFloat() * 0.1F + 0.5F);
 		world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, Block.getBlockById(stack.getItemDamage() >>> 8).stepSound.getBreakSound(), 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);

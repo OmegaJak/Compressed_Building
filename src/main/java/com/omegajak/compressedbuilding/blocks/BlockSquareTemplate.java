@@ -35,9 +35,9 @@ public class BlockSquareTemplate extends Block{
 	
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		if(!world.isRemote){
+		//if(!world.isRemote){
 			world.setBlock(x, y, z, Block.getBlockFromName("cobblestone"));
-		}
+		//}
 	}
 	
 	@Override

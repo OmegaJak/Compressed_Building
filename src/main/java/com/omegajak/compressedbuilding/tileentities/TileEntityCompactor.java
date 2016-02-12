@@ -6,12 +6,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import com.omegajak.compressedbuilding.CompressedBuilding;
 import com.omegajak.compressedbuilding.blocks.Blocks;
 import com.omegajak.compressedbuilding.inventory.ContainerCompactor;
-import com.omegajak.compressedbuilding.network.PacketCompactor;
+import com.omegajak.compressedbuilding.network.CompactorMessage;
 
 public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	
@@ -25,6 +28,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
     private boolean isDistributing = false;//this is true when the inputs aren't equalized enough
     private boolean isAddingToStack = false;
     public byte direction = -1;//this is used for rending and changed when the block is placed
+	public boolean hasSentDirectionRequest;
 	
 	
 	public TileEntityCompactor() {
@@ -82,11 +86,17 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 			onInventoryChanged(true, (itemstack == null && slot == 9) && determineIfFilled() && determineIfHomogenous());
 		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring) {//if youre simply removing the output, no shift clicking though
 			if (determineIfHomogenous() && determineIfFilled()) {//always good to check
-				CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)0, this.xCoord, this.yCoord, this.zCoord));//tells the server to set output to null and do normal updating stuff
-																			//including decrementing
+				//CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)0, this.xCoord, this.yCoord, this.zCoord));//tells the server to set output to null and do normal updating stuff
+																//including decrementing
+				//this.setItem(9, null);
+				//decrementInputs();
+				//checkForCompacting(true);
+				CompressedBuilding.network.sendToServer(new CompactorMessage((byte)0, xCoord, yCoord, zCoord));
 			}
 		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {//if you take an input out
-			CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)1, this.xCoord, this.yCoord, this.zCoord));//let the server know
+			//CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)1, this.xCoord, this.yCoord, this.zCoord));//let the server know
+			//this.setItem(9, null);
+			CompressedBuilding.network.sendToServer(new CompactorMessage((byte)1, xCoord, yCoord, zCoord));
 		}
 		if(worldObj.isRemote && this.isTransferring && slot != 9) {//if we're on the client side, and we're transferring, and it's an input
 			int smallestInput = 0;
@@ -168,6 +178,21 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 				items[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
 			}
 		}
+	}
+	
+	@Override
+	/*
+	 * This is syncs the te when a player loads up a chunk or loads the world
+	 */
+	public Packet getDescriptionPacket() {
+		NBTTagCompound compound = new NBTTagCompound();
+		writeToNBT(compound);
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, compound);
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+		readFromNBT(packet.func_148857_g()); // This must get the tag compound from the packet
 	}
 	
 	/**set the field smallestIn to the input found to have the smallest stack size, used for incrementing transferPass
@@ -260,6 +285,7 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 	
 	public void onInventoryChanged(boolean shouldCheckForCompacting, boolean shouldDecrement) {
 		checkForCompacting(shouldDecrement);
+		System.out.println("OnInventoryChanged");
 		//this is what updates the inventory on the client side when the back-end edits and item, otherwise the GUI must be reloaded to update
 		container.detectAndSendChanges();
 	}

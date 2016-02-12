@@ -64,9 +64,9 @@ public class BlockCompactor extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float clickX, float clickY, float clickZ) {
         if (player.isSneaking()) return false;
-        if (!world.isRemote) {
+        //if (!world.isRemote) {
             FMLNetworkHandler.openGui(player, CompressedBuilding.instance, 0, world, x, y, z);
-        }
+        //}
         return true;
 	}
 	
