@@ -76,7 +76,6 @@ public class PlacementUtil {
 							if (world.isAirBlock(x + i, y + j, z + orientationArr[4]) || !world.getBlock(x + i, y + j, z + orientationArr[4]).getMaterial().isSolid() || Block.getIdFromBlock(world.getBlock(x + i, y + j, z + orientationArr[4])) == Block.getIdFromBlock(Blocks.squareTemplate)) {
 								world.setBlock(x + i, y + j, z + orientationArr[4], Block.getBlockById(id >>> 8), 0xFF & id, 2);
 								System.out.println((x + i) + ", " + (y + j) + ", " + (z + orientationArr[4]) + ", " + (Block.getBlockById(id >>> 8)));
-								//world.setBlockMetadataWithNotify(x + i, y + j, z + orientationArr[4], 0xFF & id, 2);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
@@ -84,7 +83,6 @@ public class PlacementUtil {
 							if (world.isAirBlock(x + orientationArr[4], y + j, z + i) || !world.getBlock(x + orientationArr[4], y + j, z + i).getMaterial().isSolid() || Block.getIdFromBlock(world.getBlock(x + orientationArr[4], y + j, z + i)) == Block.getIdFromBlock(Blocks.squareTemplate)) {
 								world.setBlock(x + orientationArr[4], y + j, z + i, Block.getBlockById(id >>> 8), 0xFF & id, 2);
 								System.out.println((x + orientationArr[4]) + ", " + (y + j) + ", " + (z + i) + ", " + (Block.getBlockById(id >>> 8)));
-								//world.setBlockMetadataWithNotify(x + orientationArr[4], y + j, z + i, 0xFF & id, 2);
 							}else{
 								spawnCompensation(world, id, 1, x, y, z, player);
 							}
@@ -93,7 +91,6 @@ public class PlacementUtil {
 						if (world.isAirBlock(x + i, y + orientationArr[4], z + j) || !world.getBlock(x + i, y + orientationArr[4], z + j).getMaterial().isSolid() || Block.getIdFromBlock(world.getBlock(x + i, y + orientationArr[4], z + j)) == Block.getIdFromBlock(Blocks.squareTemplate)) {
 							world.setBlock(x + i, y + orientationArr[4], z + j, Block.getBlockById(id >>> 8), 0xFF & id, 2);
 							System.out.println((x + i) + ", " + (y + orientationArr[4]) + ", " + (z + j) + ", " + (Block.getBlockById(id >>> 8)));
-							//world.setBlockMetadataWithNotify(x + i, y + orientationArr[4], z + j, 0xFF & id, 2);
 						}else{
 							spawnCompensation(world, id, 1, x, y, z, player);
 						}
@@ -203,12 +200,10 @@ public class PlacementUtil {
 		if (side == 0 || side == 1) {
 			for (int n = orientationArr[0]; n < orientationArr[1]; n++) {
 				if(orientationArr[5] == 1) {
-					//if(!(world.isAirBlock(x + n, y, z + orientationArr[4]) || !world.getBlock(x + n, y, z + orientationArr[4]).getMaterial().isSolid())){
 					if (world.getBlock(x + n, y, z + orientationArr[4]).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {	
 						originalCount++;
 					}
 				}else{
-					//if(!(world.isAirBlock(x + orientationArr[4], y, z + n) || !world.getBlock(x + orientationArr[4], y, z + n).getMaterial().isSolid())) {
 					if (world.getBlock(x + orientationArr[4], y, z + n).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
 						originalCount++;
 					}
@@ -216,12 +211,10 @@ public class PlacementUtil {
 			}
 			for (int n = orientationArr[0]; n < orientationArr[1]; n++) {
 				if(orientationArr[5] == 1) {//It might look like this is the same as above, but I switched the if statements so it does the opposite
-					//if(!world.isAirBlock(x + orientationArr[4], y, z + n)) {
 					if (world.getBlock(x + orientationArr[4], y, z + n).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
 						newCount++;
 					}
 				}else{
-					//if(!world.isAirBlock(x + n, y, z + orientationArr[4])){
 					if (world.getBlock(x + n, y, z + orientationArr[4]).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
 						newCount++;
 					}
@@ -237,21 +230,18 @@ public class PlacementUtil {
 		} else {
 			if (sneaking) {
 				for (int n = -1; n < 2; n++) {
-					//if (!(world.isAirBlock(x, y + n, z) || !world.getBlockMaterial(x, y + n, z).isSolid())) {
 					if (world.getBlock(x, y + n, z).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
 						originalCount++;
 					}
 				}
 				if (side == 2 || side == 3) {
 					for (int n = -1; n < 2; n++) {
-						//if (!(world.isAirBlock(x + n, y, z) || !world.getBlockMaterial(x + n, y, z).isSolid())) {
 						if (world.getBlock(x + n, y, z).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
 							newCount++;
 						}
 					}
 				} else if (side == 4 || side == 5) {
 					for (int n = -1; n < 2; n++) {
-						//if (!(world.isAirBlock(x, y, z + n) || !world.getBlockMaterial(x, y, z + n).isSolid())) {
 						if (world.getBlock(x, y, z + n).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
 							newCount++;
 						}

@@ -69,12 +69,9 @@ public class CompactorMessage implements IMessage {
 				}
 				System.out.println("Received eventID of " + message.eventID + ", x of " + message.x + ", y of " + message.y + 
 						", and z of " + message.z + "on the server side from " + ctx.getServerHandler().playerEntity.getDisplayName());
-				/*message.dir = ((TileEntityCompactor)te).direction; // Change the dir of the message to reflect the server's info
-				*/return message; // Send the message back to the client who sent it
+				return message; // Send the message back to the client who sent it
 			} else {
-				/*System.out.println("Received direction of " + message.dir + " on the client side");
-				((TileEntityCompactor)Minecraft.getMinecraft().theWorld.getTileEntity(message.x, message.y, message.z)).direction = message.dir; // Apply the new info to the client's TileEntity
-				*/return null;
+				return null;
 			}
 		}
 	}

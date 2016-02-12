@@ -86,16 +86,9 @@ public class TileEntityCompactor extends TileEntity implements ISidedInventory {
 			onInventoryChanged(true, (itemstack == null && slot == 9) && determineIfFilled() && determineIfHomogenous());
 		}else if(worldObj.isRemote && slot == 9 && itemstack == null && !this.isTransferring) {//if youre simply removing the output, no shift clicking though
 			if (determineIfHomogenous() && determineIfFilled()) {//always good to check
-				//CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)0, this.xCoord, this.yCoord, this.zCoord));//tells the server to set output to null and do normal updating stuff
-																//including decrementing
-				//this.setItem(9, null);
-				//decrementInputs();
-				//checkForCompacting(true);
 				CompressedBuilding.network.sendToServer(new CompactorMessage((byte)0, xCoord, yCoord, zCoord));
 			}
 		}else if(worldObj.isRemote && slot >= 0 && slot <= 8 && itemstack == null) {//if you take an input out
-			//CompressedBuilding.packetPipeline.sendToServer(new PacketCompactor((byte)1, this.xCoord, this.yCoord, this.zCoord));//let the server know
-			//this.setItem(9, null);
 			CompressedBuilding.network.sendToServer(new CompactorMessage((byte)1, xCoord, yCoord, zCoord));
 		}
 		if(worldObj.isRemote && this.isTransferring && slot != 9) {//if we're on the client side, and we're transferring, and it's an input
