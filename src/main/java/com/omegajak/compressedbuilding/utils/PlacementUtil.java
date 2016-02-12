@@ -196,27 +196,31 @@ public class PlacementUtil {
 	}
 	
 	private void orientationLogic(World world,int x,int y,int z, int side) {
+		originalCount = 0;
+		newCount = 0;
 		if (side == 0 || side == 1) {
-			originalCount = 0;
 			for (int n = orientationArr[0]; n < orientationArr[1]; n++) {
 				if(orientationArr[5] == 1) {
-					if(!(world.isAirBlock(x + n, y, z + orientationArr[4]) || !world.getBlock(x + n, y, z + orientationArr[4]).getMaterial().isSolid())){
+					//if(!(world.isAirBlock(x + n, y, z + orientationArr[4]) || !world.getBlock(x + n, y, z + orientationArr[4]).getMaterial().isSolid())){
+					if (world.getBlock(x + n, y, z + orientationArr[4]).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {	
 						originalCount++;
 					}
 				}else{
-					if(!(world.isAirBlock(x + orientationArr[4], y, z + n) || !world.getBlock(x + orientationArr[4], y, z + n).getMaterial().isSolid())) {
+					//if(!(world.isAirBlock(x + orientationArr[4], y, z + n) || !world.getBlock(x + orientationArr[4], y, z + n).getMaterial().isSolid())) {
+					if (world.getBlock(x + orientationArr[4], y, z + n).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
 						originalCount++;
 					}
 				}
 			}
-			newCount = 0;
 			for (int n = orientationArr[0]; n < orientationArr[1]; n++) {
 				if(orientationArr[5] == 1) {//It might look like this is the same as above, but I switched the if statements so it does the opposite
-					if(!world.isAirBlock(x + orientationArr[4], y, z + n)) {
+					//if(!world.isAirBlock(x + orientationArr[4], y, z + n)) {
+					if (world.getBlock(x + orientationArr[4], y, z + n).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
 						newCount++;
 					}
 				}else{
-					if(!world.isAirBlock(x + n, y, z + orientationArr[4])){
+					//if(!world.isAirBlock(x + n, y, z + orientationArr[4])){
+					if (world.getBlock(x + n, y, z + orientationArr[4]).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
 						newCount++;
 					}
 				}
@@ -226,6 +230,35 @@ public class PlacementUtil {
 					orientationArr[5] = 2;
 				}else{
 					orientationArr[5] = 1;
+				}
+			}
+		} else {
+			if (sneaking) {
+				for (int n = -1; n < 2; n++) {
+					//if (!(world.isAirBlock(x, y + n, z) || !world.getBlockMaterial(x, y + n, z).isSolid())) {
+					if (world.getBlock(x, y + n, z).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
+						originalCount++;
+					}
+				}
+				if (side == 2 || side == 3) {
+					for (int n = -1; n < 2; n++) {
+						//if (!(world.isAirBlock(x + n, y, z) || !world.getBlockMaterial(x + n, y, z).isSolid())) {
+						if (world.getBlock(x + n, y, z).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
+							newCount++;
+						}
+					}
+				} else if (side == 4 || side == 5) {
+					for (int n = -1; n < 2; n++) {
+						//if (!(world.isAirBlock(x, y, z + n) || !world.getBlockMaterial(x, y, z + n).isSolid())) {
+						if (world.getBlock(x, y, z + n).getLocalizedName().equals(world.getBlock(x, y, z).getLocalizedName())) {
+							newCount++;
+						}
+					}
+				}
+				if (newCount >= originalCount) {
+					orientationArr[6] = 2;
+				} else {
+					orientationArr[6] = 1;
 				}
 			}
 		}
